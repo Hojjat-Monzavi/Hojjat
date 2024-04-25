@@ -1,3 +1,479 @@
-<html>
-<h1>! </h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile-Friendly Table with Form</title>
+    <!-- Material Design Lite -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Styles for desktop */
+        table {
+            width: 100%;
+            table-layout: fixed;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        /* Styles for mobile */
+        @media (max-width: 600px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            tr {
+                margin: 0 0 1rem 0;
+            }
+            tr:nth-child(odd) {
+                background-color: #f2f2f2;
+            }
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+                text-align: right;
+            }
+            td:before {
+                position: absolute;
+                top: 0;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: bold;
+            }
+            td:before { content: attr(data-title); }
+        }
+    </style>
+    <script>
+      function convertTimeToHours(timeString) {
+    // Split the time string into hours and minutes
+    const [hours, minutes] = timeString.split(':').map(Number);
+    
+    // Convert the time to hours with minutes as a decimal
+    return hours + minutes / 60;
+}
+
+
+function evalute(plan){
+    var cost = 0;
+    var mean = 0;
+    var variance = 0;
+    plan.forEach(function(record,index){
+        mean += (convertTimeToHours(record.minTime) + convertTimeToHours(record.maxTime))/2
+        variance += (convertTimeToHours(record.maxTime) - convertTimeToHours(record.minTime))*(convertTimeToHours(record.maxTime) - convertTimeToHours(record.minTime))/4
+        cost += overdueProbability(record.time,mean,variance)*record.prior
+    });
+    return cost;
+}
+
+function optimize(records){
+    var finalPlan = [...records];
+
+    // Sort the copied records array by date
+    finalPlan.sort(function(a, b) {
+        return new Date(b.due) - new Date(a.due);
+    });
+    var cost = evalute(finalPlan);
+    const MAX_GEN = 10000
+    for (var gen=0; gen<MAX_GEN; gen++){
+        console.log(cost);
+        var new_plan = [...finalPlan];
+        const index1 = Math.floor(Math.random() * new_plan.length);
+        var index2;
+        do {
+            index2 = Math.floor(Math.random() * new_plan.length);
+        } while (index1 === index2 && new_plan.length > 1);
+        //TODO:len=1
+        const temp = new_plan[index2];
+        new_plan[index2] = new_plan[index1];
+        new_plan[index1] = temp
+        var new_cost = evalute(new_plan);
+        if (new_cost < cost){
+            finalPlan = new_plan;
+            cost = new_cost;
+        }
+    }
+    return finalPlan;
+}
+
+function getTimes(records,free_hours){
+    var today = new Date();
+    records.forEach(function(record,index){
+        var days = Math.ceil((new Date(record.due)-today)/(1000 * 60 * 60 * 24));
+        if (days < 0){
+            deleteRecord(index);
+            return;
+        }
+        var timeDiffer = (days - days%7)/7*free_hours.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+        var todayWeekday = (today.getDay()+1)%7
+        var dueWeekday = (new Date(record.due).getDay()+1)%7
+        for (var day=todayWeekday; day<dueWeekday; day++){
+            if (day>=7)
+                day = day%7;
+            timeDiffer += free_hours[day]
+        }
+        record.time = timeDiffer;
+    })
+}
+
+// Function to approximate the integral of the normal distribution from a lower bound to an upper limit
+function overdueProbability(lowerBound, mean, variance) {
+    // Calculate the upper limit as mean plus two standard deviations
+    const upperLimit = mean + Math.sqrt(variance) * 2;
+    
+    // If the upper limit is less than the lower bound, return 0 as the integral
+    if (upperLimit < lowerBound) {
+        return 0;
+    }
+    
+    // Calculate the range of integration and determine the step size
+    const range = upperLimit - lowerBound;
+    const step = range / 100;
+    
+    // Initialize the sum to accumulate the area under the curve
+    let sum = 0;
+    
+    // Loop to calculate the sum of areas of small rectangles under the curve
+    for (let i = 0; i < 100; i++) {
+        // Calculate the x-coordinate of the current rectangle
+        const x = lowerBound + step * i;
+        
+        // Calculate the value of the normal distribution at x
+        const normalValue = normal(x, mean, variance);
+
+        // Add the area of the rectangle to the sum
+        sum += normalValue * step;
+    }
+    
+    // Return the approximate integral
+    return sum;
+}
+
+// Helper function to calculate the normal distribution value
+function normal(x, mean, variance) {
+    // Calculate the exponent part of the normal distribution formula
+    const exponent = -Math.pow(x - mean, 2) / (2 * variance);
+    
+    // Return the value of the normal distribution for x
+    return (1 / Math.sqrt(2 * Math.PI * variance)) * Math.exp(exponent);
+}
+
+
+
+// Function to save form data to local storage
+function saveFormData() {
+// Get form data
+var title = document.getElementById('title').value;
+var due = document.getElementById('due').value;
+var frq = parseInt(document.getElementById('freq').value);
+var prior = parseInt(document.getElementById('prior').value);
+var minTime = document.getElementById('min_time').value; // Duration as string
+var maxTime = document.getElementById('max_time').value; // Duration as string
+
+console.log(frq);
+
+ // Get existing records from local storage
+ var records = JSON.parse(localStorage.getItem('records')) || [];
+
+if (!frq.isNaN && frq > 0 ){
+    console.log('here')
+    for (var i=0; i<frq; i++){
+        // Create a record object
+        var record = { title, due, prior, minTime, maxTime };
+
+       
+
+        // Add new record to records array
+        records.push(record);
+
+        console.log(records)
+    }
+
+}else{
+
+    // Create a record object
+    var record = { title, due, prior, minTime, maxTime };
+
+    // Add new record to records array
+    records.push(record);
+}
+
+// Save updated records array to local storage
+localStorage.setItem('records', JSON.stringify(records));
+
+// Reload the page to update the tables
+loadRecords();
+
+// Clear the form
+document.getElementById('recordForm').reset();
+
+// Prevent form from submitting
+return false;
+}
+
+// Function to delete a record from local storage
+function deleteRecord(index) {
+// Get existing records from local storage
+var records = JSON.parse(localStorage.getItem('records')) || [];
+
+// Remove record at the specified index
+records.splice(index, 1);
+
+// Save updated records array to local storage
+localStorage.setItem('records', JSON.stringify(records));
+
+// Reload the tables
+loadRecords();
+}
+
+// Function to load records from local storage and display in tables
+function loadRecords() {
+
+
+// Get records from local storage
+var records = JSON.parse(localStorage.getItem('records')) || [];
+var freeHours = JSON.parse(localStorage.getItem('free_times')) || [0,0,0,0,0,0,0];
+
+// Get the table body element for the unsorted table
+var tableBody = document.getElementById('tableBody');
+
+// Clear existing table data
+tableBody.innerHTML = '';
+
+// Add each record to the unsorted table
+records.forEach(function(record, index) {
+    var row = '<tr>' +
+            '<td class="mdl-data-table__cell--non-numeric">' + record.title + '</td>' +
+            '<td>' + record.due + '</td>' +
+            '<td>' + record.prior + '</td>' +
+            '<td>' + record.minTime + '</td>' +
+            '<td>' + record.maxTime + '</td>' +
+            '<td><button class="mdl-button mdl-js-button mdl-button--icon" onclick="deleteRecord(' + index + ')"><i class="material-icons">delete</i></button></td>' +
+            '</tr>';
+    tableBody.innerHTML += row;
+});
+
+// Get the table body element for the sorted table
+var sortedTableBody = document.getElementById('sortedTableBody');
+
+// Clear existing sorted table data
+sortedTableBody.innerHTML = '';
+
+getTimes(records,freeHours)
+var finalPlan = optimize(records,freeHours)
+console.log('finally Got');
+
+// Add each record to the sorted table
+alert('writing')
+finalPlan.forEach(function(record, index) {
+    var row = '<tr>' +
+            '<td class="mdl-data-table__cell--non-numeric">' + record.title + '</td>' +
+            '<td>' + record.due + '</td>' +
+            '<td>' + record.prior + '</td>' +
+            '<td>' + record.minTime + '</td>' +
+            '<td>' + record.maxTime+ '</td>' +
+            '</tr>';
+    sortedTableBody.innerHTML += row;
+});
+}
+
+function refreshTime(){
+    // Get form data
+    var time0 = document.getElementById('free_time0');
+    var time1 = document.getElementById('free_time1');
+    var time2 = document.getElementById('free_time2');
+    var time3 = document.getElementById('free_time3');
+    var time4 = document.getElementById('free_time4');
+    var time5 = document.getElementById('free_time5');
+    var time6 = document.getElementById('free_time6');
+
+    var freeHours = JSON.parse(localStorage.getItem('free_times')) || [0,0,0,0,0,0,0];
+    time0.setAttribute("value",freeHours[0])
+    time1.setAttribute("value",freeHours[1])
+    time2.setAttribute("value",freeHours[2])
+    time3.setAttribute("value",freeHours[3])
+    time4.setAttribute("value",freeHours[4])
+    time5.setAttribute("value",freeHours[5])
+    time6.setAttribute("value",freeHours[6])
+}
+
+// Call loadRecords on page load to display records
+window.onload = function start(){
+    loadRecords()
+    refreshTime()
+}
+
+
+function updateTime(){
+    // Get form data
+    var time0 = parseInt(document.getElementById('free_time0').value);
+    var time1 = parseInt(document.getElementById('free_time1').value);
+    var time2 = parseInt(document.getElementById('free_time2').value);
+    var time3 = parseInt(document.getElementById('free_time3').value);
+    var time4 = parseInt(document.getElementById('free_time4').value);
+    var time5 = parseInt(document.getElementById('free_time5').value);
+    var time6 = parseInt(document.getElementById('free_time6').value);
+
+    // Validate number fields
+    if (isNaN(time0) || isNaN(time1) || isNaN(time2) || isNaN(time3) || isNaN(time4) || isNaN(time5) || isNaN(time6)) {
+        //alert('Please enter valid values');
+        return false;
+    }
+
+    // Create a record object
+    var freeHours = [ time0, time1, time2, time3, time4, time5 ,time6];
+
+    // Save updated records array to local storage
+    localStorage.setItem('free_times', JSON.stringify(freeHours));
+
+    // Prevent form from submitting
+    return false;
+}
+    </script>
+    <script type="text/javascript"
+    src="worker.js">
+    </script>
+</head>
+<body>
+
+<!-- Simple header with fixed tabs. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
+            mdl-layout--fixed-tabs">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">Records</span>
+    </div>
+    <!-- Tabs -->
+    <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+      <a href="#add-record" class="mdl-layout__tab is-active">Add Record</a>
+      <a href="#view-records" class="mdl-layout__tab">View Records</a>
+      <a href="#sorted-table" class="mdl-layout__tab">Sorted Table</a>
+    </div>
+  </header>
+  <main class="mdl-layout__content">
+    <section class="mdl-layout__tab-panel is-active" id="add-record">
+      <div class="page-content">
+        <!-- Add Record Form -->
+        <form onsubmit="return saveFormData()" id="recordForm">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" id="title" >
+            <label class="mdl-textfield__label" for="title">Title</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="date" id="due" >
+            <label class="mdl-textfield__label" for="due">Date</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="number" id="prior"  min="0" step="1">
+            <label class="mdl-textfield__label" for="prior">Coefficient</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="number" id="freq">
+            <label class="mdl-textfield__label" for="freq">How many?</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" pattern="[0-9]{2}:[0-9]{2}" id="min_time">
+            <label class="mdl-textfield__label" for="min_time">Minimum Time (HH:MM)...</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" pattern="[0-9]{2}:[0-9]{2}" id="max_time">
+            <label class="mdl-textfield__label" for="max_time">Duration (HH:MM)...</label>
+          </div>
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            Add Record
+          </button>
+        </form>
+        <hr/>
+        <h2>Free Hours</h2>
+        <form id="free_hours_form">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="number" pattern="[0-9]{2}:[0-9]{2}" id="free_time0" onchange="updateTime()">
+            <label class="mdl-textfield__label" for="free_time0">Saturday</label> 
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="number" pattern="[0-9]{2}:[0-9]{2}" id="free_time1" onchange="updateTime()">
+            <label class="mdl-textfield__label" for="free_time0">Sunday</label> 
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" >
+            <input class="mdl-textfield__input" type="number" pattern="[0-9]{2}:[0-9]{2}" id="free_time2" onchange="updateTime()">
+            <label class="mdl-textfield__label" for="free_time0">Monday</label> 
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ">
+            <input class="mdl-textfield__input" type="number" pattern="[0-9]{2}:[0-9]{2}" id="free_time3" onchange="updateTime()">
+            <label class="mdl-textfield__label" for="free_time0">Tuesday</label> 
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" >
+            <input class="mdl-textfield__input" type="number" pattern="[0-9]{2}:[0-9]{2}" id="free_time4" onchange="updateTime()">
+            <label class="mdl-textfield__label" for="free_time0">Wednesday</label> 
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" >
+            <input class="mdl-textfield__input" type="number" pattern="[0-9]{2}:[0-9]{2}" id="free_time5" onchange="updateTime()">
+            <label class="mdl-textfield__label" for="free_time0">Thursday</label> 
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" >
+            <input class="mdl-textfield__input" type="number" pattern="[0-9]{2}:[0-9]{2}" id="free_time6" onchange="updateTime()">
+            <label class="mdl-textfield__label" for="free_time0">Friday</label> 
+          </div>
+        </form>
+      </div>
+    </section>
+    <section class="mdl-layout__tab-panel" id="view-records">
+      <div class="page-content">
+        <!-- Unsorted Records Table -->
+        <table class="mdl-data-table mdl-js-data-table">
+          <thead>
+            <tr>
+              <th class="mdl-data-table__cell--non-numeric">Title</th>
+              <th>Date</th>
+              <th>Coefficient</th>
+              <th>Min Time</th>
+              <th>Max Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Unsorted table rows will be added here -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="mdl-layout__tab-panel" id="sorted-table">
+      <div class="page-content">
+        <!-- Sorted Records Table -->
+        <table class="mdl-data-table mdl-js-data-table">
+          <thead>
+            <tr>
+              <th class="mdl-data-table__cell--non-numeric">Title</th>
+              <th>Date</th>
+              <th>Coefficient</th>
+              <th>Min Time</th>
+              <th>Max Time</th>
+            </tr>
+          </thead>
+          <tbody id="sortedTableBody">
+            <!-- Sorted table rows will be added here -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+</body>
 </html>
