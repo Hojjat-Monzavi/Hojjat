@@ -94,7 +94,7 @@ function optimize(records){
         return new Date(b.due) - new Date(a.due);
     });
     var cost = evalute(finalPlan);
-    const MAX_GEN = 25000
+    const MAX_GEN = 10000
     var withoutChange = 0
     while (withoutChange < MAX_GEN){
         console.log(cost);
@@ -110,18 +110,19 @@ function optimize(records){
         new_plan[index1] = temp
         var new_cost = evalute(new_plan);
         if (new_cost < cost){
-            finalPlan = new_plan;
+          finalPlan = new_plan;
             cost = new_cost;
             withoutChange = 0
-        }else if(new_cos == cost){
-            finalPlan = new_plan;
-            withoutChange++
+        }else if(new_cost == cost){
+          finalPlan = new_plan
+          withoutChange = 0
         }else{
-            withoutChange++
+          withoutChange++
         }
     }
     return finalPlan;
 }
+
 function getTimes(records,free_hours){
     var today = new Date();
     records.forEach(function(record,index){
@@ -204,6 +205,7 @@ console.log(frq);
 if (!frq.isNaN && frq > 0 ){
     console.log('here')
     for (var i=0; i<frq; i++){
+        alert(due)
         // Create a record object
         var record = { title, due, prior, minTime, maxTime };
 
