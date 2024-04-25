@@ -113,8 +113,12 @@ function optimize(records){
             finalPlan = new_plan;
             cost = new_cost;
             withoutChange = 0
+        }else if(new_cos == cost){
+            finalPlan = new_plan;
+            withoutChange++
         }else{
             withoutChange++
+        }
     }
     return finalPlan;
 }
