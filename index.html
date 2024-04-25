@@ -113,9 +113,13 @@ function optimize(records){
             finalPlan = new_plan;
             cost = new_cost;
             withoutChange = 0
+        }else if(new_cost == cost){
+            //To randomize even more
+            finalPlan = new_plan;
+            cost = new_cost;
+            withoutChange++
         }else{
-          withoutChange++
-        }
+            withoutChange++
     }
     return finalPlan;
 }
