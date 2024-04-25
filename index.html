@@ -112,6 +112,7 @@ function optimize(records){
         if (new_cost < cost){
             finalPlan = new_plan;
             cost = new_cost;
+            withoutChange = 0
         }else{
           withoutChange++
         }
