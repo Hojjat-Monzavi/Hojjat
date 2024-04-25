@@ -110,11 +110,9 @@ function optimize(records){
         new_plan[index1] = temp
         var new_cost = evalute(new_plan);
         if (new_cost < cost){
-          finalPlan = new_plan;
+            finalPlan = new_plan;
             cost = new_cost;
             withoutChange = 0
-        }else if(new_cost == cost){
-          finalPlan = new_plan
         }else{
           withoutChange++
         }
