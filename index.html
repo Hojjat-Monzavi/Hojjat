@@ -279,7 +279,6 @@ var finalPlan = optimize(records,freeHours)
 console.log('finally Got');
 
 // Add each record to the sorted table
-alert('writing')
 finalPlan.forEach(function(record, index) {
     var row = '<tr>' +
             '<td class="mdl-data-table__cell--non-numeric">' + record.title + '</td>' +
