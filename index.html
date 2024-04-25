@@ -119,7 +119,6 @@ function optimize(records){
     }
     return finalPlan;
 }
-
 function getTimes(records,free_hours){
     var today = new Date();
     records.forEach(function(record,index){
@@ -202,7 +201,6 @@ console.log(frq);
 if (!frq.isNaN && frq > 0 ){
     console.log('here')
     for (var i=0; i<frq; i++){
-        alert(due)
         // Create a record object
         var record = { title, due, prior, minTime, maxTime };
 
