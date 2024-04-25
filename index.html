@@ -94,7 +94,7 @@ function optimize(records){
         return new Date(b.due) - new Date(a.due);
     });
     var cost = evalute(finalPlan);
-    const MAX_GEN = 10000
+    const MAX_GEN = 25000
     var withoutChange = 0
     while (withoutChange < MAX_GEN){
         console.log(cost);
