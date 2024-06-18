@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="UTF-8"> 
+  <title>Mobile Stopwatch and Lap Plotter</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f4f6f8;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .stopwatch-display {
+            font-size: 3em;
+            color: #333;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .button {
+            margin: 5px;
+            padding: 10px 15px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+        .start {
+            background-color: #4CAF50;
+        }
+        .stop {
+            background-color: #f44336;
+        }
+        .reset {
+            background-color: #008CBA;
+        }
+        .lap {
+            background-color: #9C27B0;
+        }
+        .lap-times {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .lap-time {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            margin: 10px 0;
+            width: 90%;
+            max-width: 400px;
+        }
+        .lap-time .trash-icon {
+            cursor: pointer;
+            color: #f44336;
+        }
+        #lapChart {
+            max-width: 100%;
+            max-height: 300px;
+        }
+        .stats {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+    </style> 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+  <script>
+        // Perform linear regression and calculate R²
+        function linearRegression(x, y) {
+            const n = x.length;
+            const xSum = x.reduce((a, b) => a + b, 0);
+            const ySum = y.reduce((a, b) => a + b, 0);
+            const xSquaredSum = x.reduce((a, b) => a + b * b, 0);
+            const xySum = x.reduce((a, b, i) => a + b * y[i], 0);
+
+            const slope = (n * xySum - xSum * ySum) / (n * xSquaredSum - xSum * xSum);
+            const intercept = (ySum - slope * xSum) / n;
+
+            const yPred = x.map(xi => slope * xi + intercept);
+            const ssTot = y.reduce((a, yi) => a + (yi - ySum / n) ** 2, 0);
+            const ssRes = y.reduce((a, yi, i) => a + (yi - yPred[i]) ** 2, 0);
+            const r2 = 1 - ssRes / ssTot;
+
+            return [slope, intercept, r2];
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Stopwatch State
+            let stopwatchState = {
+                isRunning: false,
+                startTime: 0,
+                elapsedTime: 0,
+                laps: [],
+                currentLapStart: 0,
+                lastUpdateTime: 0
+            };
+
+            // Load state from localStorage
+            const savedState = localStorage.getItem('stopwatchState');
+            if (savedState) {
+                stopwatchState = JSON.parse(savedState);
+                // Calculate the elapsed time if the stopwatch was running
+                const now = Date.now();
+                if (stopwatchState.isRunning) {
+                    stopwatchState.elapsedTime += now - stopwatchState.lastUpdateTime;
+                }
+                stopwatchState.startTime = now - stopwatchState.elapsedTime;
+            }
+
+            let intervalId;
+            const display = document.querySelector('.stopwatch-display');
+            const lapTimesContainer = document.querySelector('.lap-times');
+            const startButton = document.querySelector('.start');
+            const stopButton = document.querySelector('.stop');
+            const resetButton = document.querySelector('.reset');
+            const lapButton = document.querySelector('.lap');
+            const ctx = document.getElementById('lapChart').getContext('2d');
+            const statsContainer = document.querySelector('.stats');
+
+            // Initialize Chart.js
+            const lapChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: stopwatchState.laps.map((_, index) => `Lap ${index + 1}`),
+                    datasets: [{
+                        label: 'Lap Time (s)',
+                        data: stopwatchState.laps.map(time => (time / 1000).toFixed(2)),
+                        borderColor: '#4CAF50',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            function updateDisplay() {
+                const elapsed = Date.now() - stopwatchState.startTime;
+                display.textContent = formatTime(elapsed);
+            }
+
+            function formatTime(ms) {
+                const totalSeconds = Math.floor(ms / 1000);
+                const minutes = Math.floor(totalSeconds / 60);
+                const seconds = totalSeconds % 60;
+                const milliseconds = ms % 1000;
+                return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}`;
+            }
+
+            function saveState() {
+                stopwatchState.lastUpdateTime = Date.now();
+                localStorage.setItem('stopwatchState', JSON.stringify(stopwatchState));
+            }
+
+            function updateLapDisplay() {
+                lapTimesContainer.innerHTML = '';
+                stopwatchState.laps.forEach((lap, index) => {
+                    const lapElement = document.createElement('div');
+                    lapElement.className = 'lap-time';
+                    lapElement.innerHTML = `Lap ${index + 1}: ${formatTime(lap)} <span class="trash-icon" data-index="${index}">🗑️</span>`;
+                    lapTimesContainer.appendChild(lapElement);
+                });
+
+                lapChart.data.labels = stopwatchState.laps.map((_, index) => `Lap ${index + 1}`);
+                lapChart.data.datasets[0].data = stopwatchState.laps.map(time => (time / 1000).toFixed(2));
+
+                // Calculate linear regression line points
+                const lapIndices = stopwatchState.laps.map((_, index) => index + 1);
+                const lapTimes = stopwatchState.laps.map(time => time / 1000);
+                const [slope, intercept] = linearRegression(lapIndices, lapTimes);
+
+                const regressionPoints = lapIndices.map(index => (slope * index + intercept).toFixed(2));
+                if (lapChart.data.datasets.length === 1) {
+                    lapChart.data.datasets.push({
+                        label: 'Linear Regression',
+                        data: regressionPoints,
+                        borderColor: 'red',
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0,
+                    });
+                } else {
+                    lapChart.data.datasets[1].data = regressionPoints;
+                }
+
+                lapChart.update();
+                updateStats();
+
+                // Add event listeners for trash icons
+                document.querySelectorAll('.trash-icon').forEach(icon => {
+                    icon.addEventListener('click', function () {
+                        deleteLap(parseInt(this.getAttribute('data-index')));
+                    });
+                });
+            }
+
+            function updateStats() {
+                if (stopwatchState.laps.length > 1) {
+                    const lapTimes = stopwatchState.laps.map((time, index) => [index + 1, time / 1000]);
+                    const x = lapTimes.map(([index]) => index);
+                    const y = lapTimes.map(([, time]) => time);
+                    const [slope, intercept, r2] = linearRegression(x, y);
+
+                    statsContainer.innerHTML = `
+                        <div>Linear Equation: y = ${slope.toFixed(2)}x + ${intercept.toFixed(2)}</div>
+                        <div>R²: ${r2.toFixed(2)}</div>
+                    `;
+                } else {
+                    statsContainer.innerHTML = '<div>Not enough data for linear regression</div>';
+                }
+            }
+
+            function start() {
+                if (!stopwatchState.isRunning) {
+                    stopwatchState.isRunning = true;
+                    stopwatchState.startTime = Date.now() - stopwatchState.elapsedTime;
+                    intervalId = setInterval(updateDisplay, 10);
+                    updateDisplay();
+                    saveState();
+                }
+            }
+
+            function stop() {
+                if (stopwatchState.isRunning) {
+                    clearInterval(intervalId);
+                    stopwatchState.elapsedTime = Date.now() - stopwatchState.startTime;
+                    stopwatchState.isRunning = false;
+                    updateDisplay();
+                    saveState();
+                }
+            }
+
+            function reset() {
+                stop();
+                stopwatchState.elapsedTime = 0;
+                stopwatchState.startTime = Date.now();
+                stopwatchState.laps = [];
+                stopwatchState.currentLapStart = 0;
+                stopwatchState.isRunning = false;
+                updateDisplay();
+                updateLapDisplay();
+                saveState();
+            }
+
+            function recordLap() {
+                if (!stopwatchState.isRunning) {
+                  return;
+                }
+                const currentTime = Date.now() - stopwatchState.startTime;
+                const lapTime = currentTime - stopwatchState.currentLapStart;
+                stopwatchState.currentLapStart = currentTime;
+                stopwatchState.laps.push(lapTime);
+                updateLapDisplay();
+                saveState();
+            }
+
+            function deleteLap(index) {
+                stopwatchState.laps.splice(index, 1);
+                updateLapDisplay();
+                saveState();
+            }
+
+            startButton.addEventListener('click', start);
+            stopButton.addEventListener('click', stop);
+            resetButton.addEventListener('click', reset);
+            lapButton.addEventListener('click', recordLap);
+
+            // Initial setup
+            updateDisplay();
+            updateLapDisplay();
+        });
+    </script> 
+ </head> 
+ <body> 
+  <div class="card"> 
+   <div class="stopwatch-display">
+     00:00.000 
+   </div> 
+   <div class="buttons"> <button class="button start">Start</button> <button class="button stop">Stop</button> <button class="button reset">Reset</button> <button class="button lap">Lap</button> 
+   </div> 
+   <div class="lap-times"></div> 
+   <canvas id="lapChart" width="400" height="300"></canvas> 
+   <div class="stats"></div> 
+  </div> 
+ 
+</body></html>
