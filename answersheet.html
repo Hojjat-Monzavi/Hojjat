@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Sheet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .question-number {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .button-container button {
+            flex: 1;
+            margin: 5px;
+            padding: 15px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+        .button-container button:active {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        .edit-button {
+            color: #007BFF;
+            cursor: pointer;
+        }
+        .clear-button {
+            background-color: #DC3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .clear-button:active {
+            background-color: #c82333;
+        }
+        .marked-row {
+            background-color: red !important;
+            color: white !important;
+        }
+        .marked-count {
+            color: red;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="question-number" id="question-number">Question 1</div>
+    <div class="button-container">
+        <button onclick="selectAnswer(1)">1</button>
+        <button onclick="selectAnswer(2)">2</button>
+        <button onclick="selectAnswer(3)">3</button>
+        <button onclick="selectAnswer(4)">4</button>
+    </div>
+    <table id="answer-table">
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>Actions</th>
+                <th>Mark</th> <!-- New column for marking tests -->
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div id="marked-count" class="marked-count">Marked Tests: 0</div> <!-- Marked count display -->
+    <button class="clear-button" onclick="clearAnswers()">Clear Answers</button>
+</div>
+
+<script>
+    let currentQuestion = 1;
+    let answers = JSON.parse(localStorage.getItem('answers')) || [];
+
+    function updateTable() {
+        const tableBody = document.getElementById('answer-table').querySelector('tbody');
+        tableBody.innerHTML = '';
+        answers.forEach((answerObj, index) => {
+            const row = document.createElement('tr');
+            const questionCell = document.createElement('td');
+            questionCell.textContent = index + 1; // Display question number
+            const answerCell = document.createElement('td');
+            answerCell.textContent = answerObj.answer; // Access the answer property
+            const actionCell = document.createElement('td');
+            const editIcon = document.createElement('i');
+            editIcon.className = 'fas fa-edit edit-button';
+            editIcon.onclick = () => editAnswer(index);
+            actionCell.appendChild(editIcon);
+            const markCell = document.createElement('td');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = answerObj.marked || false; // Check if the row is marked
+            checkbox.onclick = () => markTest(index, checkbox.checked);
+            markCell.appendChild(checkbox);
+            row.appendChild(questionCell);
+            row.appendChild(answerCell);
+            row.appendChild(actionCell);
+            row.appendChild(markCell);
+            if (answerObj.marked) { // Add marked-row class if marked
+                row.classList.add('marked-row');
+            }
+            tableBody.appendChild(row);
+        });
+        updateMarkedCount(); // Update marked count display
+    }
+
+    function updateQuestionNumber() {
+        document.getElementById('question-number').textContent = `Question ${currentQuestion}`;
+    }
+
+    function selectAnswer(answer) {
+        if (!answers[currentQuestion - 1]) {
+            answers[currentQuestion - 1] = {};
+        }
+        answers[currentQuestion - 1].answer = answer;
+        localStorage.setItem('answers', JSON.stringify(answers));
+        updateTable();
+        currentQuestion = answers.length + 1;
+        updateQuestionNumber();
+    }
+
+    function editAnswer(questionIndex) {
+        currentQuestion = questionIndex + 1;
+        updateQuestionNumber();
+    }
+
+    function markTest(testIndex, isChecked) {
+        if (!answers[testIndex]) {
+            answers[testIndex] = {};
+        }
+        answers[testIndex].marked = isChecked;
+        localStorage.setItem('answers', JSON.stringify(answers));
+        const rowToMark = document.querySelector(`#answer-table tbody tr:nth-child(${testIndex + 1})`);
+        if (isChecked) {
+            rowToMark.classList.add('marked-row');
+        } else {
+            rowToMark.classList.remove('marked-row');
+        }
+        updateMarkedCount(); // Update marked count display
+    }
+
+    function clearAnswers() {
+        if (confirm('Are you sure you want to clear all answers?')) {
+            answers = [];
+            localStorage.removeItem('answers');
+            updateTable();
+            currentQuestion = 1;
+            updateQuestionNumber();
+            updateMarkedCount(); // Reset marked count display
+        }
+    }
+
+    function updateMarkedCount() {
+        const markedCount = answers.filter(answer => answer.marked).length;
+        document.getElementById('marked-count').textContent = `Marked Tests: ${markedCount}`;
+    }
+
+    // Key press event listener for desktop
+    document.addEventListener('keydown', function(event) {
+        if (event.key >= '1' && event.key <= '4') {
+            selectAnswer(parseInt(event.key));
+        }
+    });
+
+    // Initialize the table on load
+    updateTable();
+    updateQuestionNumber();
+</script>
+
+
+</body></html>
