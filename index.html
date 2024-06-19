@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HTML File Index</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -37,8 +37,8 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             background-color: rgba(255, 255, 255, 0.8);
             display: flex;
             justify-content: center;
@@ -47,12 +47,12 @@
         }
 
         .loading-spinner {
-            border: 16px solid #f3f3f3;
-            border-top: 16px solid #3498db;
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
             border-radius: 50%;
-            width: 120px;
-            height: 120px;
-            animation: spin 2s linear infinite;
+            width: 60px;
+            height: 60px;
+            animation: spin 1.5s linear infinite;
         }
 
         @keyframes spin {
@@ -115,97 +115,99 @@
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        const githubPagesBaseUrl = 'https://hojjat-monzavi.github.io/Hojjat/';
-        const repoOwner = 'hojjat-monzavi';
-        const repoName = 'Hojjat';
-        const branch = 'main';
-        const apiBaseUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/`;
+        document.addEventListener('DOMContentLoaded', () => {
+            const githubPagesBaseUrl = 'https://hojjat-monzavi.github.io/Hojjat/';
+            const repoOwner = 'hojjat-monzavi';
+            const repoName = 'Hojjat';
+            const branch = 'main';
+            const apiBaseUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/`;
 
-        const showLoadingAnimation = () => {
-            document.getElementById('loadingOverlay').style.display = 'flex';
-            document.getElementById('skeletonFileList').style.display = 'block';
-            document.getElementById('fileList').style.display = 'none';
-        };
+            const showLoadingAnimation = () => {
+                document.getElementById('loadingOverlay').style.display = 'flex';
+                document.getElementById('skeletonFileList').style.display = 'block';
+                document.getElementById('fileList').style.display = 'none';
+            };
 
-        const hideLoadingAnimation = () => {
-            document.getElementById('loadingOverlay').style.display = 'none';
-            document.getElementById('skeletonFileList').style.display = 'none';
-            document.getElementById('fileList').style.display = 'block';
-        };
+            const hideLoadingAnimation = () => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                document.getElementById('skeletonFileList').style.display = 'none';
+                document.getElementById('fileList').style.display = 'block';
+            };
 
-        const fetchHtmlFiles = async (path = '') => {
-            try {
-                const response = await axios.get(apiBaseUrl + path, {
-                    headers: { 'Accept': 'application/vnd.github.v3+json' }
-                });
-                return response.data.filter(file => file.type === 'file' && file.name.endsWith('.html'));
-            } catch (error) {
-                console.error(error);
-                return [];
-            }
-        };
+            const fetchHtmlFiles = async (path = '') => {
+                try {
+                    const response = await axios.get(apiBaseUrl + path, {
+                        headers: { 'Accept': 'application/vnd.github.v3+json' }
+                    });
+                    return response.data.filter(file => file.type === 'file' && file.name.endsWith('.html'));
+                } catch (error) {
+                    console.error(error);
+                    return [];
+                }
+            };
 
-        const fetchHtmlTitle = async (fileUrl) => {
-            try {
-                const response = await axios.get(fileUrl);
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(response.data, 'text/html');
-                const title = doc.querySelector('title')?.textContent || 'No Title';
-                return title;
-            } catch (error) {
-                console.error(`Error fetching title for ${fileUrl}:`, error);
-                return 'No Title';
-            }
-        };
+            const fetchHtmlTitle = async (fileUrl) => {
+                try {
+                    const response = await axios.get(fileUrl);
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(response.data, 'text/html');
+                    const title = doc.querySelector('title')?.textContent || 'No Title';
+                    return title;
+                } catch (error) {
+                    console.error(`Error fetching title for ${fileUrl}:`, error);
+                    return 'No Title';
+                }
+            };
 
-        const renderHtmlFiles = async () => {
-            const fileListElement = document.getElementById('fileList');
-            const errorMessageElement = document.getElementById('errorMessage');
+            const renderHtmlFiles = async () => {
+                const fileListElement = document.getElementById('fileList');
+                const errorMessageElement = document.getElementById('errorMessage');
 
-            showLoadingAnimation();
+                showLoadingAnimation();
 
-            try {
-                const files = await fetchHtmlFiles();
-                fileListElement.innerHTML = '';
+                try {
+                    const files = await fetchHtmlFiles();
+                    fileListElement.innerHTML = '';
 
-                if (files.length === 0) {
-                    fileListElement.innerHTML = '<li>No HTML pages found.</li>';
-                } else {
-                    for (const file of files) {
-                        const listItem = document.createElement('li');
-                        listItem.classList.add('list-group-item');
-                        const title = await fetchHtmlTitle(githubPagesBaseUrl + file.name.replace('.html', ''));
-                        const link = document.createElement('a');
-                        link.href = githubPagesBaseUrl + file.name.replace('.html', '');
-                        link.textContent = title;
-                        listItem.appendChild(link);
-                        fileListElement.appendChild(listItem);
+                    if (files.length === 0) {
+                        fileListElement.innerHTML = '<li>No HTML pages found.</li>';
+                    } else {
+                        for (const file of files) {
+                            const listItem = document.createElement('li');
+                            listItem.classList.add('list-group-item');
+                            const title = await fetchHtmlTitle(githubPagesBaseUrl + file.name.replace('.html', ''));
+                            const link = document.createElement('a');
+                            link.href = githubPagesBaseUrl + file.name.replace('.html', '');
+                            link.textContent = title;
+                            listItem.appendChild(link);
+                            fileListElement.appendChild(listItem);
+                        }
                     }
+                } catch (error) {
+                    errorMessageElement.textContent = 'Error fetching HTML files from GitHub repository.';
+                    errorMessageElement.style.display = 'block';
+                } finally {
+                    hideLoadingAnimation();
                 }
-            } catch (error) {
-                errorMessageElement.textContent = 'Error fetching HTML files from GitHub repository.';
-                errorMessageElement.style.display = 'block';
-            } finally {
-                hideLoadingAnimation();
-            }
-        };
+            };
 
-        const filterFiles = () => {
-            const searchInput = document.getElementById('searchInput').value.toLowerCase();
-            const fileListItems = document.querySelectorAll('#fileList li');
-            fileListItems.forEach(item => {
-                const link = item.querySelector('a');
-                if (link.textContent.toLowerCase().includes(searchInput)) {
-                    item.style.display = '';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        };
+            const filterFiles = () => {
+                const searchInput = document.getElementById('searchInput').value.toLowerCase();
+                const fileListItems = document.querySelectorAll('#fileList li');
+                fileListItems.forEach(item => {
+                    const link = item.querySelector('a');
+                    if (link.textContent.toLowerCase().includes(searchInput)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            };
 
-        document.getElementById('searchInput').addEventListener('input', filterFiles);
+            document.getElementById('searchInput').addEventListener('input', filterFiles);
 
-        renderHtmlFiles();
+            renderHtmlFiles();
+        });
     </script>
 </body>
 </html>
