@@ -31,9 +31,80 @@
         .file-list a:hover {
             text-decoration: underline;
         }
+
+        /* Loading animation styles */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .skeleton-card {
+            background-color: #e0e0e0;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .skeleton-title {
+            width: 80%;
+            height: 15px;
+            background-color: #c0c0c0;
+            border-radius: 3px;
+        }
+
+        .skeleton-link {
+            width: 20%;
+            height: 15px;
+            background-color: #c0c0c0;
+            border-radius: 3px;
+            margin-left: auto;
+        }
     </style>
 </head>
 <body>
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <ul id="skeletonFileList" class="file-list" style="display: none;">
+        <li class="skeleton-card">
+            <div class="skeleton-title"></div>
+            <div class="skeleton-link"></div>
+        </li>
+        <li class="skeleton-card">
+            <div class="skeleton-title"></div>
+            <div class="skeleton-link"></div>
+        </li>
+        <li class="skeleton-card">
+            <div class="skeleton-title"></div>
+            <div class="skeleton-link"></div>
+        </li>
+    </ul>
+
     <div class="container">
         <div class="search-bar">
             <input type="text" id="searchInput" class="form-control" placeholder="Search HTML pages...">
@@ -41,16 +112,27 @@
         <ul id="fileList" class="file-list"></ul>
         <div id="errorMessage" class="alert alert-danger" style="display:none;"></div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        // Replace these constants with your GitHub Pages URL
         const githubPagesBaseUrl = 'https://hojjat-monzavi.github.io/Hojjat/';
         const repoOwner = 'hojjat-monzavi';
         const repoName = 'Hojjat';
         const branch = 'main';
         const apiBaseUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/`;
-        
-        // Fetch all HTML files in the given path
+
+        const showLoadingAnimation = () => {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            document.getElementById('skeletonFileList').style.display = 'block';
+            document.getElementById('fileList').style.display = 'none';
+        };
+
+        const hideLoadingAnimation = () => {
+            document.getElementById('loadingOverlay').style.display = 'none';
+            document.getElementById('skeletonFileList').style.display = 'none';
+            document.getElementById('fileList').style.display = 'block';
+        };
+
         const fetchHtmlFiles = async (path = '') => {
             try {
                 const response = await axios.get(apiBaseUrl + path, {
@@ -63,7 +145,6 @@
             }
         };
 
-        // Fetch the title of an HTML page
         const fetchHtmlTitle = async (fileUrl) => {
             try {
                 const response = await axios.get(fileUrl);
@@ -77,13 +158,16 @@
             }
         };
 
-        // Render the HTML files in the file list
         const renderHtmlFiles = async () => {
             const fileListElement = document.getElementById('fileList');
             const errorMessageElement = document.getElementById('errorMessage');
 
+            showLoadingAnimation();
+
             try {
                 const files = await fetchHtmlFiles();
+                fileListElement.innerHTML = '';
+
                 if (files.length === 0) {
                     fileListElement.innerHTML = '<li>No HTML pages found.</li>';
                 } else {
@@ -101,10 +185,11 @@
             } catch (error) {
                 errorMessageElement.textContent = 'Error fetching HTML files from GitHub repository.';
                 errorMessageElement.style.display = 'block';
+            } finally {
+                hideLoadingAnimation();
             }
         };
 
-        // Filter files based on search input
         const filterFiles = () => {
             const searchInput = document.getElementById('searchInput').value.toLowerCase();
             const fileListItems = document.querySelectorAll('#fileList li');
@@ -118,10 +203,8 @@
             });
         };
 
-        // Add event listener to the search input
         document.getElementById('searchInput').addEventListener('input', filterFiles);
 
-        // Render the HTML files when the page loads
         renderHtmlFiles();
     </script>
 </body>
