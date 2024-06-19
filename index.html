@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML File Index</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        .file-list {
+            list-style: none;
+            padding: 0;
+        }
+        .file-list li {
+            padding: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .file-list a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .file-list a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search HTML files...">
+        </div>
+        <ul id="fileList" class="file-list"></ul>
+        <div id="errorMessage" class="alert alert-danger" style="display:none;"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // Replace these constants with your GitHub Pages URL
+        const githubPagesBaseUrl = 'https://hojjat-monzavi.github.io/Hojjat/';
+        const repoOwner = 'hojjat-monzavi';
+        const repoName = 'Hojjat';
+        const branch = 'main';
+        const apiBaseUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/`;
+        
+        // Fetch all HTML files in the given path
+        const fetchHtmlFiles = async (path = '') => {
+            try {
+                const response = await axios.get(apiBaseUrl + path, {
+                    headers: { 'Accept': 'application/vnd.github.v3+json' }
+                });
+                return response.data.filter(file => file.type === 'file' && file.name.endsWith('.html'));
+            } catch (error) {
+                console.error(error);
+                return [];
+            }
+        };
+
+        // Render the HTML files in the file list
+        const renderHtmlFiles = async () => {
+            const fileListElement = document.getElementById('fileList');
+            const errorMessageElement = document.getElementById('errorMessage');
+
+            try {
+                const files = await fetchHtmlFiles();
+                if (files.length === 0) {
+                    fileListElement.innerHTML = '<li>No HTML files found.</li>';
+                } else {
+                    files.forEach(file => {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('list-group-item');
+                        const link = document.createElement('a');
+                        link.href = githubPagesBaseUrl + file.name;
+                        link.textContent = file.name;
+                        listItem.appendChild(link);
+                        fileListElement.appendChild(listItem);
+                    });
+                }
+            } catch (error) {
+                errorMessageElement.textContent = 'Error fetching HTML files from GitHub repository.';
+                errorMessageElement.style.display = 'block';
+            }
+        };
+
+        // Filter files based on search input
+        const filterFiles = () => {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const fileListItems = document.querySelectorAll('#fileList li');
+            fileListItems.forEach(item => {
+                const link = item.querySelector('a');
+                if (link.textContent.toLowerCase().includes(searchInput)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        };
+
+        // Add event listener to the search input
+        document.getElementById('searchInput').addEventListener('input', filterFiles);
+
+        // Render the HTML files when the page loads
+        renderHtmlFiles();
+    </script>
+</body>
+</html>
