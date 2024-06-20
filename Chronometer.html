@@ -298,9 +298,9 @@
             // Initial setup
             updateDisplay();
             updateLapDisplay();
-
+            //TODO: a better approach for this bug is required. it's resuming after reload
             if (stopwatchState.isRunning){
-              stopwatchState.isRunning = false;
+              stop()
               start()
             }
         });
