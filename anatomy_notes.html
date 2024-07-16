@@ -1,0 +1,2001 @@
+
+<!DOCTYPE html>
+<html lang="fa" x-data="{ darkMode: false }" :class="{ 'dark': darkMode }">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anatomy Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Roboto', 'sans-serif'],
+                        'persian': ['Vazirmatn', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .card-container {
+            perspective: 1000px;
+        }
+        .card {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+    <div class="container mx-auto px-4 py-8" x-data="{ searchTerm: '' }">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Anatomy Notes</h1>
+            <div class="flex space-x-4">
+                <button @click="darkMode = !darkMode" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white">
+                    <svg x-show="!darkMode" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    <svg x-show="darkMode" x-cloak class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                </button>
+            </div>
+        </div>
+        <input type="text" x-model="searchTerm" placeholder="Search anatomy notes..." class="w-full p-2 mb-8 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان ترقوه اولین استخوانی است که در بدن شروع به تشکیل و رشد میکند (در هفته 5 جنینی).'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان ترقوه اولین استخوانی است که در بدن شروع به تشکیل و رشد میکند (در هفته 5 جنینی).</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان ترقوه اولین استخوانی است که در بدن شروع به تشکیل و رشد میکند (در هفته 5 جنینی).</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان ترقوه در تمام طول خود قابل لمس است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان ترقوه در تمام طول خود قابل لمس است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان ترقوه در تمام طول خود قابل لمس است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان ترقوه از بالا به صورت s خوابیده است و در طول خود دو خم دارد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان ترقوه از بالا به صورت S خوابیده است و در طول خود دو خم دارد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان ترقوه از بالا به صورت S خوابیده است و در طول خود دو خم دارد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'تنۀ استخوان ترقوه دارای یک کنار قدامی و یک کنار خلفی است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">تنۀ استخوان ترقوه دارای یک کنار قدامی و یک کنار خلفی است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">تنۀ استخوان ترقوه دارای یک کنار قدامی و یک کنار خلفی است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'تنۀ استخوان ترقوه دارای یک سطح فوقانی و یک سطح تحتانی است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">تنۀ استخوان ترقوه دارای یک سطح فوقانی و یک سطح تحتانی است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">تنۀ استخوان ترقوه دارای یک سطح فوقانی و یک سطح تحتانی است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'طول استخوان ترقوه از دیگر ابعاد آن بیشتر است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">طول استخوان ترقوه از دیگر ابعاد آن بیشتر است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">طول استخوان ترقوه از دیگر ابعاد آن بیشتر است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان ترقوه دارای 2 انتها است: انتهای خارجی و انتهای داخلی.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان ترقوه دارای 2 انتها است: انتهای خارجی و انتهای داخلی.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان ترقوه دارای 2 انتها است: انتهای خارجی و انتهای داخلی.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'از نظر بالینی، استخوان ترقوه شایع‌ترین استخوانی است که دچار شکستگی می‌شود، به ویژه در اطفال و نوزادان به دلیل افتادن روی دست یا نوع خروج جنین هنگام زایمان.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">از نظر بالینی، استخوان ترقوه شایع‌ترین استخوانی است که دچار شکستگی می‌شود، به ویژه در اطفال و نوزادان به دلیل افتادن روی دست یا نوع خروج جنین هنگام زایمان.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">از نظر بالینی، استخوان ترقوه شایع‌ترین استخوانی است که دچار شکستگی می‌شود، به ویژه در اطفال و نوزادان به دلیل افتادن روی دست یا نوع خروج جنین هنگام زایمان.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'شکستگی استخوان ترقوه غالباً به خاطر فشارهای غیرمستقیم رخ می‌دهد و معمولاً در حد فاصل ثلث خارجی و ثلث میانی دچار شکستگی می‌شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی استخوان ترقوه غالباً به خاطر فشارهای غیرمستقیم رخ می‌دهد و معمولاً در حد فاصل ثلث خارجی و ثلث میانی دچار شکستگی می‌شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی استخوان ترقوه غالباً به خاطر فشارهای غیرمستقیم رخ می‌دهد و معمولاً در حد فاصل ثلث خارجی و ثلث میانی دچار شکستگی می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'درمان شکستگی ترقوه در نوزادان نیاز به درمان خاصی ندارد و تنها خواباندن نوزاد به پشت کافی است. درمان معمولاً 3 تا 4 هفته طول می‌کشد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">درمان شکستگی ترقوه در نوزادان نیاز به درمان خاصی ندارد و تنها خواباندن نوزاد به پشت کافی است. درمان معمولاً 3 تا 4 هفته طول می‌کشد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">درمان شکستگی ترقوه در نوزادان نیاز به درمان خاصی ندارد و تنها خواباندن نوزاد به پشت کافی است. درمان معمولاً 3 تا 4 هفته طول می‌کشد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'برای جایگذاری صحیح استخوان ترقوه، باید آن را به گونه‌ای در دست بگیریم که ناودان آن به سمت پایین باشد و سطح پهن شده به سمت خارج باشد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">برای جایگذاری صحیح استخوان ترقوه، باید آن را به گونه‌ای در دست بگیریم که ناودان آن به سمت پایین باشد و سطح پهن شده به سمت خارج باشد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">برای جایگذاری صحیح استخوان ترقوه، باید آن را به گونه‌ای در دست بگیریم که ناودان آن به سمت پایین باشد و سطح پهن شده به سمت خارج باشد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان ترقوه (clavicle) یک استخوان دراز است که دارای یک تنه و دو انتهای داخلی و خارجی است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان ترقوه (clavicle) یک استخوان دراز است که دارای یک تنه و دو انتهای داخلی و خارجی است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان ترقوه (clavicle) یک استخوان دراز است که دارای یک تنه و دو انتهای داخلی و خارجی است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'سر استخوان اولنا در قسمت تحتانی این استخوان واقع شده است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سر استخوان اولنا در قسمت تحتانی این استخوان واقع شده است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سر استخوان اولنا در قسمت تحتانی این استخوان واقع شده است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'سر استخوان radius در سمت داخلی خود با کنار خارجی انتهای فوقانی استخوان اولنا مفصل تشکیل می دهد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سر استخوان Radius در سمت داخلی خود با کنار خارجی انتهای فوقانی استخوان اولنا مفصل تشکیل می دهد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سر استخوان Radius در سمت داخلی خود با کنار خارجی انتهای فوقانی استخوان اولنا مفصل تشکیل می دهد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در انتهای تحتانی استخوان اولنا، زائدۀ نیزه ای یا styloid process وجود دارد که از قسمت خلفی استخوان به سمت داخل کشیده شده است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در انتهای تحتانی استخوان اولنا، زائدۀ نیزه ای یا Styloid process وجود دارد که از قسمت خلفی استخوان به سمت داخل کشیده شده است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در انتهای تحتانی استخوان اولنا، زائدۀ نیزه ای یا Styloid process وجود دارد که از قسمت خلفی استخوان به سمت داخل کشیده شده است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'سر استخوان اولنا دارای یک رویۀ مفصلی است که با یک دیسک مفصلی ارتباط برقرار می کند. این دیسک فاصلۀ بین سر اولنا و استخوانهای مچ را پر میکند. بنابراین، استخوان اولنا به طور مستقیم در مفصل مچ شرکت نمیکند، بلکه به صورت غیر مستقیم در آن نقش دارد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سر استخوان اولنا دارای یک رویۀ مفصلی است که با یک دیسک مفصلی ارتباط برقرار می کند. این دیسک فاصلۀ بین سر اولنا و استخوانهای مچ را پر میکند. بنابراین، استخوان اولنا به طور مستقیم در مفصل مچ شرکت نمیکند، بلکه به صورت غیر مستقیم در آن نقش دارد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سر استخوان اولنا دارای یک رویۀ مفصلی است که با یک دیسک مفصلی ارتباط برقرار می کند. این دیسک فاصلۀ بین سر اولنا و استخوانهای مچ را پر میکند. بنابراین، استخوان اولنا به طور مستقیم در مفصل مچ شرکت نمیکند، بلکه به صورت غیر مستقیم در آن نقش دارد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در سطح تحتانی انتهای تحتانی استخوان radius، دو رویۀ مفصلی وجود دارد که توسط یک بریدگی از یکدیگر جدا شده اند و در تشکیل مفصل مچ شرکت می کنند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح تحتانی انتهای تحتانی استخوان Radius، دو رویۀ مفصلی وجود دارد که توسط یک بریدگی از یکدیگر جدا شده اند و در تشکیل مفصل مچ شرکت می کنند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح تحتانی انتهای تحتانی استخوان Radius، دو رویۀ مفصلی وجود دارد که توسط یک بریدگی از یکدیگر جدا شده اند و در تشکیل مفصل مچ شرکت می کنند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'سر استخوان اولنا با یک بریدگی از انتهای تحتانی استخوان radius به نام بریدگی اولنا ارتباط برقرار کرده و مفصل رادیو-اولنار تحتانی را ایجاد میکند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سر استخوان اولنا با یک بریدگی از انتهای تحتانی استخوان Radius به نام بریدگی اولنا ارتباط برقرار کرده و مفصل رادیو-اولنار تحتانی را ایجاد میکند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سر استخوان اولنا با یک بریدگی از انتهای تحتانی استخوان Radius به نام بریدگی اولنا ارتباط برقرار کرده و مفصل رادیو-اولنار تحتانی را ایجاد میکند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان radius یک استخوان دراز در سمت خارجی ساعد است که کوتاهتر از استخوان ulna می باشد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان Radius یک استخوان دراز در سمت خارجی ساعد است که کوتاهتر از استخوان Ulna می باشد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان Radius یک استخوان دراز در سمت خارجی ساعد است که کوتاهتر از استخوان Ulna می باشد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'رویۀ مفصلی بزرگتر در خارج انتهای تحتانی استخوان radius برای مفصل شدن با استخوان scaphoid (ناوی) مچ است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">رویۀ مفصلی بزرگتر در خارج انتهای تحتانی استخوان Radius برای مفصل شدن با استخوان Scaphoid (ناوی) مچ است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">رویۀ مفصلی بزرگتر در خارج انتهای تحتانی استخوان Radius برای مفصل شدن با استخوان Scaphoid (ناوی) مچ است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در سطح قدامی استخوان radius یک برجستگی به نام radial tuberosity وجود دارد که محل اتصال عضلات است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح قدامی استخوان Radius یک برجستگی به نام Radial tuberosity وجود دارد که محل اتصال عضلات است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح قدامی استخوان Radius یک برجستگی به نام Radial tuberosity وجود دارد که محل اتصال عضلات است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در انتهای تحتانی استخوان radius، به سمت خارج یک زائده به نام styloid process of radius وجود دارد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در انتهای تحتانی استخوان Radius، به سمت خارج یک زائده به نام Styloid process of Radius وجود دارد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در انتهای تحتانی استخوان Radius، به سمت خارج یک زائده به نام Styloid process of Radius وجود دارد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در سطح خلفی انتهای تحتانی استخوان radius، یک سری ناودان وجود دارد که تاندون عضلات اکستنسوری از درون آن ها عبور می کند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح خلفی انتهای تحتانی استخوان Radius، یک سری ناودان وجود دارد که تاندون عضلات اکستنسوری از درون آن ها عبور می کند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح خلفی انتهای تحتانی استخوان Radius، یک سری ناودان وجود دارد که تاندون عضلات اکستنسوری از درون آن ها عبور می کند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'رویۀ مفصلی کوچکتر و گردتر در داخل انتهای تحتانی استخوان radius برای مفصل شدن با استخوان lunate (هلالی) مچ است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">رویۀ مفصلی کوچکتر و گردتر در داخل انتهای تحتانی استخوان Radius برای مفصل شدن با استخوان Lunate (هلالی) مچ است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">رویۀ مفصلی کوچکتر و گردتر در داخل انتهای تحتانی استخوان Radius برای مفصل شدن با استخوان Lunate (هلالی) مچ است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'سطح فوقانی استخوان کلاویکل شامل نکات مهمی است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سطح فوقانی استخوان کلاویکل شامل نکات مهمی است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سطح فوقانی استخوان کلاویکل شامل نکات مهمی است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'سطح تحتانی استخوان کلاویکل یک بخش میانی و دو بخش طرفی دارد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سطح تحتانی استخوان کلاویکل یک بخش میانی و دو بخش طرفی دارد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سطح تحتانی استخوان کلاویکل یک بخش میانی و دو بخش طرفی دارد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در بخش طرفی استخوان کلاویکل، انتهای داخلی دارای یک زبرشدگی و انتهای خارجی دارای دو زبرشدگی است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در بخش طرفی استخوان کلاویکل، انتهای داخلی دارای یک زبرشدگی و انتهای خارجی دارای دو زبرشدگی است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در بخش طرفی استخوان کلاویکل، انتهای داخلی دارای یک زبرشدگی و انتهای خارجی دارای دو زبرشدگی است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'اندام فوقانی شامل استخوان های کمربند شانه ای است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">اندام فوقانی شامل استخوان های کمربند شانه ای است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">اندام فوقانی شامل استخوان های کمربند شانه ای است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان های کمربند شانه ای اندام فوقانی را به تنه متصل می کنند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های کمربند شانه ای اندام فوقانی را به تنه متصل می کنند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های کمربند شانه ای اندام فوقانی را به تنه متصل می کنند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'شایع ترین استخوان مچ دست که دچار شکستگی می شود، استخوان scaphoid است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شایع ترین استخوان مچ دست که دچار شکستگی می شود، استخوان Scaphoid است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شایع ترین استخوان مچ دست که دچار شکستگی می شود، استخوان Scaphoid است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'شکستگی در استخوان پنجم کف دست (metacarpal 5) معمولا در اثر مشت زدن اتفاق می افتد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی در استخوان پنجم کف دست (Metacarpal 5) معمولا در اثر مشت زدن اتفاق می افتد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی در استخوان پنجم کف دست (Metacarpal 5) معمولا در اثر مشت زدن اتفاق می افتد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'شکستگی در استخوان اول کف دست (metacarpal 1) به نام شکستگی bennett (bennett fracture) شناخته می شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی در استخوان اول کف دست (Metacarpal 1) به نام شکستگی Bennett (Bennett fracture) شناخته می شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی در استخوان اول کف دست (Metacarpal 1) به نام شکستگی Bennett (Bennett fracture) شناخته می شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'اولین استخوانی که در دوران جنینی شروع به تشکیل می کند، استخوان capitate است و سایر استخوان های مچ دست حول آن شکل می گیرند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">اولین استخوانی که در دوران جنینی شروع به تشکیل می کند، استخوان Capitate است و سایر استخوان های مچ دست حول آن شکل می گیرند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">اولین استخوانی که در دوران جنینی شروع به تشکیل می کند، استخوان Capitate است و سایر استخوان های مچ دست حول آن شکل می گیرند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'درمان شکستگی کالز در افراد مسن با جراحی و پین، و در افراد جوان با گچ انجام می شود. در موارد شدید، قطعۀ شکسته شده به عقب و خارج جابجا می شود و حالت چنگالی (dinner fork deformity) ایجاد می کند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">درمان شکستگی کالز در افراد مسن با جراحی و پین، و در افراد جوان با گچ انجام می شود. در موارد شدید، قطعۀ شکسته شده به عقب و خارج جابجا می شود و حالت چنگالی (dinner fork deformity) ایجاد می کند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">درمان شکستگی کالز در افراد مسن با جراحی و پین، و در افراد جوان با گچ انجام می شود. در موارد شدید، قطعۀ شکسته شده به عقب و خارج جابجا می شود و حالت چنگالی (dinner fork deformity) ایجاد می کند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'شکستگی اسمیت (smith's fracture) عکس شکستگی کالز است و در آن قطعه شکسته به سمت پشت جابجا می شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی اسمیت (Smith's fracture) عکس شکستگی کالز است و در آن قطعه شکسته به سمت پشت جابجا می شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی اسمیت (Smith's fracture) عکس شکستگی کالز است و در آن قطعه شکسته به سمت پشت جابجا می شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'شکستگی تنۀ ساعد یا شکستگی دوبل ساعد زمانی رخ می دهد که ضربه شدید باشد و به تنه آسیب بزند، در نتیجه استخوان مجاور هم می شکند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی تنۀ ساعد یا شکستگی دوبل ساعد زمانی رخ می دهد که ضربه شدید باشد و به تنه آسیب بزند، در نتیجه استخوان مجاور هم می شکند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی تنۀ ساعد یا شکستگی دوبل ساعد زمانی رخ می دهد که ضربه شدید باشد و به تنه آسیب بزند، در نتیجه استخوان مجاور هم می شکند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'شمارش استخوان های مچ دست معمولا از خارج به داخل در حالت آناتومیک انجام می شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شمارش استخوان های مچ دست معمولا از خارج به داخل در حالت آناتومیک انجام می شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شمارش استخوان های مچ دست معمولا از خارج به داخل در حالت آناتومیک انجام می شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'انتهای خارجی استخوان ترقوه پهن و تخت است که با زائده آکرومیون از استخوان کتف مفصل تشکیل می‌دهد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای خارجی استخوان ترقوه پهن و تخت است که با زائده آکرومیون از استخوان کتف مفصل تشکیل می‌دهد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای خارجی استخوان ترقوه پهن و تخت است که با زائده آکرومیون از استخوان کتف مفصل تشکیل می‌دهد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'قسمت داخلی استرنال استخوان ترقوه چهارگوش است و با استخوان جناغ مفصل تشکیل می‌دهد، اما تمامی آن با استخوان جناغ مفصل نمی‌شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">قسمت داخلی استرنال استخوان ترقوه چهارگوش است و با استخوان جناغ مفصل تشکیل می‌دهد، اما تمامی آن با استخوان جناغ مفصل نمی‌شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">قسمت داخلی استرنال استخوان ترقوه چهارگوش است و با استخوان جناغ مفصل تشکیل می‌دهد، اما تمامی آن با استخوان جناغ مفصل نمی‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'انتهای داخلی استخوان ترقوه چهارگوش است و در مفصل استرنوکلاویکولار با استخوان جناغ مفصل می‌شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای داخلی استخوان ترقوه چهارگوش است و در مفصل استرنوکلاویکولار با استخوان جناغ مفصل می‌شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای داخلی استخوان ترقوه چهارگوش است و در مفصل استرنوکلاویکولار با استخوان جناغ مفصل می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در بخش میانی سطح تحتانی استخوان کلاویکل، یک ناودان کم عمق به نام ناودان ساب‌کلاویوس وجود دارد که به دلیل قرار گرفتن زیر استخوان ترقوه به این نام خوانده می‌شود. در این ناودان، عضله ساب‌کلاویوس متصل می‌شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در بخش میانی سطح تحتانی استخوان کلاویکل، یک ناودان کم عمق به نام ناودان ساب‌کلاویوس وجود دارد که به دلیل قرار گرفتن زیر استخوان ترقوه به این نام خوانده می‌شود. در این ناودان، عضله ساب‌کلاویوس متصل می‌شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در بخش میانی سطح تحتانی استخوان کلاویکل، یک ناودان کم عمق به نام ناودان ساب‌کلاویوس وجود دارد که به دلیل قرار گرفتن زیر استخوان ترقوه به این نام خوانده می‌شود. در این ناودان، عضله ساب‌کلاویوس متصل می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'درمان شکستگی ترقوه در بزرگسالان شامل استفاده از بانداژ به شکل عدد 8 به مدت 5 تا 6 هفته است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">درمان شکستگی ترقوه در بزرگسالان شامل استفاده از بانداژ به شکل عدد 8 به مدت 5 تا 6 هفته است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">درمان شکستگی ترقوه در بزرگسالان شامل استفاده از بانداژ به شکل عدد 8 به مدت 5 تا 6 هفته است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'سطح فوقانی تنه استخوان ترقوه صاف و تخت است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سطح فوقانی تنه استخوان ترقوه صاف و تخت است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سطح فوقانی تنه استخوان ترقوه صاف و تخت است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'رباط annular (حلقوی) به صورت دایره ای سر استخوان radius را در بر می گیرد و به بریدگی رادیال استخوان اولنا متصل می کند. این رباط نقش حمایتی دارد اما قدرت زیادی ندارد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">رباط Annular (حلقوی) به صورت دایره ای سر استخوان Radius را در بر می گیرد و به بریدگی رادیال استخوان اولنا متصل می کند. این رباط نقش حمایتی دارد اما قدرت زیادی ندارد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">رباط Annular (حلقوی) به صورت دایره ای سر استخوان Radius را در بر می گیرد و به بریدگی رادیال استخوان اولنا متصل می کند. این رباط نقش حمایتی دارد اما قدرت زیادی ندارد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'زائدۀ styloid استخوان اولنا حدود 1 تا 1.5 سانتی متر بالاتر از زائدۀ styloid استخوان رادیوس قرار دارد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">زائدۀ Styloid استخوان اولنا حدود 1 تا 1.5 سانتی متر بالاتر از زائدۀ Styloid استخوان رادیوس قرار دارد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">زائدۀ Styloid استخوان اولنا حدود 1 تا 1.5 سانتی متر بالاتر از زائدۀ Styloid استخوان رادیوس قرار دارد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'شکستگی کالز (colle's fracture) در انتهای تحتانی استخوان رادیوس، به ویژه در افراد مسن رخ می دهد. در این شکستگی، قطعه شکسته شده به سمت عقب جا به جا میشود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی کالز (Colle's fracture) در انتهای تحتانی استخوان رادیوس، به ویژه در افراد مسن رخ می دهد. در این شکستگی، قطعه شکسته شده به سمت عقب جا به جا میشود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی کالز (Colle's fracture) در انتهای تحتانی استخوان رادیوس، به ویژه در افراد مسن رخ می دهد. در این شکستگی، قطعه شکسته شده به سمت عقب جا به جا میشود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'انتهای فوقانی استخوان radius دارای یک سر مدور است که درون آن حفره ای به نام جام رادیوس قرار دارد و با capitulum استخوان بازو مفصل تشکیل می دهد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای فوقانی استخوان Radius دارای یک سر مدور است که درون آن حفره ای به نام جام رادیوس قرار دارد و با Capitulum استخوان بازو مفصل تشکیل می دهد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای فوقانی استخوان Radius دارای یک سر مدور است که درون آن حفره ای به نام جام رادیوس قرار دارد و با Capitulum استخوان بازو مفصل تشکیل می دهد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'بین radial tuberosity و سر استخوان radius ناحیه ای به نام گردن یا neck وجود دارد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">بین Radial tuberosity و سر استخوان Radius ناحیه ای به نام گردن یا Neck وجود دارد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">بین Radial tuberosity و سر استخوان Radius ناحیه ای به نام گردن یا Neck وجود دارد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در سطح قدامی تنه استخوان radius، یک خط مایل به نام anterior oblique line وجود دارد که از radius tuberosity به سمت کنار خارجی می رود و محل اتصال عضله است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح قدامی تنه استخوان Radius، یک خط مایل به نام Anterior oblique line وجود دارد که از Radius tuberosity به سمت کنار خارجی می رود و محل اتصال عضله است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح قدامی تنه استخوان Radius، یک خط مایل به نام Anterior oblique line وجود دارد که از Radius tuberosity به سمت کنار خارجی می رود و محل اتصال عضله است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'بین ناودان های سطح خلفی انتهای تحتانی استخوان radius، یک برجستگی به نام dorsal tubercle یا lister's tubercle دیده می شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">بین ناودان های سطح خلفی انتهای تحتانی استخوان Radius، یک برجستگی به نام Dorsal tubercle یا Lister's tubercle دیده می شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">بین ناودان های سطح خلفی انتهای تحتانی استخوان Radius، یک برجستگی به نام Dorsal tubercle یا Lister's tubercle دیده می شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان کتف (scapula) یک استخوان پهن و نامنظم است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان کتف (scapula) یک استخوان پهن و نامنظم است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان کتف (scapula) یک استخوان پهن و نامنظم است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در انتهای آکرومیال استخوان کلاویکل، یک خط زبر به نام خط تراپزوئید وجود دارد که به سمت جلو و خارج امتداد می‌یابد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در انتهای آکرومیال استخوان کلاویکل، یک خط زبر به نام خط تراپزوئید وجود دارد که به سمت جلو و خارج امتداد می‌یابد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در انتهای آکرومیال استخوان کلاویکل، یک خط زبر به نام خط تراپزوئید وجود دارد که به سمت جلو و خارج امتداد می‌یابد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در پشت خط تراپزوئید و نزدیک به لبه خلفی استخوان کلاویکل، یک تکمه به نام تکمه کونوئید وجود دارد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در پشت خط تراپزوئید و نزدیک به لبه خلفی استخوان کلاویکل، یک تکمه به نام تکمه کونوئید وجود دارد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در پشت خط تراپزوئید و نزدیک به لبه خلفی استخوان کلاویکل، یک تکمه به نام تکمه کونوئید وجود دارد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'شکستگی شایع در بزرگسالان، شکستگی گردن جراحی است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی شایع در بزرگسالان، شکستگی گردن جراحی است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی شایع در بزرگسالان، شکستگی گردن جراحی است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'عصب آگزیلاری در مجاورت گردن جراحی قرار دارد و از آن عبور می‌کند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">عصب آگزیلاری در مجاورت گردن جراحی قرار دارد و از آن عبور می‌کند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">عصب آگزیلاری در مجاورت گردن جراحی قرار دارد و از آن عبور می‌کند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'یک‌چهارم فوقانی انتهای استرنال توسط رباط عرضی اینترکلاویکولار متصل می‌شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">یک‌چهارم فوقانی انتهای استرنال توسط رباط عرضی اینترکلاویکولار متصل می‌شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">یک‌چهارم فوقانی انتهای استرنال توسط رباط عرضی اینترکلاویکولار متصل می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان های کف دست یا metacarpal با قاعدۀ خود به استخوان های مچ دست (carpal) مفصل می شوند و با سر خود به استخوان های انگشتان (phalanges) مفصل می شوند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های کف دست یا Metacarpal با قاعدۀ خود به استخوان های مچ دست (Carpal) مفصل می شوند و با سر خود به استخوان های انگشتان (Phalanges) مفصل می شوند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های کف دست یا Metacarpal با قاعدۀ خود به استخوان های مچ دست (Carpal) مفصل می شوند و با سر خود به استخوان های انگشتان (Phalanges) مفصل می شوند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان های مچ دست یا carpal برای متخصصین رادیولوژی و سونوگرافی جهت چک کردن اپی فیزهای استخوانی اهمیت دارند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های مچ دست یا Carpal برای متخصصین رادیولوژی و سونوگرافی جهت چک کردن اپی فیزهای استخوانی اهمیت دارند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های مچ دست یا Carpal برای متخصصین رادیولوژی و سونوگرافی جهت چک کردن اپی فیزهای استخوانی اهمیت دارند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'خار اسکپولا در محاذات مهره t₃ قرار دارد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">خار اسکپولا در محاذات مهره T₃ قرار دارد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">خار اسکپولا در محاذات مهره T₃ قرار دارد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'عصب اولنار از پشت اپی‌کوندیل داخلی عبور می‌کند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">عصب اولنار از پشت اپی‌کوندیل داخلی عبور می‌کند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">عصب اولنار از پشت اپی‌کوندیل داخلی عبور می‌کند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان های کمربند شانه ای شامل ترقوه یا clavicle و کتف یا scapula هستند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های کمربند شانه ای شامل ترقوه یا Clavicle و کتف یا Scapula هستند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های کمربند شانه ای شامل ترقوه یا Clavicle و کتف یا Scapula هستند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'زائده کوراکوئید (coracoid) استخوان کتف از ریشه زاویه خارجی به سمت جلو و خارج می‌رود و تا حدود 2.5 سانتی‌متری زیر ترقوه ادامه دارد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">زائده کوراکوئید (coracoid) استخوان کتف از ریشه زاویه خارجی به سمت جلو و خارج می‌رود و تا حدود 2.5 سانتی‌متری زیر ترقوه ادامه دارد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">زائده کوراکوئید (coracoid) استخوان کتف از ریشه زاویه خارجی به سمت جلو و خارج می‌رود و تا حدود 2.5 سانتی‌متری زیر ترقوه ادامه دارد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'از نظر بالینی، استخوان ترقوه دارای سه مرکز استخوان‌سازی است: دو مرکز در تنه که فعالیت خود را از ابتدای زندگی شروع می‌کنند و یک مرکز ثانویه در انتهای استرنال که فعالیت آن از 15-16 سالگی تا 25-26 سالگی ادامه دارد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">از نظر بالینی، استخوان ترقوه دارای سه مرکز استخوان‌سازی است: دو مرکز در تنه که فعالیت خود را از ابتدای زندگی شروع می‌کنند و یک مرکز ثانویه در انتهای استرنال که فعالیت آن از 15-16 سالگی تا 25-26 سالگی ادامه دارد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">از نظر بالینی، استخوان ترقوه دارای سه مرکز استخوان‌سازی است: دو مرکز در تنه که فعالیت خود را از ابتدای زندگی شروع می‌کنند و یک مرکز ثانویه در انتهای استرنال که فعالیت آن از 15-16 سالگی تا 25-26 سالگی ادامه دارد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'عروق شریان ساب‌کلاوین و اعصاب اندام فوقانی از زیر ترقوه و روی دنده اول عبور می‌کنند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">عروق شریان ساب‌کلاوین و اعصاب اندام فوقانی از زیر ترقوه و روی دنده اول عبور می‌کنند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">عروق شریان ساب‌کلاوین و اعصاب اندام فوقانی از زیر ترقوه و روی دنده اول عبور می‌کنند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در سطح قدامی استخوان کتف، اثراتی از خطوطی وجود دارد که اثر فشار دنده‌ها به درون استخوان است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح قدامی استخوان کتف، اثراتی از خطوطی وجود دارد که اثر فشار دنده‌ها به درون استخوان است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح قدامی استخوان کتف، اثراتی از خطوطی وجود دارد که اثر فشار دنده‌ها به درون استخوان است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان کتف دارای یک سطح قدامی است که چون رو به دنده‌ها قرار دارد به آن سطح کوستال می‌گویند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان کتف دارای یک سطح قدامی است که چون رو به دنده‌ها قرار دارد به آن سطح کوستال می‌گویند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان کتف دارای یک سطح قدامی است که چون رو به دنده‌ها قرار دارد به آن سطح کوستال می‌گویند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'کنار خارجی استخوان کتف ضخیم‌تر شده و آن نیز دارای اتصالات عضلانی است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">کنار خارجی استخوان کتف ضخیم‌تر شده و آن نیز دارای اتصالات عضلانی است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">کنار خارجی استخوان کتف ضخیم‌تر شده و آن نیز دارای اتصالات عضلانی است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'این دو استخوان هم در قسمت فوقانی و هم در قسمت تحتانی با یکدیگر مفصل تشکیل می‌دهند: رادیو اولنار فوقانی و رادیو اولنار تحتانی.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">این دو استخوان هم در قسمت فوقانی و هم در قسمت تحتانی با یکدیگر مفصل تشکیل می‌دهند: رادیو اولنار فوقانی و رادیو اولنار تحتانی.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">این دو استخوان هم در قسمت فوقانی و هم در قسمت تحتانی با یکدیگر مفصل تشکیل می‌دهند: رادیو اولنار فوقانی و رادیو اولنار تحتانی.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'رباط های طرفی مچ دست به زوائد styloid استخوان های اولنا و رادیوس متصل میشوند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">رباط های طرفی مچ دست به زوائد styloid استخوان های اولنا و رادیوس متصل میشوند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">رباط های طرفی مچ دست به زوائد styloid استخوان های اولنا و رادیوس متصل میشوند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان اولنا (ulna) یک استخوان دراز در داخل ساعد است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان اولنا (Ulna) یک استخوان دراز در داخل ساعد است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان اولنا (Ulna) یک استخوان دراز در داخل ساعد است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'انتهای فوقانی استخوان اولنا همچنین دارای زائده‌ای به نام کورونوئید (coronoid) است که در قدام واقع شده است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای فوقانی استخوان اولنا همچنین دارای زائده‌ای به نام کورونوئید (Coronoid) است که در قدام واقع شده است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای فوقانی استخوان اولنا همچنین دارای زائده‌ای به نام کورونوئید (Coronoid) است که در قدام واقع شده است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'انتهای فوقانی استخوان اولنا دارای زائده‌ای به نام اولکرانون (olecranon) است که به سمت خلف حرکت می‌کند و اتصال استخوانی دارد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای فوقانی استخوان اولنا دارای زائده‌ای به نام اولکرانون (Olecranon) است که به سمت خلف حرکت می‌کند و اتصال استخوانی دارد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای فوقانی استخوان اولنا دارای زائده‌ای به نام اولکرانون (Olecranon) است که به سمت خلف حرکت می‌کند و اتصال استخوانی دارد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'گردن جراحی (surgical neck) استخوان بازو به صورت ناگهانی ضخامت بازو را کاهش می‌دهد و محلی شایع برای شکستگی‌های بازو در افراد بالغ است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">گردن جراحی (surgical neck) استخوان بازو به صورت ناگهانی ضخامت بازو را کاهش می‌دهد و محلی شایع برای شکستگی‌های بازو در افراد بالغ است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">گردن جراحی (surgical neck) استخوان بازو به صورت ناگهانی ضخامت بازو را کاهش می‌دهد و محلی شایع برای شکستگی‌های بازو در افراد بالغ است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'شکستگی‌های اسکپولا شایع نیستند، اما اگر رخ دهند، معمولاً در اثر ضربات شدید و غالباً در کنار داخلی چون نازک‌تر است، ایجاد می‌شوند. شکستگی اغلب به صورت یک خط عرضی است. برای درمان نیازی به اقدام خاصی نیست و همین که فیکس باشد، عضلات نقش گچ را ایفا می‌کنند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی‌های اسکپولا شایع نیستند، اما اگر رخ دهند، معمولاً در اثر ضربات شدید و غالباً در کنار داخلی چون نازک‌تر است، ایجاد می‌شوند. شکستگی اغلب به صورت یک خط عرضی است. برای درمان نیازی به اقدام خاصی نیست و همین که فیکس باشد، عضلات نقش گچ را ایفا می‌کنند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی‌های اسکپولا شایع نیستند، اما اگر رخ دهند، معمولاً در اثر ضربات شدید و غالباً در کنار داخلی چون نازک‌تر است، ایجاد می‌شوند. شکستگی اغلب به صورت یک خط عرضی است. برای درمان نیازی به اقدام خاصی نیست و همین که فیکس باشد، عضلات نقش گچ را ایفا می‌کنند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'عضله ساب‌کلاویوس هنگام شکستگی ترقوه از عروق و اعصاب در برابر سر تیز استخوان محافظت می‌کند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">عضله ساب‌کلاویوس هنگام شکستگی ترقوه از عروق و اعصاب در برابر سر تیز استخوان محافظت می‌کند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">عضله ساب‌کلاویوس هنگام شکستگی ترقوه از عروق و اعصاب در برابر سر تیز استخوان محافظت می‌کند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'شکستگی شایع در کودکان، شکستگی سوپراکوندیلار است که معمولاً با ایسکمی ولکمان (volkmann) همراه است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی شایع در کودکان، شکستگی سوپراکوندیلار است که معمولاً با ایسکمی ولکمان (Volkmann) همراه است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">شکستگی شایع در کودکان، شکستگی سوپراکوندیلار است که معمولاً با ایسکمی ولکمان (Volkmann) همراه است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'انتهای استرنال استخوان کلاویکل با استخوان جناغ در مفصل استرنوکلاویکولار مفصل می‌شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای استرنال استخوان کلاویکل با استخوان جناغ در مفصل استرنوکلاویکولار مفصل می‌شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای استرنال استخوان کلاویکل با استخوان جناغ در مفصل استرنوکلاویکولار مفصل می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'انتهای استرنال استخوان ترقوه در مفصل استرنوکلاویکولار با استخوان جناغ مفصل می‌شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای استرنال استخوان ترقوه در مفصل استرنوکلاویکولار با استخوان جناغ مفصل می‌شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای استرنال استخوان ترقوه در مفصل استرنوکلاویکولار با استخوان جناغ مفصل می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'سه‌چهارم تحتانی انتهای استرنال به دسته استخوان جناغ (مانوبریوم) متصل می‌شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سه‌چهارم تحتانی انتهای استرنال به دسته استخوان جناغ (مانوبریوم) متصل می‌شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سه‌چهارم تحتانی انتهای استرنال به دسته استخوان جناغ (مانوبریوم) متصل می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'انتهای استرنال استخوان کلاویکل دارای یک زبرشدگی است که به رباط کوستو‌کلاویکولار یا دنده‌ای-ترقوه‌ای متصل می‌شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای استرنال استخوان کلاویکل دارای یک زبرشدگی است که به رباط کوستو‌کلاویکولار یا دنده‌ای-ترقوه‌ای متصل می‌شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای استرنال استخوان کلاویکل دارای یک زبرشدگی است که به رباط کوستو‌کلاویکولار یا دنده‌ای-ترقوه‌ای متصل می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'انتهای آکرومیال استخوان کلاویکل با زائده آکرومیون در مفصل آکرومیوکلاویکولار مفصل می‌شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای آکرومیال استخوان کلاویکل با زائده آکرومیون در مفصل آکرومیوکلاویکولار مفصل می‌شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای آکرومیال استخوان کلاویکل با زائده آکرومیون در مفصل آکرومیوکلاویکولار مفصل می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'انتهای آکرومیال استخوان ترقوه در مفصل آکرومیوکلاویکولار با زائده آکرومیون مفصل می‌شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای آکرومیال استخوان ترقوه در مفصل آکرومیوکلاویکولار با زائده آکرومیون مفصل می‌شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای آکرومیال استخوان ترقوه در مفصل آکرومیوکلاویکولار با زائده آکرومیون مفصل می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'لبه قدامی و لبه خلفی استخوان کلاویکل دارای دو خم هستند: خم انتهای استرنال دارای تحدب قدامی و خم انتهای آکرومیال دارای تحدب خلفی است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">لبه قدامی و لبه خلفی استخوان کلاویکل دارای دو خم هستند: خم انتهای استرنال دارای تحدب قدامی و خم انتهای آکرومیال دارای تحدب خلفی است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">لبه قدامی و لبه خلفی استخوان کلاویکل دارای دو خم هستند: خم انتهای استرنال دارای تحدب قدامی و خم انتهای آکرومیال دارای تحدب خلفی است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'آکرومیون در استخوان اسکپولا احتمال دررفتگی دارد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">آکرومیون در استخوان اسکپولا احتمال دررفتگی دارد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">آکرومیون در استخوان اسکپولا احتمال دررفتگی دارد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'دررفتگی‌های ناحیه استرنال نسبت به ناحیه آکرومیوکلاویکولار شایع‌تر است، زیرا به دلیل وجود مرکز استخوان‌سازی ثانویه، استحکام آن کمتر است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">دررفتگی‌های ناحیه استرنال نسبت به ناحیه آکرومیوکلاویکولار شایع‌تر است، زیرا به دلیل وجود مرکز استخوان‌سازی ثانویه، استحکام آن کمتر است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">دررفتگی‌های ناحیه استرنال نسبت به ناحیه آکرومیوکلاویکولار شایع‌تر است، زیرا به دلیل وجود مرکز استخوان‌سازی ثانویه، استحکام آن کمتر است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان بازو (humerus) یک استخوان دراز است و دارای یک تنه و دو انتهای فوقانی و تحتانی است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان بازو (Humerus) یک استخوان دراز است و دارای یک تنه و دو انتهای فوقانی و تحتانی است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان بازو (Humerus) یک استخوان دراز است و دارای یک تنه و دو انتهای فوقانی و تحتانی است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در کودکان زیر 4 یا 5 سال، وقتی والدین آنها را ناگهانی از مچ بلند میکنند، به علت عدم انقباض عضلات و تکامل ناکافی سر رادیوس و رباط annular، دررفتگی ناقص (subluxation) سر رادیوس ایجاد میشود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در کودکان زیر 4 یا 5 سال، وقتی والدین آنها را ناگهانی از مچ بلند میکنند، به علت عدم انقباض عضلات و تکامل ناکافی سر رادیوس و رباط annular، دررفتگی ناقص (Subluxation) سر رادیوس ایجاد میشود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در کودکان زیر 4 یا 5 سال، وقتی والدین آنها را ناگهانی از مچ بلند میکنند، به علت عدم انقباض عضلات و تکامل ناکافی سر رادیوس و رباط annular، دررفتگی ناقص (Subluxation) سر رادیوس ایجاد میشود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان‌های ساعد (forearm) شامل یک استخوان به سمت داخل به نام اولنا (ulna) و یک استخوان به سمت خارج به نام رادیوس (radius) هستند که بین بازو و مچ قرار گرفته‌اند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان‌های ساعد (Forearm) شامل یک استخوان به سمت داخل به نام اولنا (Ulna) و یک استخوان به سمت خارج به نام رادیوس (Radius) هستند که بین بازو و مچ قرار گرفته‌اند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان‌های ساعد (Forearm) شامل یک استخوان به سمت داخل به نام اولنا (Ulna) و یک استخوان به سمت خارج به نام رادیوس (Radius) هستند که بین بازو و مچ قرار گرفته‌اند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'برای تشخیص دررفتگی مفصل آکرومیوکلاویکولار باید حتماً رادیوگرافی انجام شود. به بیمار دو وزنه داده می‌شود و در صورت داشتن آسیب، ارتفاع مفصل بیش از حد نرمال خواهد بود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">برای تشخیص دررفتگی مفصل آکرومیوکلاویکولار باید حتماً رادیوگرافی انجام شود. به بیمار دو وزنه داده می‌شود و در صورت داشتن آسیب، ارتفاع مفصل بیش از حد نرمال خواهد بود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">برای تشخیص دررفتگی مفصل آکرومیوکلاویکولار باید حتماً رادیوگرافی انجام شود. به بیمار دو وزنه داده می‌شود و در صورت داشتن آسیب، ارتفاع مفصل بیش از حد نرمال خواهد بود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'خار اسکپولا به سمت خارج که می‌رود، پهن و تخت شده و زائده آکرومیون (acromion) را ایجاد می‌کند که در تشکیل مفصل آکرومیوکلاویکولار (acromioclavicular) نقش دارد. این مفصل استحکام خوبی دارد اما ممکن است دچار دررفتگی شود. (دررفتگی این مفصل را با دررفتگی مفصل شانه اشتباه نگیریم.)'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">خار اسکپولا به سمت خارج که می‌رود، پهن و تخت شده و زائده آکرومیون (Acromion) را ایجاد می‌کند که در تشکیل مفصل آکرومیوکلاویکولار (Acromioclavicular) نقش دارد. این مفصل استحکام خوبی دارد اما ممکن است دچار دررفتگی شود. (دررفتگی این مفصل را با دررفتگی مفصل شانه اشتباه نگیریم.)</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">خار اسکپولا به سمت خارج که می‌رود، پهن و تخت شده و زائده آکرومیون (Acromion) را ایجاد می‌کند که در تشکیل مفصل آکرومیوکلاویکولار (Acromioclavicular) نقش دارد. این مفصل استحکام خوبی دارد اما ممکن است دچار دررفتگی شود. (دررفتگی این مفصل را با دررفتگی مفصل شانه اشتباه نگیریم.)</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'دررفتگی مفصل شانه شایع است و بیشتر به صورت قدامی-تحتانی رخ می‌دهد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">دررفتگی مفصل شانه شایع است و بیشتر به صورت قدامی-تحتانی رخ می‌دهد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">دررفتگی مفصل شانه شایع است و بیشتر به صورت قدامی-تحتانی رخ می‌دهد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در خلف اپی‌کوندیل داخلی ناودانی قرار دارد که از داخل آن عصب اولنا عبور کرده و به سمت دست می‌آید.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در خلف اپی‌کوندیل داخلی ناودانی قرار دارد که از داخل آن عصب اولنا عبور کرده و به سمت دست می‌آید.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در خلف اپی‌کوندیل داخلی ناودانی قرار دارد که از داخل آن عصب اولنا عبور کرده و به سمت دست می‌آید.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در خلف اپی‌کوندیل داخلی یک حفره کم‌عمق وجود دارد که عصب اولنا از آن عبور می‌کند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در خلف اپی‌کوندیل داخلی یک حفره کم‌عمق وجود دارد که عصب اولنا از آن عبور می‌کند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در خلف اپی‌کوندیل داخلی یک حفره کم‌عمق وجود دارد که عصب اولنا از آن عبور می‌کند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان های مچ یا carpal شامل 8 استخوان در دو ردیف 4 تایی proximal و 4 تایی distal هستند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های مچ یا Carpal شامل 8 استخوان در دو ردیف 4 تایی proximal و 4 تایی Distal هستند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های مچ یا Carpal شامل 8 استخوان در دو ردیف 4 تایی proximal و 4 تایی Distal هستند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان های دست شامل سه بخش هستند: 1- استخوان های مچ یا carpal، 2- استخوان های کف دست یا metacarpal، و 3- استخوان های انگشتان یا phalanges.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های دست شامل سه بخش هستند: 1- استخوان های مچ یا Carpal، 2- استخوان های کف دست یا metacarpal، و 3- استخوان های انگشتان یا phalanges.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های دست شامل سه بخش هستند: 1- استخوان های مچ یا Carpal، 2- استخوان های کف دست یا metacarpal، و 3- استخوان های انگشتان یا phalanges.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان های مچ یا carpal به گونه ای قرار می گیرند که تعقر رو به قدام و تحدب رو به خلف داشته باشند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های مچ یا Carpal به گونه ای قرار می گیرند که تعقر رو به قدام و تحدب رو به خلف داشته باشند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های مچ یا Carpal به گونه ای قرار می گیرند که تعقر رو به قدام و تحدب رو به خلف داشته باشند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'به خط تراپزوئید و تکمه کونوئید یک رباط به نام رباط کوراکوکلاویکولار یا کتفی-ترقوه‌ای متصل می‌شود که دارای دو بخش است و هر کدام از این بخش‌ها به زبرشدگی همنام خود متصل می‌شوند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">به خط تراپزوئید و تکمه کونوئید یک رباط به نام رباط کوراکوکلاویکولار یا کتفی-ترقوه‌ای متصل می‌شود که دارای دو بخش است و هر کدام از این بخش‌ها به زبرشدگی همنام خود متصل می‌شوند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">به خط تراپزوئید و تکمه کونوئید یک رباط به نام رباط کوراکوکلاویکولار یا کتفی-ترقوه‌ای متصل می‌شود که دارای دو بخش است و هر کدام از این بخش‌ها به زبرشدگی همنام خود متصل می‌شوند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'روی حفره گلنوئید یک بافت لیفی حضور دارد که برای عمیق‌تر کردن این حفره مفصلی به کار می‌رود و به آن گلنوئید لابروم (glenoid labrum) می‌گویند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">روی حفره گلنوئید یک بافت لیفی حضور دارد که برای عمیق‌تر کردن این حفره مفصلی به کار می‌رود و به آن گلنوئید لابروم (Glenoid labrum) می‌گویند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">روی حفره گلنوئید یک بافت لیفی حضور دارد که برای عمیق‌تر کردن این حفره مفصلی به کار می‌رود و به آن گلنوئید لابروم (Glenoid labrum) می‌گویند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در نمای قدامی-داخلی، یک تکمه به نام لسر تیوبرکل (lesser tubercle) وجود دارد که عضلات روتاتور کاف به آن متصل می‌شوند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در نمای قدامی-داخلی، یک تکمه به نام لسر تیوبرکل (lesser tubercle) وجود دارد که عضلات روتاتور کاف به آن متصل می‌شوند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در نمای قدامی-داخلی، یک تکمه به نام لسر تیوبرکل (lesser tubercle) وجود دارد که عضلات روتاتور کاف به آن متصل می‌شوند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در نمای قدامی-خارجی، یک تکمه به نام گریتر تیوبرکل (greater tubercle) وجود دارد که عضلات روتاتور کاف به آن متصل می‌شوند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در نمای قدامی-خارجی، یک تکمه به نام گریتر تیوبرکل (greater tubercle) وجود دارد که عضلات روتاتور کاف به آن متصل می‌شوند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در نمای قدامی-خارجی، یک تکمه به نام گریتر تیوبرکل (greater tubercle) وجود دارد که عضلات روتاتور کاف به آن متصل می‌شوند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'یک بریدگی به نام رادیال ناچ (radial notch) وجود دارد که برای مفصل شدن با سر رادیوس به کار می‌رود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">یک بریدگی به نام رادیال ناچ (Radial notch) وجود دارد که برای مفصل شدن با سر رادیوس به کار می‌رود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">یک بریدگی به نام رادیال ناچ (Radial notch) وجود دارد که برای مفصل شدن با سر رادیوس به کار می‌رود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'بین قسمت‌های فوقانی و تحتانی استخوان‌های اولنا و رادیوس یک فضا به نام اینتراوسئوس (interosseous) وجود دارد که توسط غشای بین استخوانی پر می‌شود (interosseous membrane of forearm).'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">بین قسمت‌های فوقانی و تحتانی استخوان‌های اولنا و رادیوس یک فضا به نام اینتراوسئوس (Interosseous) وجود دارد که توسط غشای بین استخوانی پر می‌شود (Interosseous membrane of Forearm).</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">بین قسمت‌های فوقانی و تحتانی استخوان‌های اولنا و رادیوس یک فضا به نام اینتراوسئوس (Interosseous) وجود دارد که توسط غشای بین استخوانی پر می‌شود (Interosseous membrane of Forearm).</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'سطح خلفی استخوان کتف دارای خاری به نام خار اسکپولا (spine of scapula) است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سطح خلفی استخوان کتف دارای خاری به نام خار اسکپولا (spine of scapula) است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سطح خلفی استخوان کتف دارای خاری به نام خار اسکپولا (spine of scapula) است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'سطح قدامی استخوان کتف به شکل حفره است، به همین دلیل به آن حفره ساب‌اسکپولار می‌گویند، و داخل آن عضله‌ای به نام عضله ساب‌اسکپولار متصل می‌شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سطح قدامی استخوان کتف به شکل حفره است، به همین دلیل به آن حفره ساب‌اسکپولار می‌گویند، و داخل آن عضله‌ای به نام عضله ساب‌اسکپولار متصل می‌شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سطح قدامی استخوان کتف به شکل حفره است، به همین دلیل به آن حفره ساب‌اسکپولار می‌گویند، و داخل آن عضله‌ای به نام عضله ساب‌اسکپولار متصل می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان کتف دارای سه کنار است: کنار فوقانی، کنار داخلی، و کنار خارجی.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان کتف دارای سه کنار است: کنار فوقانی، کنار داخلی، و کنار خارجی.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان کتف دارای سه کنار است: کنار فوقانی، کنار داخلی، و کنار خارجی.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'کنار داخلی استخوان کتف که به سمت قفسه سینه (thorax) قرار دارد نازک‌تر است و دارای اتصالات عضلانی است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">کنار داخلی استخوان کتف که به سمت قفسه سینه (Thorax) قرار دارد نازک‌تر است و دارای اتصالات عضلانی است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">کنار داخلی استخوان کتف که به سمت قفسه سینه (Thorax) قرار دارد نازک‌تر است و دارای اتصالات عضلانی است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان کتف در قسمت خلفی و فوقانی قفسه سینه (thorax) قرار دارد و از دنده دوم تا دنده هفتم را می‌پوشاند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان کتف در قسمت خلفی و فوقانی قفسه سینه (Thorax) قرار دارد و از دنده دوم تا دنده هفتم را می‌پوشاند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان کتف در قسمت خلفی و فوقانی قفسه سینه (Thorax) قرار دارد و از دنده دوم تا دنده هفتم را می‌پوشاند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'از امتداد کنار خارجی به سمت بالا و زاویه خارجی استخوان کتف، یک حفره کم‌عمق به نام گلنوئید کاویتی (glenoid cavity) وجود دارد که بخش کمی از استخوان بازو (humerus) در آن مفصل تشکیل می‌دهد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">از امتداد کنار خارجی به سمت بالا و زاویه خارجی استخوان کتف، یک حفره کم‌عمق به نام گلنوئید کاویتی (Glenoid cavity) وجود دارد که بخش کمی از استخوان بازو (humerus) در آن مفصل تشکیل می‌دهد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">از امتداد کنار خارجی به سمت بالا و زاویه خارجی استخوان کتف، یک حفره کم‌عمق به نام گلنوئید کاویتی (Glenoid cavity) وجود دارد که بخش کمی از استخوان بازو (humerus) در آن مفصل تشکیل می‌دهد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان کتف دارای سه زاویه است: زاویه فوقانی، زاویه خارجی، و زاویه تحتانی.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان کتف دارای سه زاویه است: زاویه فوقانی، زاویه خارجی، و زاویه تحتانی.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان کتف دارای سه زاویه است: زاویه فوقانی، زاویه خارجی، و زاویه تحتانی.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'انتهای فوقانی استخوان بازو شامل سر (head) است که به صورت دایره‌ای به سمت داخل قرار دارد و با حفره گلنوئید (glenoid) استخوان کتف، مفصل شانه را ایجاد می‌کند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای فوقانی استخوان بازو شامل سر (Head) است که به صورت دایره‌ای به سمت داخل قرار دارد و با حفره گلنوئید (Glenoid) استخوان کتف، مفصل شانه را ایجاد می‌کند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای فوقانی استخوان بازو شامل سر (Head) است که به صورت دایره‌ای به سمت داخل قرار دارد و با حفره گلنوئید (Glenoid) استخوان کتف، مفصل شانه را ایجاد می‌کند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'سر استخوان بازو بزرگ‌تر از حفره گلنوئید است و برای حرکت نیاز به پشتیبانی دارد. این وظیفه را چهار عضله به نام روتاتور کاف (rotator cuff) بر عهده دارند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سر استخوان بازو بزرگ‌تر از حفره گلنوئید است و برای حرکت نیاز به پشتیبانی دارد. این وظیفه را چهار عضله به نام روتاتور کاف (rotator cuff) بر عهده دارند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سر استخوان بازو بزرگ‌تر از حفره گلنوئید است و برای حرکت نیاز به پشتیبانی دارد. این وظیفه را چهار عضله به نام روتاتور کاف (rotator cuff) بر عهده دارند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'گردن آناتومی (anatomical neck) یا تشریحی به صورت شیاری باریک دور سر بازو است و در واقع سر را از باقی عناصر فوقانی جدا می‌کند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">گردن آناتومی (Anatomical neck) یا تشریحی به صورت شیاری باریک دور سر بازو است و در واقع سر را از باقی عناصر فوقانی جدا می‌کند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">گردن آناتومی (Anatomical neck) یا تشریحی به صورت شیاری باریک دور سر بازو است و در واقع سر را از باقی عناصر فوقانی جدا می‌کند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'عصب رادیال درون ناودان رادیال در تنه استخوان بازو قرار می‌گیرد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">عصب رادیال درون ناودان رادیال در تنه استخوان بازو قرار می‌گیرد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">عصب رادیال درون ناودان رادیال در تنه استخوان بازو قرار می‌گیرد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در شکستگی‌های تنه استخوان بازو باید عصب رادیال و شریان‌های بازویی عمقی چک شوند. علامت شایع این آسیب افتادگی مچ است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در شکستگی‌های تنه استخوان بازو باید عصب رادیال و شریان‌های بازویی عمقی چک شوند. علامت شایع این آسیب افتادگی مچ است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در شکستگی‌های تنه استخوان بازو باید عصب رادیال و شریان‌های بازویی عمقی چک شوند. علامت شایع این آسیب افتادگی مچ است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'تنه استخوان بازو (humerus) دارای یک سطح قدامی و یک سطح خلفی است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">تنه استخوان بازو (Humerus) دارای یک سطح قدامی و یک سطح خلفی است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">تنه استخوان بازو (Humerus) دارای یک سطح قدامی و یک سطح خلفی است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'عضله سه سر به سطح خلفی استخوان بازو و طرفین ناودان رادیال متصل می‌شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">عضله سه سر به سطح خلفی استخوان بازو و طرفین ناودان رادیال متصل می‌شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">عضله سه سر به سطح خلفی استخوان بازو و طرفین ناودان رادیال متصل می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'سطح خلفی استخوان کتف توسط خار اسکپولا (spine of scapula) به دو حفره نامساوی تقسیم می‌شود: حفره بالایی به نام سوپرااسپیناتوس (supraspinatus) و حفره پایینی به نام اینفرااسپیناتوس (infraspinatus).'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سطح خلفی استخوان کتف توسط خار اسکپولا (spine of scapula) به دو حفره نامساوی تقسیم می‌شود: حفره بالایی به نام سوپرااسپیناتوس (supraspinatus) و حفره پایینی به نام اینفرااسپیناتوس (infraspinatus).</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">سطح خلفی استخوان کتف توسط خار اسکپولا (spine of scapula) به دو حفره نامساوی تقسیم می‌شود: حفره بالایی به نام سوپرااسپیناتوس (supraspinatus) و حفره پایینی به نام اینفرااسپیناتوس (infraspinatus).</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'زاویه تحتانی استخوان کتف به موازات دیسک بین مهره‌های t₇ و t₈ قرار دارد (در راستای دنده هفتم) زیرا توسط عضلات پوشیده شده است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">زاویه تحتانی استخوان کتف به موازات دیسک بین مهره‌های T₇ و T₈ قرار دارد (در راستای دنده هفتم) زیرا توسط عضلات پوشیده شده است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">زاویه تحتانی استخوان کتف به موازات دیسک بین مهره‌های T₇ و T₈ قرار دارد (در راستای دنده هفتم) زیرا توسط عضلات پوشیده شده است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در سطح خلفی یک ناودان مارپیچی، مایل و کم‌عمق به نام ناودان رادیال (radial groove) از سر داخلی شروع شده و به سمت پایین تا زیر دلتوئید تیوبرسیتی کشیده می‌شود. درون این ناودان، عصب رادیال (radial nerve) و عروق بازویی-عمقی (profunda brachii) عبور می‌کنند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح خلفی یک ناودان مارپیچی، مایل و کم‌عمق به نام ناودان رادیال (radial groove) از سر داخلی شروع شده و به سمت پایین تا زیر دلتوئید تیوبرسیتی کشیده می‌شود. درون این ناودان، عصب رادیال (Radial nerve) و عروق بازویی-عمقی (profunda brachii) عبور می‌کنند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح خلفی یک ناودان مارپیچی، مایل و کم‌عمق به نام ناودان رادیال (radial groove) از سر داخلی شروع شده و به سمت پایین تا زیر دلتوئید تیوبرسیتی کشیده می‌شود. درون این ناودان، عصب رادیال (Radial nerve) و عروق بازویی-عمقی (profunda brachii) عبور می‌کنند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در سطح قدامی زیر زائده کورونوئید، یک برجستگی به نام تیوبروسیته اولنا (tuberosity of ulna) وجود دارد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح قدامی زیر زائده کورونوئید، یک برجستگی به نام تیوبروسیته اولنا (Tuberosity of Ulna) وجود دارد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح قدامی زیر زائده کورونوئید، یک برجستگی به نام تیوبروسیته اولنا (Tuberosity of Ulna) وجود دارد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در سطح قدامی و به پایین و خارج، اثری از یک برجستگی به نام دلتوئید تیوبرسیتی (deltoid tuberosity) وجود دارد که عضله دلتوئید به آن متصل می‌شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح قدامی و به پایین و خارج، اثری از یک برجستگی به نام دلتوئید تیوبرسیتی (Deltoid tuberosity) وجود دارد که عضله دلتوئید به آن متصل می‌شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح قدامی و به پایین و خارج، اثری از یک برجستگی به نام دلتوئید تیوبرسیتی (Deltoid tuberosity) وجود دارد که عضله دلتوئید به آن متصل می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در سطح قدامی یک رویه مفصلی به نام کاپیتولوم (capitulum) وجود دارد (به معنی لقمه) که به سمت خارج قرار گرفته و با سر رادیوس (radius) در ساعد مفصل تشکیل می‌دهد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح قدامی یک رویه مفصلی به نام کاپیتولوم (Capitulum) وجود دارد (به معنی لقمه) که به سمت خارج قرار گرفته و با سر رادیوس (Radius) در ساعد مفصل تشکیل می‌دهد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح قدامی یک رویه مفصلی به نام کاپیتولوم (Capitulum) وجود دارد (به معنی لقمه) که به سمت خارج قرار گرفته و با سر رادیوس (Radius) در ساعد مفصل تشکیل می‌دهد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در سطح قدامی یک رویه مفصلی به نام تروکله‌آ (trochlea) وجود دارد (شبیه قرقره) که به سمت داخل قرار گرفته و با بخش متناظر خود در استخوان ساعد به نام اولنا (ulna) مفصل تشکیل می‌دهد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح قدامی یک رویه مفصلی به نام تروکله‌آ (trochlea) وجود دارد (شبیه قرقره) که به سمت داخل قرار گرفته و با بخش متناظر خود در استخوان ساعد به نام اولنا (ulna) مفصل تشکیل می‌دهد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سطح قدامی یک رویه مفصلی به نام تروکله‌آ (trochlea) وجود دارد (شبیه قرقره) که به سمت داخل قرار گرفته و با بخش متناظر خود در استخوان ساعد به نام اولنا (ulna) مفصل تشکیل می‌دهد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'یک حفره در جلو و بالای کاپیتولوم (capitulum) به نام حفره رادیال (radial fossa) قرار دارد که سر استخوان رادیوس در حالت فلکشن درون این حفره قرار می‌گیرد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">یک حفره در جلو و بالای کاپیتولوم (Capitulum) به نام حفره رادیال (Radial fossa) قرار دارد که سر استخوان رادیوس در حالت فلکشن درون این حفره قرار می‌گیرد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">یک حفره در جلو و بالای کاپیتولوم (Capitulum) به نام حفره رادیال (Radial fossa) قرار دارد که سر استخوان رادیوس در حالت فلکشن درون این حفره قرار می‌گیرد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'ردیف proximal استخوان های مچ دست از خارج به داخل شامل استخوان های scaphoid، lunate، triquetrum، و pisiform است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">ردیف proximal استخوان های مچ دست از خارج به داخل شامل استخوان های Scaphoid، lunate، triquetrum، و pisiform است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">ردیف proximal استخوان های مچ دست از خارج به داخل شامل استخوان های Scaphoid، lunate، triquetrum، و pisiform است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'استخوان های انگشتان یا phalanges هر کدام دارای سه بند proximal، middle، و distal هستند، به جز انگشت شست که بند میانی (middle) را ندارد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های انگشتان یا Phalanges هر کدام دارای سه بند proximal، middle، و distal هستند، به جز انگشت شست که بند میانی (middle) را ندارد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">استخوان های انگشتان یا Phalanges هر کدام دارای سه بند proximal، middle، و distal هستند، به جز انگشت شست که بند میانی (middle) را ندارد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'ردیف distal استخوان های مچ دست از خارج به داخل شامل استخوان های trapezium، trapezoid، capitate، و hamate است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">ردیف distal استخوان های مچ دست از خارج به داخل شامل استخوان های Trapezium، Trapezoid، Capitate، و Hamate است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">ردیف distal استخوان های مچ دست از خارج به داخل شامل استخوان های Trapezium، Trapezoid، Capitate، و Hamate است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در بالا و جلوی تروکله‌آ (trochlea) یک حفره به نام حفره کورونوئید (coronoid fossa) قرار دارد که زائده کورونوئید استخوان اولنا در حالت فلکشن (flexion) دست درون این حفره قرار می‌گیرد.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در بالا و جلوی تروکله‌آ (Trochlea) یک حفره به نام حفره کورونوئید (coronoid fossa) قرار دارد که زائده کورونوئید استخوان اولنا در حالت فلکشن (flexion) دست درون این حفره قرار می‌گیرد.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در بالا و جلوی تروکله‌آ (Trochlea) یک حفره به نام حفره کورونوئید (coronoid fossa) قرار دارد که زائده کورونوئید استخوان اولنا در حالت فلکشن (flexion) دست درون این حفره قرار می‌گیرد.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'انتهای تحتانی استخوان بازو (humerus) شامل 1- دو رویه مفصلی، 2- دو برجستگی اپی‌کوندیل، 3- سه حفره و 4- دو خط است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای تحتانی استخوان بازو (Humerus) شامل 1- دو رویه مفصلی، 2- دو برجستگی اپی‌کوندیل، 3- سه حفره و 4- دو خط است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">انتهای تحتانی استخوان بازو (Humerus) شامل 1- دو رویه مفصلی، 2- دو برجستگی اپی‌کوندیل، 3- سه حفره و 4- دو خط است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در سمت بالا و طرفین دو رویه مفصلی، دو اپی‌کوندیل (برجستگی بالایی) وجود دارد: اپی‌کوندیل داخلی (medial epicondyle) در داخل و اپی‌کوندیل خارجی (lateral epicondyle) در خارج قرار دارند. اپی‌کوندیل داخلی ضخیم‌تر و برجسته‌تر است و محل اتصال عضلات ساعد محسوب می‌شود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سمت بالا و طرفین دو رویه مفصلی، دو اپی‌کوندیل (برجستگی بالایی) وجود دارد: اپی‌کوندیل داخلی (medial epicondyle) در داخل و اپی‌کوندیل خارجی (lateral epicondyle) در خارج قرار دارند. اپی‌کوندیل داخلی ضخیم‌تر و برجسته‌تر است و محل اتصال عضلات ساعد محسوب می‌شود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در سمت بالا و طرفین دو رویه مفصلی، دو اپی‌کوندیل (برجستگی بالایی) وجود دارد: اپی‌کوندیل داخلی (medial epicondyle) در داخل و اپی‌کوندیل خارجی (lateral epicondyle) در خارج قرار دارند. اپی‌کوندیل داخلی ضخیم‌تر و برجسته‌تر است و محل اتصال عضلات ساعد محسوب می‌شود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'خطوط سوپراکوندیلار (supracondylar lines) به صورت ستیغ و ممتد هستند (supracondylar ridge) که در شکستگی‌ها اهمیت دارند. کناره‌های هومروس به سمت پایین از حالت پهن و دایره‌ای درآمده و تیز و نازک می‌شوند (به دلیل مثلثی شدن پایین هومروس). به این تیزشدگی‌ها ستیغ می‌گویند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">خطوط سوپراکوندیلار (Supracondylar lines) به صورت ستیغ و ممتد هستند (Supracondylar ridge) که در شکستگی‌ها اهمیت دارند. کناره‌های هومروس به سمت پایین از حالت پهن و دایره‌ای درآمده و تیز و نازک می‌شوند (به دلیل مثلثی شدن پایین هومروس). به این تیزشدگی‌ها ستیغ می‌گویند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">خطوط سوپراکوندیلار (Supracondylar lines) به صورت ستیغ و ممتد هستند (Supracondylar ridge) که در شکستگی‌ها اهمیت دارند. کناره‌های هومروس به سمت پایین از حالت پهن و دایره‌ای درآمده و تیز و نازک می‌شوند (به دلیل مثلثی شدن پایین هومروس). به این تیزشدگی‌ها ستیغ می‌گویند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در زیر رادیال ناچ، یک برجستگی (ستیغ) به نام سوپیناتور کرست (supinator crest) وجود دارد که محل اتصال عضله‌ای به نام سوپیناتور است. وظیفه این عضله فلکشن (flexion) و سوپینیشن (supination) است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در زیر رادیال ناچ، یک برجستگی (ستیغ) به نام سوپیناتور کرست (Supinator crest) وجود دارد که محل اتصال عضله‌ای به نام سوپیناتور است. وظیفه این عضله فلکشن (Flexion) و سوپینیشن (Supination) است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در زیر رادیال ناچ، یک برجستگی (ستیغ) به نام سوپیناتور کرست (Supinator crest) وجود دارد که محل اتصال عضله‌ای به نام سوپیناتور است. وظیفه این عضله فلکشن (Flexion) و سوپینیشن (Supination) است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در خلف تروکله‌آ (trochlea) یک حفره وسیع به نام حفره اولکرانون (olecranon fossa) قرار دارد که زائده اولکرانون استخوان اولنا در حالت اکستنشن (extension) دست درون این حفره قرار می‌گیرد. (در حالت فلکشن قابل‌لمس‌تر است)'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در خلف تروکله‌آ (Trochlea) یک حفره وسیع به نام حفره اولکرانون (Olecranon fossa) قرار دارد که زائده اولکرانون استخوان اولنا در حالت اکستنشن (Extension) دست درون این حفره قرار می‌گیرد. (در حالت فلکشن قابل‌لمس‌تر است)</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در خلف تروکله‌آ (Trochlea) یک حفره وسیع به نام حفره اولکرانون (Olecranon fossa) قرار دارد که زائده اولکرانون استخوان اولنا در حالت اکستنشن (Extension) دست درون این حفره قرار می‌گیرد. (در حالت فلکشن قابل‌لمس‌تر است)</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'بین دو زائده اولکرانون و کورونوئید، یک بریدگی به نام تروکلئر ناچ (trochlear notch) ایجاد شده است که محل قرارگیری تروکله‌آ (trochlea) استخوان بازو است. این بریدگی از سطح قدامی زائده اولکرانون و سطح فوقانی زائده کورونوئید ایجاد شده است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">بین دو زائده اولکرانون و کورونوئید، یک بریدگی به نام تروکلئر ناچ (Trochlear notch) ایجاد شده است که محل قرارگیری تروکله‌آ (Trochlea) استخوان بازو است. این بریدگی از سطح قدامی زائده اولکرانون و سطح فوقانی زائده کورونوئید ایجاد شده است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">بین دو زائده اولکرانون و کورونوئید، یک بریدگی به نام تروکلئر ناچ (Trochlear notch) ایجاد شده است که محل قرارگیری تروکله‌آ (Trochlea) استخوان بازو است. این بریدگی از سطح قدامی زائده اولکرانون و سطح فوقانی زائده کورونوئید ایجاد شده است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'بریدگی عمیقی به نام گریتر اسکاپولار ناچ (greater scapular notch) یا اسپینوجلنوئید ناچ (spinoglenoid notch) وجود دارد که دو قسمت سوپرااسپیناتوس و اینفرااسپیناتوس را به‌یکدیگر مرتبط می‌کند و برای عبور اعصاب و عروق به‌کار می‌رود.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">بریدگی عمیقی به نام گریتر اسکاپولار ناچ (greater scapular notch) یا اسپینوجلنوئید ناچ (spinoglenoid notch) وجود دارد که دو قسمت سوپرااسپیناتوس و اینفرااسپیناتوس را به‌یکدیگر مرتبط می‌کند و برای عبور اعصاب و عروق به‌کار می‌رود.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">بریدگی عمیقی به نام گریتر اسکاپولار ناچ (greater scapular notch) یا اسپینوجلنوئید ناچ (spinoglenoid notch) وجود دارد که دو قسمت سوپرااسپیناتوس و اینفرااسپیناتوس را به‌یکدیگر مرتبط می‌کند و برای عبور اعصاب و عروق به‌کار می‌رود.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در کنار فوقانی استخوان کتف یک بریدگی به نام سوپراسکاپولار ناچ (suprascapular notch) وجود دارد که رباط ترنسورس به صورت عرضی از روی آن عبور کرده و یک سوراخ (foramen) تشکیل می‌دهد. عصب سوپراسکاپولار از درون آن عبور می‌کند و عروق سوپراسکاپولار (شامل شریان و ورید) از بالای آن عبور می‌کنند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در کنار فوقانی استخوان کتف یک بریدگی به نام سوپراسکاپولار ناچ (suprascapular notch) وجود دارد که رباط ترنسورس به صورت عرضی از روی آن عبور کرده و یک سوراخ (foramen) تشکیل می‌دهد. عصب سوپراسکاپولار از درون آن عبور می‌کند و عروق سوپراسکاپولار (شامل شریان و ورید) از بالای آن عبور می‌کنند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در کنار فوقانی استخوان کتف یک بریدگی به نام سوپراسکاپولار ناچ (suprascapular notch) وجود دارد که رباط ترنسورس به صورت عرضی از روی آن عبور کرده و یک سوراخ (foramen) تشکیل می‌دهد. عصب سوپراسکاپولار از درون آن عبور می‌کند و عروق سوپراسکاپولار (شامل شریان و ورید) از بالای آن عبور می‌کنند.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'در بالای حفره گلنوئید (glenoid cavity) یک تکمه به نام سوپراگلنوئید (supraglenoid tubercle) وجود دارد که محل اتصال سر دراز عضله دو سر بازو (biceps) است. در پایین حفره گلنوئید، یک تکمه به نام اینفراگلنوئید (infraglenoid tubercle) وجود دارد که محل اتصال سر دراز عضله سه سر بازو (triceps) است.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در بالای حفره گلنوئید (Glenoid cavity) یک تکمه به نام سوپراگلنوئید (supraglenoid tubercle) وجود دارد که محل اتصال سر دراز عضله دو سر بازو (biceps) است. در پایین حفره گلنوئید، یک تکمه به نام اینفراگلنوئید (Infraglenoid tubercle) وجود دارد که محل اتصال سر دراز عضله سه سر بازو (triceps) است.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">در بالای حفره گلنوئید (Glenoid cavity) یک تکمه به نام سوپراگلنوئید (supraglenoid tubercle) وجود دارد که محل اتصال سر دراز عضله دو سر بازو (biceps) است. در پایین حفره گلنوئید، یک تکمه به نام اینفراگلنوئید (Infraglenoid tubercle) وجود دارد که محل اتصال سر دراز عضله سه سر بازو (triceps) است.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="card-container relative h-48"
+                 x-show="searchTerm === '' || 'بین دو تکمه گریتر و لسر تیوبرکل، یک ناودان وجود دارد که به دلیل عبور از بین دو تکمه به آن اینترتیوبرکولار (intertubercular) می‌گویند. به دلیل عبور تاندون سر دراز عضله دو سر بازو از این ناودان، به آن بیسیپیتال (bicipital) نیز می‌گویند.'.includes(searchTerm.toLowerCase())"
+                 x-data="{ flipped: false }">
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer"
+                     :class="{ 'flipped': flipped }">
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6">
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">بین دو تکمه گریتر و لسر تیوبرکل، یک ناودان وجود دارد که به دلیل عبور از بین دو تکمه به آن اینترتیوبرکولار (Intertubercular) می‌گویند. به دلیل عبور تاندون سر دراز عضله دو سر بازو از این ناودان، به آن بیسیپیتال (Bicipital) نیز می‌گویند.</p>
+                    </div>
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6" x-cloak>
+                        <p class="text-lg font-persian text-gray-800 dark:text-white text-center text-right" dir="rtl">بین دو تکمه گریتر و لسر تیوبرکل، یک ناودان وجود دارد که به دلیل عبور از بین دو تکمه به آن اینترتیوبرکولار (Intertubercular) می‌گویند. به دلیل عبور تاندون سر دراز عضله دو سر بازو از این ناودان، به آن بیسیپیتال (Bicipital) نیز می‌گویند.</p>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+</body>
+</html>
