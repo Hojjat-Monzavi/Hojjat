@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAT PLANNER</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        body {
+            font-family: Robot, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        button {
+            padding: 12px;
+            font-size: 16px;
+            background-color: #e4d8ffda;
+            color: #000000;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #ad8affda;
+        }
+        input {
+            padding: 8px;
+            background-color: #333333;
+            color: #e0e0e0;
+            border: 1px solid #444444;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            font-size: 16px;
+        }
+        th, td {
+            border: 1px solid #444444;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #333333;
+        }
+        #progressBar {
+            width: 100%;
+            height: 20px;
+            background-color: #333333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        #progressBarFill {
+            height: 100%;
+            width: 0;
+            background-color: #af3b05a9;
+            transition: width 0.3s ease;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modal-content {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #444444;
+            width: 90%;
+        }
+        .close {
+            color: #e0e0e0;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: #ffffff;
+        }
+        .card {
+            background-color: #333333;
+            color: #e0e0e0;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #444444;
+            border-radius: 4px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .control-panel {
+                gap: 15px;
+            }
+            button {
+                padding: 10px;
+                font-size: 14px;
+            }
+            input {
+                font-size: 14px;
+            }
+            table {
+                font-size: 16px;
+            }
+            .modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="control-panel">
+            <button id="createCsvBtn">Create New CSV</button>
+            <button id="loadCsvBtn">Load Data CSV</button>
+            <button id="editCsvBtn">Edit CSV Data</button>
+            <label for="totalTime">Total Time (hours):</label>
+            <input type="number" id="totalTime" step="0.01">
+            <button id="analyzeBtn">Analyze</button>
+            <div id="progressBar"><div id="progressBarFill"></div></div>
+        </div>
+        <div class="results">
+            <table id="resultsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Time (HH:MM)</th>
+                        <th>Saturation (%)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <canvas id="chart"></canvas>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit CSV Data</h2>
+            <div id="cardContainer"></div> <!-- Replaces the table -->
+            <button id="addRowBtn">Add Row</button>
+            <button id="saveEditBtn">Save Changes</button>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let names = [];
+        let finalWeightsList = [];
+        let saturationTimeList = [];
+        let startTimeList = [];
+        let chart;
+
+        // DOM elements
+        const createCsvBtn = document.getElementById('createCsvBtn');
+        const loadCsvBtn = document.getElementById('loadCsvBtn');
+        const editCsvBtn = document.getElementById('editCsvBtn');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const totalTimeInput = document.getElementById('totalTime');
+        const resultsTable = document.getElementById('resultsTable');
+        const progressBar = document.getElementById('progressBar');
+        const progressBarFill = document.getElementById('progressBarFill');
+        const editModal = document.getElementById('editModal');
+        const editTable = document.getElementById('editTable');
+        const addRowBtn = document.getElementById('addRowBtn');
+        const saveEditBtn = document.getElementById('saveEditBtn');
+        const closeBtn = document.getElementsByClassName('close')[0];
+
+        // Event listeners
+        createCsvBtn.addEventListener('click', createCsv);
+        loadCsvBtn.addEventListener('click', loadCsv);
+        editCsvBtn.addEventListener('click', openEditModal);
+        analyzeBtn.addEventListener('click', runAnalysis);
+        addRowBtn.addEventListener('click', addCard);
+        saveEditBtn.addEventListener('click', saveEditedData);
+        closeBtn.addEventListener('click', closeEditModal);
+
+        // Helper functions
+        function formatDecimalHoursToHHMM(decimalHours) {
+            const hours = Math.floor(decimalHours);
+            const minutes = Math.round((decimalHours - hours) * 60);
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+        }
+
+        function formatHHMMToDecimalHours(hhmm) {
+            const [hours, minutes] = hhmm.split(':').map(Number);
+            return hours + minutes / 60;
+        }
+
+        function stepFunc(x, dev = 0) {
+            if (dev === 0) {
+                return 1 / (1 + Math.exp(-5 * x));
+            } else if (dev === 1) {
+                return 5 * stepFunc(x) * stepFunc(-x);
+            }
+        }
+
+        // CSV handling functions
+        function createCsv() {
+            names = [];
+            finalWeightsList = [];
+            saturationTimeList = [];
+            startTimeList = [];
+            saveCsv();
+            openEditModal();
+        }
+
+        function loadCsv() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.csv';
+            input.onchange = (event) => {
+                const file = event.target.files[0];
+                Papa.parse(file, {
+                    complete: (results) => {
+                        if (results.errors.length > 0) {
+                            alert('Error parsing CSV: ' + results.errors[0].message);
+                            return;
+                        }
+                        const data = results.data;
+                        if (data.length < 2) {
+                            alert('CSV file is empty or invalid.');
+                            return;
+                        }
+                        const headers = data[0];
+                        if (headers.length !== 4 || 
+                            headers[0] !== 'Name' || 
+                            headers[1] !== 'FinalWeight' || 
+                            headers[2] !== 'SaturationTime' || 
+                            headers[3] !== 'StartTime') {
+                            alert('Invalid CSV format. Please ensure the headers are correct.');
+                            return;
+                        }
+                        names = [];
+                        finalWeightsList = [];
+                        saturationTimeList = [];
+                        startTimeList = [];
+                        for (let i = 1; i < data.length; i++) {
+                            const row = data[i];
+                            if (row.length === 4) {
+                                names.push(row[0]);
+                                finalWeightsList.push(parseFloat(row[1]));
+                                saturationTimeList.push(formatHHMMToDecimalHours(row[2]));
+                                startTimeList.push(formatHHMMToDecimalHours(row[3]));
+                            }
+                        }
+                        alert('CSV file loaded successfully!');
+                    }
+                });
+            };
+            input.click();
+        }
+
+        function saveCsv() {
+            const csvContent = Papa.unparse({
+                fields: ['Name', 'FinalWeight', 'SaturationTime', 'StartTime'],
+                data: names.map((name, index) => [
+                    name,
+                    finalWeightsList[index],
+                    formatDecimalHoursToHHMM(saturationTimeList[index]),
+                    formatDecimalHoursToHHMM(startTimeList[index])
+                ])
+            });
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            saveAs(blob, 'time_manager_data.csv');
+        }
+
+        // Edit modal functions
+        function openEditModal() {
+            editModal.style.display = 'block';
+            populateEditCards();
+        }
+        function closeEditModal() {
+            editModal.style.display = 'none';
+        }
+
+        function populateEditCards() {
+            const cardContainer = document.getElementById('cardContainer');
+            cardContainer.innerHTML = '';
+            names.forEach((name, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span>Row ${index + 1}</span>
+                        <button onclick="deleteCard(this)">Delete</button>
+                    </div>
+                    <div class="card-content">
+                        <label>Name:</label>
+                        <input type="text" value="${name}">
+                        <label>Final Weight:</label>
+                        <input type="number" step="0.01" value="${finalWeightsList[index]}">
+                        <label>Saturation Time (HH:MM):</label>
+                        <input type="time" value="${formatDecimalHoursToHHMM(saturationTimeList[index])}">
+                        <label>Start Time (HH:MM):</label>
+                        <input type="time" value="${formatDecimalHoursToHHMM(startTimeList[index])}">
+                    </div>
+                `;
+                cardContainer.appendChild(card);
+            });
+        }
+
+        function addCard() {
+            const cardContainer = document.getElementById('cardContainer');
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="card-header">
+                    <span>New Row</span>
+                    <button onclick="deleteCard(this)">Delete</button>
+                </div>
+                <div class="card-content">
+                    <label>Name:</label>
+                    <input type="text">
+                    <label>Final Weight:</label>
+                    <input type="number" step="0.01">
+                    <label>Saturation Time (HH:MM):</label>
+                    <input type="time">
+                    <label>Start Time (HH:MM):</label>
+                    <input type="time">
+                </div>
+            `;
+            cardContainer.appendChild(card);
+        }
+
+        function deleteCard(button) {
+            const card = button.parentNode.parentNode;
+            card.parentNode.removeChild(card);
+        }
+
+        function saveEditedData() {
+            const cards = document.getElementById('cardContainer').getElementsByClassName('card');
+            names = [];
+            finalWeightsList = [];
+            saturationTimeList = [];
+            startTimeList = [];
+            Array.from(cards).forEach(card => {
+                const inputs = card.getElementsByTagName('input');
+                const name = inputs[0].value.trim();
+                const finalWeight = parseFloat(inputs[1].value);
+                const saturationTime = formatHHMMToDecimalHours(inputs[2].value);
+                const startTime = formatHHMMToDecimalHours(inputs[3].value);
+                if (name && !isNaN(finalWeight) && !isNaN(saturationTime) && !isNaN(startTime)) {
+                    names.push(name);
+                    finalWeightsList.push(finalWeight);
+                    saturationTimeList.push(saturationTime);
+                    startTimeList.push(startTime);
+                }
+            });
+            saveCsv();
+            closeEditModal();
+        }
+
+        // Analysis functions
+        function runAnalysis() {
+            if (names.length === 0) {
+                alert('Please load or create CSV data before analyzing.');
+                return;
+            }
+
+            const totalTime = parseFloat(totalTimeInput.value);
+            if (isNaN(totalTime) || totalTime <= 0) {
+                alert('Please enter a valid number for total time.');
+                return;
+            }
+
+            const N = names.length;
+            const NUM_ITTER = 10000;
+            const ALPHA = 0.1;
+
+            const finalWeights = new Float64Array(finalWeightsList);
+            const saturationTime = new Float64Array(saturationTimeList);
+            const startTime = new Float64Array(startTimeList);
+
+            const funcWeights = new Float64Array(N * 2);
+            for (let i = 0; i < N; i++) {
+                funcWeights[i * 2] = totalTime / (saturationTime[i] - startTime[i]);
+                funcWeights[i * 2 + 1] = -startTime[i] / (saturationTime[i] - startTime[i]);
+            }
+
+            const inputData = new Float64Array(N);
+            for (let i = 0; i < N; i++) {
+                inputData[i] = Math.random();
+            }
+
+            showProgress(true);
+
+            // Use Web Worker for analysis to prevent UI blocking
+            const worker = new Worker(URL.createObjectURL(new Blob([`
+                ${stepFunc.toString()}
+
+                self.onmessage = function(e) {
+                    const { inputData, funcWeights, finalWeights, N, NUM_ITTER, ALPHA, totalTime } = e.data;
+                    
+                    const o1 = new Float64Array(N);
+                    const o1_bias = new Float64Array(N * 2);
+                    const i2 = new Float64Array(N);
+                    const o2 = new Float64Array(N);
+                    const delta = new Float64Array(N);
+
+                    const history = [];
+                    const deltas = [];
+
+                    for (let iter = 0; iter < NUM_ITTER; iter++) {
+                        let sum = inputData.reduce((a, b) => a + b, 0);
+                        for (let i = 0; i < N; i++) {
+                            o1[i] = inputData[i] / sum;
+                            o1_bias[i * 2] = o1[i];
+                            o1_bias[i * 2 + 1] = 1;
+                        }
+
+                        for (let i = 0; i < N; i++) {
+                            i2[i] = o1_bias[i * 2] * funcWeights[i * 2] + o1_bias[i * 2 + 1] * funcWeights[i * 2 + 1];
+                            o2[i] = stepFunc(i2[i]);
+                        }
+
+                        let utility = 0;
+                        for (let i = 0; i < N; i++) {
+                            utility += o2[i] * finalWeights[i];
+                        }
+                        if (iter < 100) {
+                            history.push(utility);
+                        }
+
+                        let multiplication = o2.reduce((a, b) => a * b, 1);
+                        const avgFinalWeight = finalWeights.reduce((a, b) => a + b, 0) / N;
+
+                        for (let i = 0; i < N; i++) {
+                            delta[i] = (finalWeights[i] + multiplication / o2[i] * avgFinalWeight * 0.1)
+                                * stepFunc(i2[i], 1)
+                                * funcWeights[i * 2]
+                                * (sum - inputData[i])
+                                / (sum * sum);
+                        }
+
+                        const maxAbsDelta = Math.max(...delta.map(Math.abs));
+                        const maxInput = Math.max(...inputData);
+                        if (maxAbsDelta < maxInput / totalTime * 2) {
+                            break;
+                        }
+
+                        let deltaSum = 0;
+                        for (let i = 0; i < N; i++) {
+                            if (delta[i] > inputData[i] * 0.1) {
+                                deltaSum += Math.abs(delta[i]);
+                            }
+                        }
+                        
+                        if (deltaSum > 0) {
+                            for (let i = 0; i < N; i++) {
+                                delta[i] /= deltaSum;
+                            }
+                        }
+
+                        for (let i = 0; i < N; i++) {
+                            inputData[i] += delta[i] * ALPHA;
+                        }
+
+                        // Normalize inputData
+                        sum = inputData.reduce((a, b) => a + b, 0);
+                        for (let i = 0; i < N; i++) {
+                            inputData[i] /= sum;
+                        }
+                        if (iter < 100) deltas.push(delta.reduce((a, b) => a + b * b, 0));
+
+                        if (iter % 1000 === 0) {
+                            self.postMessage({ type: 'progress', value: iter / NUM_ITTER });
+                        }
+                    }
+
+                    self.postMessage({ type: 'result', inputData, o2, history, deltas });
+                };
+            `], { type: 'application/javascript' })));
+
+            worker.onmessage = function(e) {
+                if (e.data.type === 'progress') {
+                    updateProgress(e.data.value);
+                } else if (e.data.type === 'result') {
+                    const { inputData, o2, history, deltas } = e.data;
+                    showProgress(false);
+                    displayResults(inputData, o2, totalTime);
+                    visualizeResults(history, deltas);
+                }
+            };
+
+            worker.postMessage({ inputData, funcWeights, finalWeights, N, NUM_ITTER, ALPHA, totalTime });
+        }
+
+        function showProgress(visible) {
+            progressBar.style.display = visible ? 'block': 'none';
+            progressBarFill.style.width = '0%';
+        }
+
+        function updateProgress(value) {
+            progressBarFill.style.width = `${value * 100}%`;
+        }
+
+        function displayResults(inputData, o2, totalTime) {
+            const tbody = resultsTable.querySelector('tbody');
+            tbody.innerHTML = '';
+            for (let i = 0; i < names.length; i++) {
+                const row = tbody.insertRow();
+                const timeHHMM = formatDecimalHoursToHHMM(inputData[i] * totalTime);
+                const saturationPercent = Math.round(o2[i] * 100);
+                row.innerHTML = `
+                    <td>${names[i]}</td>
+                    <td>${timeHHMM}</td>
+                    <td>${saturationPercent}%</td>
+                `;
+            }
+        }
+
+        function visualizeResults(history, deltas) {
+            if (chart) {
+                chart.destroy();
+            }
+
+            const ctx = document.getElementById('chart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: history.length }, (_, i) => i),
+                    datasets: [
+                        {
+                            label: 'Utility',
+                            data: history,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Delta',
+                            data: deltas,
+                            borderColor: 'rgb(255, 99, 132)',
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Iteration'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Value'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize the application
+        function init() {
+            // Load data from localStorage if available
+            const savedData = localStorage.getItem('timeManagerData');
+            if (savedData) {
+                const parsedData = JSON.parse(savedData);
+                names = parsedData.names;
+                finalWeightsList = parsedData.finalWeightsList;
+                saturationTimeList = parsedData.saturationTimeList;
+                startTimeList = parsedData.startTimeList;
+            }
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            const dataToSave = {
+                names,
+                finalWeightsList,
+                saturationTimeList,
+                startTimeList
+            };
+            localStorage.setItem('timeManagerData', JSON.stringify(dataToSave));
+        }
+
+        // Call init function when the page loads
+        window.addEventListener('load', init);
+
+        // Save data before unloading the page
+        window.addEventListener('beforeunload', saveData);
+    </script>
+</body>
+</html>
