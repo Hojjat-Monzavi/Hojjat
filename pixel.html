@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pixelate Image with Custom Palette</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 50px;
+        }
+        canvas {
+            border: 1px solid #ced4da;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+        .color-picker {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .color-picker input[type="color"] {
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 40px;
+            height: 40px;
+        }
+        .color-palette {
+            margin-top: 20px;
+        }
+        .btn-remove {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .btn-remove:hover {
+            background-color: #c82333;
+        }
+        .btn-add {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .btn-add:hover {
+            background-color: #218838;
+        }
+        .btn-pixelate {
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .btn-pixelate:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Pixelate Image with Custom Palette</h1>
+        <div class="mb-3">
+            <label for="imageInput" class="form-label">Select Image</label>
+            <input type="file" class="form-control" id="imageInput" accept="image/*">
+        </div>
+        <div class="mb-3">
+            <label for="downscaleFactor" class="form-label">Downscale Factor</label>
+            <input type="number" class="form-control" id="downscaleFactor" value="0.1" step="0.01" min="0.01" max="1">
+        </div>
+        <button class="btn-pixelate" onclick="pixelateImage()">Pixelate</button>
+        <div class="color-palette">
+            <h2>Color Palette</h2>
+            <div id="colorPickers"></div>
+            <button class="btn-add" onclick="addColorPicker()"><i class="bi bi-plus-circle"></i> Add Color</button>
+        </div>
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <script>
+        const defaultHexValues = [
+            'F24444',
+            'FCF61B',
+            'D64A12',
+            'D6AF35',
+            '475663',
+            '0A1322',
+            '000000'
+        ];
+
+        function hexToRgb(hex) {
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+            return [r, g, b];
+        }
+
+        function rgbToHex(rgb) {
+            return rgb.map(value => value.toString(16).padStart(2, '0')).join('');
+        }
+
+        function findClosestColor(pixel, palette) {
+            let minDist = Infinity;
+            let closestColor = null;
+            for (const color of palette) {
+                const dist = Math.pow(pixel[0] - color[0], 2) + Math.pow(pixel[1] - color[1], 2) + Math.pow(pixel[2] - color[2], 2);
+                if (dist < minDist) {
+                    minDist = dist;
+                    closestColor = color;
+                }
+            }
+            return closestColor;
+        }
+
+        function getPaletteFromPickers() {
+            const pickers = document.querySelectorAll('.color-picker input[type="color"]');
+            return Array.from(pickers).map(picker => hexToRgb(picker.value.substring(1)));
+        }
+
+        function addColorPicker(hex = '000000') {
+            const colorPickersDiv = document.getElementById('colorPickers');
+            const colorPickerDiv = document.createElement('div');
+            colorPickerDiv.className = 'color-picker';
+            colorPickerDiv.innerHTML = `
+                <input type="color" value="#${hex}">
+                <button class="btn-remove" onclick="removeColorPicker(this)"><i class="bi bi-trash"></i> Remove</button>
+            `;
+            colorPickersDiv.appendChild(colorPickerDiv);
+        }
+
+        function removeColorPicker(button) {
+            button.parentElement.remove();
+        }
+
+        function initializeDefaultPalette() {
+            for (const hex of defaultHexValues) {
+                addColorPicker(hex);
+            }
+        }
+
+        function pixelateImage() {
+            const fileInput = document.getElementById('imageInput');
+            const downscaleFactor = parseFloat(document.getElementById('downscaleFactor').value);
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            if (fileInput.files.length === 0) {
+                alert('Please select an image file.');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = new Image();
+                img.onload = function () {
+                    const originalWidth = img.width;
+                    const originalHeight = img.height;
+                    const smallWidth = Math.max(1, Math.floor(originalWidth * downscaleFactor));
+                    const smallHeight = Math.max(1, Math.floor(originalHeight * downscaleFactor));
+
+                    // Resize to smaller size
+                    const smallCanvas = document.createElement('canvas');
+                    smallCanvas.width = smallWidth;
+                    smallCanvas.height = smallHeight;
+                    const smallCtx = smallCanvas.getContext('2d');
+                    smallCtx.drawImage(img, 0, 0, smallWidth, smallHeight);
+
+                    // Resize back to original size
+                    canvas.width = originalWidth;
+                    canvas.height = originalHeight;
+                    ctx.imageSmoothingEnabled = false;
+                    ctx.drawImage(smallCanvas, 0, 0, originalWidth, originalHeight);
+
+                    // Apply color quantization
+                    const imageData = ctx.getImageData(0, 0, originalWidth, originalHeight);
+                    const data = imageData.data;
+                    const palette = getPaletteFromPickers();
+
+                    for (let i = 0; i < data.length; i += 4) {
+                        const pixel = [data[i], data[i + 1], data[i + 2]];
+                        const closestColor = findClosestColor(pixel, palette);
+                        data[i] = closestColor[0];
+                        data[i + 1] = closestColor[1];
+                        data[i + 2] = closestColor[2];
+                    }
+
+                    ctx.putImageData(imageData, 0, 0);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Initialize the default color palette
+        initializeDefaultPalette();
+    </script>
+</body>
+</html>
