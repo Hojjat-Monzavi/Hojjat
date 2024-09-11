@@ -77,6 +77,18 @@
         .btn-pixelate:hover {
             background-color: #0056b3;
         }
+        .btn-save {
+            margin-top: 10px;
+            background-color: #ffc107;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .btn-save:hover {
+            background-color: #e0a800;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
 </head>
@@ -92,6 +104,7 @@
             <input type="number" class="form-control" id="downscaleFactor" value="0.1" step="0.01" min="0.01" max="1">
         </div>
         <button class="btn-pixelate" onclick="pixelateImage()">Pixelate</button>
+        <button class="btn-save" onclick="saveImage()">Save as PNG</button>
         <div class="color-palette">
             <h2>Color Palette</h2>
             <div id="colorPickers"></div>
@@ -213,6 +226,14 @@
                 img.src = event.target.result;
             };
             reader.readAsDataURL(file);
+        }
+
+        function saveImage() {
+            const canvas = document.getElementById('canvas');
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = 'pixelated_image.png';
+            link.click();
         }
 
         // Initialize the default color palette
