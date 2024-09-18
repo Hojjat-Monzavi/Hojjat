@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date-Based Calendar Grid with Optimized Save/Load</title>
+    <style>
+        @font-face {
+            font-family: 'Nazanin';
+            src: url('https://cdnjs.cloudflare.com/ajax/libs/fonts/B-NAZANIN.TTF') format('truetype');
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 20px;
+        }
+        h1, h2 {
+            margin: 10px 0;
+            text-align: center;
+        }
+        h3 {
+            margin: 10px 0;
+            text-align: center;
+            font-family: 'Nazanin', 'Times New Roman', Times, serif;
+        }
+        .calendar-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .time-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-right: 10px;
+            border-right: 1px solid #ccc;
+        }
+        .time-slot {
+            height: 20px;
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 1px;
+            background-color: #ccc;
+            border: 1px solid #999;
+        }
+        .grid-item {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .grid-item.active {
+            background-color: black;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        button, input {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #fff;
+            border: 1px solid #999;
+            padding: 5px 10px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover, input:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Date-Based Calendar Grid</h1>
+    <h2 id="currentDate"></h2>
+    <h3 id="persianDate"></h3>
+    <div class="controls">
+        <input type="date" id="dateSelector">
+        <button id="prevDay">&lt; Previous Day</button>
+        <button id="nextDay">Next Day &gt;</button>
+        <button id="saveBtn">Save All Data</button>
+        <button id="loadBtn">Load Data</button>
+        <button id="clearBtn">Clear Current Day</button>
+    </div>
+    <div class="calendar-container">
+        <div class="time-column" id="timeColumn"></div>
+        <div class="grid-container" id="grid"></div>
+    </div>
+
+    <script>
+        const grid = document.getElementById('grid');
+        const timeColumn = document.getElementById('timeColumn');
+        const saveBtn = document.getElementById('saveBtn');
+        const loadBtn = document.getElementById('loadBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const dateSelector = document.getElementById('dateSelector');
+        const prevDayBtn = document.getElementById('prevDay');
+        const nextDayBtn = document.getElementById('nextDay');
+        const currentDateDisplay = document.getElementById('currentDate');
+        const persianDateDisplay = document.getElementById('persianDate');
+
+        let currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        let gridStates = {};
+
+        function createGrid() {
+            timeColumn.innerHTML = '';
+            grid.innerHTML = '';
+            for (let i = 0; i < 24; i++) {
+                const timeSlot = document.createElement('div');
+                timeSlot.classList.add('time-slot');
+                timeSlot.textContent = `${i.toString().padStart(2, '0')}:00`;
+                timeColumn.appendChild(timeSlot);
+                
+                for (let j = 0; j < 8; j++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('grid-item');
+                    cell.addEventListener('click', () => toggleCell(i * 8 + j));
+                    grid.appendChild(cell);
+                }
+            }
+        }
+
+        function toggleCell(index) {
+            const dateKey = currentDate.toISOString().split('T')[0];
+            if (!gridStates[dateKey]) {
+                gridStates[dateKey] = new Array(24 * 8).fill(false);
+            }
+            gridStates[dateKey][index] = !gridStates[dateKey][index];
+            updateGrid();
+            saveToCache();
+        }
+
+        function updateGrid() {
+            const dateKey = currentDate.toISOString().split('T')[0];
+            const cells = grid.getElementsByClassName('grid-item');
+            if (!gridStates[dateKey]) {
+                gridStates[dateKey] = new Array(24 * 8).fill(false);
+            }
+            for (let i = 0; i < cells.length; i++) {
+                cells[i].classList.toggle('active', gridStates[dateKey][i]);
+            }
+            updateDateDisplay();
+        }
+
+        function updateDateDisplay() {
+            currentDateDisplay.textContent = currentDate.toDateString();
+            dateSelector.value = currentDate.toISOString().split('T')[0];
+            updatePersianDate();
+        }
+
+        function updatePersianDate() {
+            const persianDate = toJalaali(currentDate);
+            persianDateDisplay.textContent = `تاریخ هجری شمسی: ${persianDate.jy}/${persianDate.jm}/${persianDate.jd}`;
+        }
+
+        function saveToCache() {
+            localStorage.setItem('calendarGridStates', JSON.stringify(gridStates));
+        }
+
+        function loadFromCache() {
+            const savedStates = localStorage.getItem('calendarGridStates');
+            if (savedStates) {
+                gridStates = JSON.parse(savedStates);
+                updateGrid();
+            }
+        }
+
+        function clearGrid() {
+            const dateKey = currentDate.toISOString().split('T')[0];
+            gridStates[dateKey] = new Array(24 * 8).fill(false);
+            updateGrid();
+            saveToCache();
+        }
+
+        saveBtn.addEventListener('click', () => {
+            const data = JSON.stringify(gridStates);
+            const blob = new Blob([data], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'calendar_all_data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        loadBtn.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (event) => {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const contents = e.target.result;
+                    gridStates = JSON.parse(contents);
+                    updateGrid();
+                    saveToCache();
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        });
+
+        clearBtn.addEventListener('click', clearGrid);
+
+        dateSelector.addEventListener('change', (e) => {
+            currentDate = new Date(e.target.value);
+            updateGrid();
+        });
+
+        prevDayBtn.addEventListener('click', () => {
+            currentDate.setDate(currentDate.getDate() - 1);
+            updateGrid();
+        });
+
+        nextDayBtn.addEventListener('click', () => {
+            currentDate.setDate(currentDate.getDate() + 1);
+            updateGrid();
+        });
+
+        // Jalaali date conversion functions
+        function toJalaali(gy, gm, gd) {
+            if (gy instanceof Date) {
+                return toJalaali(gy.getFullYear(), gy.getMonth() + 1, gy.getDate());
+            }
+            var g_d_m, jy, jm, jd, gy2, days;
+            g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+            gy2 = (gm > 2) ? (gy + 1) : gy;
+            days = 355666 + (365 * gy) + ~~((gy2 + 3) / 4) - ~~((gy2 + 99) / 100) + ~~((gy2 + 399) / 400) + gd + g_d_m[gm - 1];
+            jy = -1595 + (33 * ~~(days / 12053));
+            days %= 12053;
+            jy += 4 * ~~(days / 1461);
+            days %= 1461;
+            if (days > 365) {
+                jy += ~~((days - 1) / 365);
+                days = (days - 1) % 365;
+            }
+            if (days < 186) {
+                jm = 1 + ~~(days / 31);
+                jd = 1 + (days % 31);
+            } else {
+                jm = 7 + ~~((days - 186) / 30);
+                jd = 1 + ((days - 186) % 30);
+            }
+            return { jy: jy, jm: jm, jd: jd };
+        }
+
+        createGrid();
+        loadFromCache();
+        updateDateDisplay();
+    </script>
+
+</body></html>
