@@ -113,7 +113,7 @@
         <canvas id="canvas"></canvas>
     </div>
 
-    <script>
+        <script>
         const defaultHexValues = [
             'F24444',
             'FCF61B',
@@ -135,11 +135,17 @@
             return rgb.map(value => value.toString(16).padStart(2, '0')).join('');
         }
 
+        function rgbToGrayscale(rgb) {
+            return Math.round((rgb[0] + rgb[1] + rgb[2]) / 3);
+        }
+
         function findClosestColor(pixel, palette) {
+            const pixelGray = rgbToGrayscale(pixel);
             let minDist = Infinity;
             let closestColor = null;
             for (const color of palette) {
-                const dist = Math.pow(pixel[0] - color[0], 2) + Math.pow(pixel[1] - color[1], 2) + Math.pow(pixel[2] - color[2], 2);
+                const colorGray = rgbToGrayscale(color);
+                const dist = Math.abs(pixelGray - colorGray);
                 if (dist < minDist) {
                     minDist = dist;
                     closestColor = color;
