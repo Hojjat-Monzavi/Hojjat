@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixelate Image with Custom Palette</title>
+    <title>Pixelate Image with Custom Palette (HSV) and Real-time Preview</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <style>
         :root {
@@ -20,7 +20,7 @@
             background-color: var(--secondary-color);
             line-height: 1.6;
             padding: 20px;
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             box-sizing: border-box;
         }
@@ -42,6 +42,17 @@
             padding-bottom: 10px;
         }
 
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .controls-container {
+            flex: 1;
+            min-width: 300px;
+        }
+
         .container {
             border: 2px solid var(--primary-color);
             padding: 20px;
@@ -55,7 +66,7 @@
             font-weight: bold;
         }
 
-        input[type="file"], input[type="number"] {
+        input[type="file"], input[type="number"], input[type="range"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -83,12 +94,18 @@
             color: var(--primary-color);
         }
 
+        .canvas-container {
+            flex: 2;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
         canvas {
             border: 1px solid var(--primary-color);
             max-width: 100%;
             height: auto;
-            display: block;
-            margin: 20px auto;
         }
 
         .color-picker {
@@ -105,27 +122,27 @@
             height: 40px;
         }
 
-        @media (min-width: 600px) {
-            body {
-                padding: 40px;
+        .slider-container {
+            margin-bottom: 15px;
+        }
+
+        .slider-container label {
+            display: inline-block;
+            width: 20px;
+            margin-right: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .main-container {
+                flex-wrap: nowrap;
             }
 
-            .container {
-                padding: 30px;
-            }
-
-            button {
-                width: auto;
-                margin-right: 10px;
-            }
-
-            .buttons-container {
-                display: flex;
-                justify-content: space-between;
+            .canvas-container {
+                flex-direction: column;
             }
         }
 
-        @media (max-width: 599px) {
+        @media (max-width: 767px) {
             h1 {
                 font-size: 2em;
             }
@@ -134,8 +151,8 @@
                 padding: 15px;
             }
 
-            input[type="file"], input[type="number"] {
-                font-size: 16px; /* Prevent zoom on focus in iOS */
+            input[type="file"], input[type="number"], input[type="range"] {
+                font-size: 16px;
             }
 
             .color-picker {
@@ -146,38 +163,55 @@
             .color-picker input[type="color"] {
                 margin-bottom: 10px;
             }
+
+            .canvas-container {
+                order: -1;
+            }
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
 </head>
 <body>
-    <h1>Pixelate Image</h1>
-    <div class="container">
-        <label for="imageInput">Select Image</label>
-        <input type="file" id="imageInput" accept="image/*">
+    <h1>Pixelate Image (HSV) with Real-time Preview</h1>
+    <div class="main-container">
+        <div class="controls-container">
+            <div class="container">
+                <label for="imageInput">Select Image</label>
+                <input type="file" id="imageInput" accept="image/*">
+                
+                <label for="downscaleFactor">Downscale Factor</label>
+                <input type="number" id="downscaleFactor" value="0.1" step="0.01" min="0.01" max="1">
+                
+                <div class="slider-container">
+                    <label for="hueWeight">H</label>
+                    <input type="range" id="hueWeight" min="0" max="1" step="0.01" value="0.5">
+                    <label for="satWeight">S</label>
+                    <input type="range" id="satWeight" min="0" max="1" step="0.01" value="1">
+                    <label for="valWeight">V</label>
+                    <input type="range" id="valWeight" min="0" max="1" step="0.01" value="1">
+                </div>
+                
+                <button onclick="saveImage()">Save as PNG</button>
+            </div>
+            
+            <div class="container">
+                <h2>Color Palette</h2>
+                <div id="colorPickers"></div>
+                <button onclick="addColorPicker()">Add Color</button>
+            </div>
+        </div>
         
-        <label for="downscaleFactor">Downscale Factor</label>
-        <input type="number" id="downscaleFactor" value="0.1" step="0.01" min="0.01" max="1">
-        
-        <div class="buttons-container">
-            <button onclick="pixelateImage()">Pixelate</button>
-            <button onclick="saveImage()">Save as PNG</button>
+        <div class="canvas-container">
+            <canvas id="originalCanvas"></canvas>
+            <canvas id="pixelatedCanvas"></canvas>
         </div>
     </div>
-    
-    <div class="container">
-        <h2>Color Palette</h2>
-        <div id="colorPickers"></div>
-        <button onclick="addColorPicker()">Add Color</button>
-    </div>
-    
-    <canvas id="canvas"></canvas>
-
     <script>
-        // JavaScript code remains the same as in the previous version
         const defaultHexValues = [
             'F24444', 'FCF61B', 'D64A12', 'D6AF35', '475663', '0A1322', '000000'
         ];
+
+        let originalImage;
 
         function hexToRgb(hex) {
             const r = parseInt(hex.substring(0, 2), 16);
@@ -190,17 +224,78 @@
             return rgb.map(value => value.toString(16).padStart(2, '0')).join('');
         }
 
-        function rgbToGrayscale(rgb) {
-            return Math.round((rgb[0] + rgb[1] + rgb[2]) / 3);
+        function rgbToHsv(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            const diff = max - min;
+
+            let h, s, v = max;
+
+            s = max === 0 ? 0 : diff / max;
+
+            if (max === min) {
+                h = 0;
+            } else {
+                switch (max) {
+                    case r:
+                        h = (g - b) / diff + (g < b ? 6 : 0);
+                        break;
+                    case g:
+                        h = (b - r) / diff + 2;
+                        break;
+                    case b:
+                        h = (r - g) / diff + 4;
+                        break;
+                }
+                h /= 6;
+            }
+
+            return [h * 360, s * 100, v * 100];
+        }
+
+        function hsvToRgb(h, s, v) {
+            h /= 360;
+            s /= 100;
+            v /= 100;
+
+            let r, g, b;
+
+            const i = Math.floor(h * 6);
+            const f = h * 6 - i;
+            const p = v * (1 - s);
+            const q = v * (1 - f * s);
+            const t = v * (1 - (1 - f) * s);
+
+            switch (i % 6) {
+                case 0: r = v; g = t; b = p; break;
+                case 1: r = q; g = v; b = p; break;
+                case 2: r = p; g = v; b = t; break;
+                case 3: r = p; g = q; b = v; break;
+                case 4: r = t; g = p; b = v; break;
+                case 5: r = v; g = p; b = q; break;
+            }
+
+            return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
         }
 
         function findClosestColor(pixel, palette) {
-            const pixelGray = rgbToGrayscale(pixel);
+            const pixelHsv = rgbToHsv(...pixel);
             let minDist = Infinity;
             let closestColor = null;
+            const hueWeight = parseFloat(document.getElementById('hueWeight').value);
+            const satWeight = parseFloat(document.getElementById('satWeight').value);
+            const valWeight = parseFloat(document.getElementById('valWeight').value);
             for (const color of palette) {
-                const colorGray = rgbToGrayscale(color);
-                const dist = Math.abs(pixelGray - colorGray);
+                const colorHsv = rgbToHsv(...color);
+                const dist = Math.sqrt(
+                    Math.pow((pixelHsv[0] - colorHsv[0]) * hueWeight, 2) +
+                    Math.pow((pixelHsv[1] - colorHsv[1]) * satWeight, 2) +
+                    Math.pow((pixelHsv[2] - colorHsv[2]) * valWeight, 2)
+                );
                 if (dist < minDist) {
                     minDist = dist;
                     closestColor = color;
@@ -219,7 +314,7 @@
             const colorPickerDiv = document.createElement('div');
             colorPickerDiv.className = 'color-picker';
             colorPickerDiv.innerHTML = `
-                <input type="color" value="#${hex}">
+                <input type="color" value="#${hex}" onchange="updatePixelatedImage()">
                 <button onclick="removeColorPicker(this)">Remove</button>
             `;
             colorPickersDiv.appendChild(colorPickerDiv);
@@ -227,6 +322,7 @@
 
         function removeColorPicker(button) {
             button.parentElement.remove();
+            updatePixelatedImage();
         }
 
         function initializeDefaultPalette() {
@@ -238,8 +334,6 @@
         function pixelateImage() {
             const fileInput = document.getElementById('imageInput');
             const downscaleFactor = parseFloat(document.getElementById('downscaleFactor').value);
-            const canvas = document.getElementById('canvas');
-            const ctx = canvas.getContext('2d');
 
             if (fileInput.files.length === 0) {
                 alert('Please select an image file.');
@@ -249,56 +343,87 @@
             const file = fileInput.files[0];
             const reader = new FileReader();
             reader.onload = function (event) {
-                const img = new Image();
-                img.onload = function () {
-                    const originalWidth = img.width;
-                    const originalHeight = img.height;
-                    const smallWidth = Math.max(1, Math.floor(originalWidth * downscaleFactor));
-                    const smallHeight = Math.max(1, Math.floor(originalHeight * downscaleFactor));
-
-                    // Resize to smaller size
-                    const smallCanvas = document.createElement('canvas');
-                    smallCanvas.width = smallWidth;
-                    smallCanvas.height = smallHeight;
-                    const smallCtx = smallCanvas.getContext('2d');
-                    smallCtx.drawImage(img, 0, 0, smallWidth, smallHeight);
-
-                    // Resize back to original size
-                    canvas.width = originalWidth;
-                    canvas.height = originalHeight;
-                    ctx.imageSmoothingEnabled = false;
-                    ctx.drawImage(smallCanvas, 0, 0, originalWidth, originalHeight);
-
-                    // Apply color quantization
-                    const imageData = ctx.getImageData(0, 0, originalWidth, originalHeight);
-                    const data = imageData.data;
-                    const palette = getPaletteFromPickers();
-
-                    for (let i = 0; i < data.length; i += 4) {
-                        const pixel = [data[i], data[i + 1], data[i + 2]];
-                        const closestColor = findClosestColor(pixel, palette);
-                        data[i] = closestColor[0];
-                        data[i + 1] = closestColor[1];
-                        data[i + 2] = closestColor[2];
-                    }
-
-                    ctx.putImageData(imageData, 0, 0);
+                originalImage = new Image();
+                originalImage.onload = function () {
+                    updatePixelatedImage();
                 };
-                img.src = event.target.result;
+                originalImage.src = event.target.result;
             };
             reader.readAsDataURL(file);
         }
 
-        function saveImage() {
-            const canvas = document.getElementById('canvas');
-            const link = document.createElement('a');
-            link.href = canvas.toDataURL('image/png');
-            link.download = 'pixelated_image.png';
-            link.click();
+        function updatePixelatedImage() {
+            if (!originalImage) return;
+
+            const downscaleFactor = parseFloat(document.getElementById('downscaleFactor').value);
+            const originalCanvas = document.getElementById('originalCanvas');
+            const pixelatedCanvas = document.getElementById('pixelatedCanvas');
+            const originalCtx = originalCanvas.getContext('2d');
+            const pixelatedCtx = pixelatedCanvas.getContext('2d');
+
+            const originalWidth = originalImage.width;
+            const originalHeight = originalImage.height;
+            const smallWidth = Math.max(1, Math.floor(originalWidth * downscaleFactor));
+            const smallHeight = Math.max(1, Math.floor(originalHeight * downscaleFactor));
+
+            // Set canvas sizes
+            originalCanvas.width = originalWidth;
+            originalCanvas.height = originalHeight;
+            pixelatedCanvas.width = originalWidth;
+            pixelatedCanvas.height = originalHeight;
+
+            // Draw original image
+            originalCtx.drawImage(originalImage, 0, 0, originalWidth, originalHeight);
+
+            // Resize to smaller size
+            const smallCanvas = document.createElement('canvas');
+            smallCanvas.width = smallWidth;
+            smallCanvas.height = smallHeight;
+            const smallCtx = smallCanvas.getContext('2d');
+            smallCtx.drawImage(originalImage, 0, 0, smallWidth, smallHeight);
+
+            // Resize back to original size
+            pixelatedCtx.imageSmoothingEnabled = false;
+            pixelatedCtx.drawImage(smallCanvas, 0, 0, originalWidth, originalHeight);
+
+            // Apply color quantization using HSV
+            const imageData = pixelatedCtx.getImageData(0, 0, originalWidth, originalHeight);
+            const data = imageData.data;
+            const palette = getPaletteFromPickers();
+
+            for (let i = 0; i < data.length; i += 4) {
+                const pixel = [data[i], data[i + 1], data[i + 2]];
+                const closestColor = findClosestColor(pixel, palette);
+                data[i] = closestColor[0];
+                data[i + 1] = closestColor[1];
+                data[i + 2] = closestColor[2];
+            }
+
+            pixelatedCtx.putImageData(imageData, 0, 0);
         }
 
-        // Initialize the default color palette
-        initializeDefaultPalette();
-    </script>
+        function saveImage() {
+        const pixelatedCanvas = document.getElementById('pixelatedCanvas');
+        const link = document.createElement('a');
+        link.href = pixelatedCanvas.toDataURL('image/png');
+        link.download = 'pixelated_image.png';
+        link.click();
+    }
+
+    // Initialize the default color palette
+    initializeDefaultPalette();
+
+    // Add event listeners for real-time updates
+    document.getElementById('downscaleFactor').addEventListener('input', updatePixelatedImage);
+    document.getElementById('hueWeight').addEventListener('input', updatePixelatedImage);
+    document.getElementById('satWeight').addEventListener('input', updatePixelatedImage);
+    document.getElementById('valWeight').addEventListener('input', updatePixelatedImage);
+
+    // Add event listener for file input
+    document.getElementById('imageInput').addEventListener('change', pixelateImage);
+
+    // Initial pixelation attempt (in case an image is already loaded)
+    pixelateImage();
+</script>
 </body>
 </html>
