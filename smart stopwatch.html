@@ -6,7 +6,7 @@
     <title>Smart Stopwatch</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&amp;family=Courier+Prime&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Courier+Prime&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/feather-icons"></script>
     <style>
         [x-cloak] { display: none !important; }
@@ -67,10 +67,10 @@
         <div class="flex items-center justify-center mb-6">
             <span class="mr-2">System:</span>
             <button @click="toggleSystem()" x-text="systemState" class="px-3 py-1 rounded-md transition-all-slow focus:outline-none focus:ring-2 focus:ring-offset-2 ripple" :class="{
-                        'bg-black text-white hover:bg-gray-800 focus:ring-gray-500': S >= 0 &amp;&amp; systemState === 1,
-                        'bg-white text-black hover:bg-gray-200 focus:ring-gray-300': S < 0 &amp;&amp; systemState === 1,
-                        'bg-gray-500 text-white hover:bg-gray-600 focus:ring-gray-400': systemState === 0
-                    }">
+                'bg-black text-white hover:bg-gray-800 focus:ring-gray-500': S >= 0 && systemState === 1,
+                'bg-white text-black hover:bg-gray-200 focus:ring-gray-300': S < 0 && systemState === 1,
+                'bg-gray-500 text-white hover:bg-gray-600 focus:ring-gray-400': systemState === 0
+            }">
             </button>
         </div>
     </div>
@@ -83,11 +83,13 @@
                 systemState: 1,
                 isRunning: false,
                 lastTimestamp: null,
+                lastSavedTime: null,
 
                 init() {
                     this.loadState();
                     this.startTimer();
                     feather.replace();
+                    this.setupVisibilityListener();
                 },
 
                 startTimer() {
@@ -127,15 +129,22 @@
 
                 toggleRunning() {
                     this.isRunning = !this.isRunning;
+                    if (this.isRunning) {
+                        this.lastSavedTime = Date.now();
+                    }
+                    this.saveState();
                 },
 
                 reset() {
                     this.S = 0;
                     this.isRunning = false;
+                    this.lastSavedTime = null;
+                    this.saveState();
                 },
 
                 toggleSystem() {
                     this.systemState = this.systemState === 1 ? 0 : 1;
+                    this.saveState();
                 },
 
                 formatTime(time) {
@@ -153,7 +162,8 @@
                         alpha: this.alpha,
                         S: this.S,
                         systemState: this.systemState,
-                        isRunning: this.isRunning
+                        isRunning: this.isRunning,
+                        lastSavedTime: this.isRunning ? Date.now() : this.lastSavedTime
                     }));
                 },
 
@@ -161,13 +171,32 @@
                     const savedState = JSON.parse(localStorage.getItem('stopwatchState'));
                     if (savedState) {
                         this.alpha = savedState.alpha;
-                        this.S = savedState.S || 0;  // Set default to 0 if S is undefined or NaN
                         this.systemState = savedState.systemState;
                         this.isRunning = savedState.isRunning;
+                        
+                        if (this.isRunning && savedState.lastSavedTime) {
+                            const elapsedSinceLastSave = (Date.now() - savedState.lastSavedTime) / 1000;
+                            this.S = savedState.S;
+                            this.updateS(elapsedSinceLastSave);
+                        } else {
+                            this.S = savedState.S || 0;
+                        }
+                        
+                        this.lastSavedTime = savedState.lastSavedTime;
                     }
+                },
+
+                setupVisibilityListener() {
+                    document.addEventListener("visibilitychange", () => {
+                        if (document.hidden) {
+                            this.saveState();
+                        } else {
+                            this.loadState();
+                        }
+                    });
                 }
             };
         }
     </script>
-
-</body></html>
+</body>
+</html>
