@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cold Start Theorem</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', 'B Nazanin', 'B Lotus', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            font-family: serif;
+            color: #000000;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        .persian {
+            direction: rtl;
+            text-align: right;
+            font-family: 'B Nazanin', 'B Lotus', sans-serif;
+        }
+        .math {
+            overflow-x: auto;
+            margin: 1em 0;
+        }
+        .author {
+            font-family: serif;
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        .author a {
+            color: #000;
+            text-decoration: none;
+        }
+        .author a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <article class="article">
+        <header>
+            <h1>Cold Start</h1>
+        </header>
+        
+        <div class="article_body">
+            <p class="persian">
+                این تز بیان می دارد که حس سختی مطالعه مربوط به شروع آن می باشد
+                در آنصورت شروع سخت است اگر و فقط اگر :
+            </p>
+
+            <figure class="math">
+                \[\left. \mathbb{E}[T \mid T > t_0] \gg t_0 \right|_{t_0 \to 0}\]
+            </figure>
+
+            <p class="persian">
+                یعنی با میزان کمی مطالعه می توانیم انتظار داشته باشیم تا میزان بسیار بیشتری از چیزی که مطالعه کردیم را مطالعه کنیم. در این صورت می توانیم ضریب سختی را بدینگونه تعریف کنیم.
+            </p>
+
+            <figure class="math">
+                \[\alpha = \lim_{{t \to 0^+}} \frac{\mathbb{E}[T \mid T > t]}{t}\]
+            </figure>
+
+            <p class="persian">
+                هر چه \(\alpha\) بیشتر ، سختی نسبی شروع هم بیشتر. 
+                حال اگر PDF زمان های ترک مطالعه رو بصورت یک تابع نرمال با میانگین \(\overline{T}\) و انحراف معیار \(\sigma\) در نظر بگیریم :
+            </p>
+
+            <figure class="math">
+                \[\mathbb{E}[T \mid T > t_0] = \int_{t_0}^{\infty} \frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{(t - \overline{T})^2}{2 \sigma^2}} \, dt\]
+            </figure>
+
+            <p class="persian">حل این معادله رو در ادامه می بینید :</p>
+
+            <figure class="math">
+                \[\begin{align*}
+                \mathbb{E}[T \mid T > t_0] &= \int_{t_0}^{\infty} \frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{(t - \overline{T})^2}{2 \sigma^2}} \, dt \\[10pt]
+                
+                & z = \frac{t - \overline{T}}{\sigma} \rightarrow dt = \sigma dz \\[10pt]
+                
+                & z_0 = \frac{t_0 - \overline{T}}{\sigma}\\[10pt]
+                
+                &= \int_{z_0}^{\infty} (\sigma z + \overline{T}) \cdot \frac{1}{\sqrt{2\pi}} e^{-\frac{z^2}{2}} \, dz \\[10pt]
+                
+                &= \sigma \int_{z_0}^{\infty} z \cdot \frac{1}{\sqrt{2\pi}} e^{-\frac{z^2}{2}} \, dz + \overline{T} \int_{z_0}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{z^2}{2}} \, dz \\[10pt]
+                
+                &= \sigma \int_{z_0}^{\infty} z \cdot \frac{1}{\sqrt{2\pi}} e^{-\frac{z^2}{2}} \, dz + \overline{T} (1 - \Phi(z_0)) \\[10pt]
+                
+                & u = -\frac{z^2}{2} \rightarrow du = -z \, dz \\[10pt]
+                
+                &= \frac{\sigma}{\sqrt{2\pi}} \left[-e^{-\frac{z^2}{2}}\right]_{z_0}^{\infty} + \overline{T} (1 - \Phi(z_0)) \\[10pt]
+                
+                &= \frac{\sigma}{\sqrt{2\pi}} e^{-\frac{z_0^2}{2}} + \overline{T} (1 - \Phi(z_0)) \\[10pt]
+                
+                &= \overline{T} + \sigma \cdot \frac{\phi(z_0)}{1 - \Phi(z_0)}
+                \end{align*}\]
+            </figure>
+
+            <p class="persian">که در آن</p>
+            <ul>
+                <li>\(\phi(z) = \frac{1}{\sqrt{2\pi}} e^{-\frac{z^2}{2}}\)  (تابع توزیع نرمال استاندارد)</li>
+                <li>\(\Phi(z)\)  (تابع توزیع تجمیعی نرمال)</li>
+                <li>\(z_0 = \frac{\overline{T}-t_0}{\sigma}\)</li>
+            </ul>
+
+            <p class="persian">
+                حال چون برد هر دو تابع \(\phi\) و \(\Phi\) بین صفر و یک هست و \(\sigma\) مقداری مثبت :
+            </p>
+
+            <figure class="math">
+                \[\mathbb{E}[T \mid T > t_0] > \overline{T}\]
+            </figure>
+
+            <p class="persian">در نتیجه :</p>
+
+            <figure class="math">
+                \[\begin{aligned}
+                &\lim_{{t \to 0^+}} \alpha = \infty \\[10pt]
+                &\left. \mathbb{E}[T \mid T > t_0] \gg t_0 \right|_{t_0 \to 0}
+                \end{aligned}\]
+            </figure>
+
+            <p class="persian">
+                <b>پس ثابت کردیم با فرض نرمال بودن توزیع زمان های مطالعه، شروع مطالعه سخت است</b>
+            </p>
+        </div>
+
+        <footer>
+            <p class="author">
+                written by 
+                <a href="https://t.me/HojjatFiles">Hojjat Monzavi</a>
+            </p>
+        </footer>
+    </article>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "$", right: "$", display: false},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError : false
+            });
+        });
+    </script>
+</body>
+</html>
