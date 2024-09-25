@@ -88,14 +88,14 @@
     </p>
 
     <div class="math">
-        \[\mathbb{E}[T \mid T > t_0] = \int_{t_0}^{\infty} \frac{t}{\sigma \sqrt{2 \pi}} e^{-\frac{(t - \overline{T})^2}{2 \sigma^2}} \, dt\]
+        \[\mathbb{E}[T \mid T > t_0] = \frac{\int_{t_0}^{\infty} \frac{t}{\sigma \sqrt{2 \pi}} e^{-\frac{(t - \overline{T})^2}{2 \sigma^2}} \, dt} {\int_{t_0}^{\infty} \frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{(t - \overline{T})^2}{2 \sigma^2}} \, dt}\]
     </div>
 
     <p class="persian">حل این معادله رو در ادامه می بینید :</p>
 
     <div class="math">
         \[\begin{align*}
-        \mathbb{E}[T \mid T > t_0] &= \int_{t_0}^{\infty} \frac{t}{\sigma \sqrt{2 \pi}} e^{-\frac{(t - \overline{T})^2}{2 \sigma^2}} \, dt \\[10pt]
+        \mathbb{E}[T \mid T > t_0] &> \int_{t_0}^{\infty} \frac{t}{\sigma \sqrt{2 \pi}} e^{-\frac{(t - \overline{T})^2}{2 \sigma^2}} \, dt \\[10pt]
         
         & z = \frac{t - \overline{T}}{\sigma} \rightarrow dt = \sigma dz \\[10pt]
         
