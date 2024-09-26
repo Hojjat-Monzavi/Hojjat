@@ -68,7 +68,7 @@
         </style>
     </head>
     <body>
-        <h1>Optimal Study Time | ؟امروز چند ساعت درس بخوانم</h1>
+        <h1>Optimal Study Time |هنوز تا امتحان مونده</h1>
     <p class="author">
             written by 
             <a href="https://t.me/HojjatFiles">
@@ -369,13 +369,26 @@
 
     <div class="math">
         \[
-        t_i = \frac{{0.01309}}{0.98691 - e^{{-0.01317}(n-1)}}(T+3n)e^{{0.01317}(n-i)} - 3  
+        t_i = \frac{{e^{0.01317}-1}}{e^{0.01317} - e^{-0.01317(n-1)}}(T+3n)e^{0.01317(n-i)} - 3
         \]
     </div>
     
     <p class="persian">این معادله نشان دهنده زمان بهینه مطالعه در هر روز برای آزمون است.</p>
-
-    
+    <h1>مثال</h1>
+    <div class="math"></div>
+        \[
+        T = 10\\
+        n = 7
+        \]
+    </div>
+    <img src="Assets/example1.png" class="center" width="100%"\>
+    <div class="math"></div>
+        \[
+        T = 30\\
+        n = 30
+        \]
+    </div>
+    <img src="Assets/example2.png" class="center" width="100%"\>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -391,4 +404,15 @@
         });
     </script>
 </body>
+<footer>
+    <p class="author">
+        written by 
+        <a href="https://t.me/HojjatFiles">
+            @HojjatFiles
+            <svg class="telegram-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-17.15 6.498a2.268 2.268 0 0 0-.214 4.180l3.608 1.707a1.417 1.417 0 0 0 1.635-.409l5.725-6.950a.563.563 0 0 1 .321-.174.572.572 0 0 1 .554.896l-4.883 6.063a1.415 1.415 0 0 0-.153 1.334l1.741 4.283a2.265 2.265 0 0 0 4.016.584l8.21-15.31c.447-.836.169-1.705-.211-2.169a2.239 2.239 0 0 0-1.82-.784z"/>
+            </svg>
+        </a>
+    </p>
+</footer>
 </html>
