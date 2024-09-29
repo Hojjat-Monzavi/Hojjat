@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fa">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Optimal Study Time</title>
+        <!-- Trick Telegram crawler into believing this is a Medium article -->
+        <meta property="al:android:app_name" content="Medium" />
+        <meta property="article:published_time" content="2024-09-20T00:00:00.000Z" />
+        <meta property="og:site_name" content="hojjat-monzavi.github.io/" />
+        <meta property="og:description" content="محاسبه مقدار دقیق مطالعه روزانه مورد نیاز به کمک ریاضیات"/>
+        <meta name="author" content="Hojjat Monzavi" />
+        <meta name="telegram:channel" content="@HojjatFiles" />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            
+            #plot {
+                width: 100%; /* Allows the plot to use available width */
+                height: 200px; /* Smaller height for the plot */
+                margin-top: 20px;
+            }
+            input {
+                margin: 5px;
+                padding: 8px;
+                border: 1px solid black;
+                border-radius: 4px;
+            }
+            body {
+                font-family: Serif, 'B Nazanin', 'B Lotus', sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            .author {
+                font-family: serif;
+                text-align: center;
+                margin-top: 20px;
+                font-style: italic;
+            }
+            .author a {
+                color: #000;
+                text-decoration: none;
+            }
+            .author a:hover {
+                text-decoration: underline;
+            }
+            h1 {
+         font-family: serif, 'B Nazanin';
+                color: #000000;
+                border-bottom: 2px solid #000;
+                padding-bottom: 10px;
+            text-align : center
+            }
+            .persian {
+                direction: rtl;
+                text-align: right;
+                font-family: 'B Nazanin', 'B Lotus', sans-serif;
+            }
+            .math {
+                overflow-x: auto;
+                margin: 1em 0;
+            }
+          .telegram-icon {
+                width: 1em;
+                height: 1em;
+                margin-left: 0.2em;
+                vertical-align: text-bottom;
+            }
+        </style>
+    </head>
+    <body>
+        <article>
+        <h1>Optimal Study Time |هنوز تا امتحان مونده</h1>
+    <p class="author">
+            written by 
+            <a href="https://t.me/HojjatFiles">
+                @HojjatFiles
+                <svg class="telegram-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-17.15 6.498a2.268 2.268 0 0 0-.214 4.180l3.608 1.707a1.417 1.417 0 0 0 1.635-.409l5.725-6.950a.563.563 0 0 1 .321-.174.572.572 0 0 1 .554.896l-4.883 6.063a1.415 1.415 0 0 0-.153 1.334l1.741 4.283a2.265 2.265 0 0 0 4.016.584l8.21-15.31c.447-.836.169-1.705-.211-2.169a2.239 2.239 0 0 0-1.82-.784z"/>
+                </svg>
+            </a>
+        </p>
+    
+    <p class="persian">
+        اگر زمان مطالعه روزانه را با $\mathbf{t}$ نشان دهیم و $n$ روز تا آزمون مورد نظر باقی باشد : 
+    </p>
+    
+    <div class="math">
+        \[
+        \vec{t} = 
+        \begin{bmatrix}
+        t_1 \\
+        t_2 \\
+        t_3 \\
+        \vdots \\
+        t_n
+        \end{bmatrix}
+        \]
+    </div>
+    
+    <p class="persian">
+        ما قاعدتا محدودیت مجموع ساعت مطالعه داریم. مجموع ساعت مطالعه را با $T$ نشان می دهیم : 
+    </p>
+    
+    <div class="math">
+        \[
+        g(\vec{t}) = \sum_{i} t_i = T
+        \]
+    </div>
+    
+    <p class="persian">
+        حال باید به مدلسازی یادگیری بپردازیم. میتوان فرض کرد ما مقدار یادگیری پس از $t$ زمان مطالعه داریم و بعد از $n$ روز بخشی از این یادگیری را به یاد می آوریم. پس میزان به خاطر آوری پس از $n$ روز و بعد از $t$ زمان مطالعه را به صورت
+    </p>
+    
+    <div class="math">
+        \[
+        f(\vec{t}, n) = \sum_{i} h(t_i) \cdot W(t_i, n-1)
+        \]
+    </div>
+    
+    <p class="persian">
+        که در آن $h(t_i)$ میزان یادگیری پس از $t_i$ مطالعه می باشد و $W(t_i,n_i)$ میزان یادآوری این مطالعه پس از $t_i$ مطالعه و $n$ روز می باشد. 
+        برای سادگی، $W$ را مستقل از زمان مطالعه در نظر می گیریم : 
+    </p>
+    
+    <div class="math">
+        \[
+        f(\vec{t}, n) = \sum_{i} h(t_i) \cdot W(n-i)
+        \]
+    </div>
+    
+    <p class="persian">
+        حال مساله واضح می شود : 
+    </p>
+    
+    
+    <p class="persian">
+        این نوعی مساله بهینه سازی مقید است. برای حل آن از روش ضرائب لاگرانژ استفاده می کنیم.
+        در این روش تابعی جدید به نام «لاگرانژین» تعریف کرده و نقاط بحرانی آن را پیدا می کنیم. این نقاط بحرانی همان ماکسیمم و مینیمم های تابع ما هستند.
+        برای توضیحات بیشتر به <a href="https://blog.faradars.org/%D8%B6%D8%B1%D8%A7%DB%8C%D8%A8-%D9%84%D8%A7%DA%AF%D8%B1%D8%A7%D9%86%DA%98/#%d8%b6%d8%b1%d8%a7%db%8c%d8%a8-%d9%84%D8%A7%da%af%d8%b1%d8%a7%d9%86%da%98-0">این مقاله</a> از فرادرس مراجعه کنید یا برای توضیحات تکمیلی و بهتر به <a href="https://www.khanacademy.org/math/multivariable-calculus/applications-of-multivariable-derivatives/constrained-optimization/a/lagrange-multipliers-single-constraint">این مقاله</a> از خان آکادمی مراجعه کنید.
+    </p>
+    
+    <div class="math">
+        \[
+        \mathcal{L}(\vec{t},\lambda) = f(\vec{t}, n) - \lambda(g(\vec{t}) - T)
+        \]
+    </div>
+    
+    <div class="math">
+        \[
+        \nabla\mathcal{L} = 0 
+        \]
+    </div>
+    
+    <p class="persian">مشتق جزئی این تابع نسبت به $t$ برابر است با :</p>
+    
+    <div class="math">
+        \[
+        \begin{align*}
+        \nabla_{\mathbf{t}} \mathcal{L}(\mathbf{t}, n) 
+        &= \begin{bmatrix}
+        \frac{\partial \mathcal{L}}{\partial t_1} \\
+        \frac{\partial \mathcal{L}}{\partial t_2} \\
+        \vdots \\
+        \frac{\partial \mathcal{L}}{\partial t_n}
+        \end{bmatrix} \\[10pt]
+        &= \begin{bmatrix}
+        \frac{\partial f}{\partial t_1} \\
+        \frac{\partial f}{\partial t_2} \\
+        \vdots \\
+        \frac{\partial f}{\partial t_n}
+        \end{bmatrix} - \lambda 
+        \begin{bmatrix}
+        \frac{\partial g}{\partial t_1} \\
+        \frac{\partial g}{\partial t_2} \\
+        \vdots \\
+        \frac{\partial g}{\partial t_n}
+        \end{bmatrix} \\[10pt]
+        &= 
+
+        \begin{bmatrix}
+        \frac{\partial h}{\partial t} \bigg|_{t=t_1} \cdot W_n \\
+        \frac{\partial h}{\partial t} \bigg|_{t=t_2} \cdot W_{n-1} \\
+        \vdots \\
+        \frac{\partial h}{\partial t} \bigg|_{t=t_n} \cdot W_0 
+        \end{bmatrix} + \begin{bmatrix}
+        \frac{\partial W}{\partial t} \bigg|_{t=t_1} \cdot h(t_1) \\
+        \frac{\partial W}{\partial t} \bigg|_{t=t_2} \cdot h(t_2)\\
+        \vdots \\
+        \frac{\partial W}{\partial t} \bigg|_{t=t_1} \cdot h(t_n)
+        \end{bmatrix}- \lambda 
+        \begin{bmatrix}
+        \frac{\partial g}{\partial t_1} \\
+        \frac{\partial g}{\partial t_2} \\
+        \vdots \\
+        \frac{\partial g}{\partial t_n}
+        \end{bmatrix} \\[10pt]
+        &=\begin{bmatrix}
+        \frac{dh}{dt} \bigg|_{t=t_1}\\
+        \frac{dh}{dt} \bigg|_{t=t_2}\\
+        \vdots \\
+        \frac{dh}{dt} \bigg|_{t=t_n}
+        \end{bmatrix}
+        \begin{bmatrix}
+        W_n\\
+        W_{n-1}\\
+        \vdots \\
+        W_0
+        \end{bmatrix}
+        - \lambda \\[10pt]
+        &= 0
+        \end{align*}
+        \]
+    </div>
+
+    <p class="persian">در نتیجه داریم برای روز $i$ ام داریم:</p>
+
+    <div class="math">
+        \[
+        \frac{dh}{dt}\bigg|_{t=t_i} \cdot W(n-i) = \lambda
+        \]
+    </div>
+
+    <p class="persian">از دوطرف بر حسب $i$ مشتق می گیریم:</p>
+
+    <div class="math">
+        \[
+        \begin{align*}
+        &\frac{dh}{dt}\bigg|_{t=t_i} \cdot W(n-i) = \lambda\\[10pt]
+       &\frac{\Delta W(n-i)}{\Delta i}\cdot\frac{dh}{dt}\bigg|_{t=t_i} + W(n-i)\frac{\Delta\frac{dh}{d{t}}}{\Delta i}\bigg|_{t=t_i} = 0 \\[10pt]
+       &\frac{dW(n-i)}{\Delta i}\cdot\frac{dh}{dt}\bigg|_{t=t_i} + W(n-i)\frac{\Delta\frac{dh}{d{t}}}{\Delta t_i} \cdot\frac{\Delta t_i}{\Delta i}\bigg|_{t=t_i} = 0 \\[20pt]
+       &\frac{\Delta t_i}{\Delta i} = - \frac{\frac{dW(n-i)}{\Delta i}\cdot\frac{dh}{dt}\bigg|_{t=t_i}}{W(n-i)\frac{\Delta\frac{dh}{d{t}}}{\Delta t_i}\bigg|_{t=t_i}}
+       \end{align*}       
+        \]
+    </div>
+
+    <p class="persian">
+        حال با توجه به اینکه هر زمان بیشتری از مطالعه گذشته باشد، میزان کمتری به یاد می آوریم و اینکه میزان بازدهی مطالعه به مرور زمان کاهش می یابد در میابیم که 
+    </p>
+    
+    <div class="math">
+        \[
+        \frac{\Delta t_i}{\Delta i} > 0
+        \]
+    </div>
+    
+    <p class="persian">پس <b>هر چه به آزمون نزدیک تر می شویم زمان مطالعه باید افزایش یابد!!</b></p>
+
+    <p class="persian">با تعیین دقیقتر تابع های $W$ و $h$ می توان به نتایج بهتری نیز رسید.</p>
+
+    <p class="persian">آزمایشات فراوان ثابت کرده اند که نمودار فراموشی انسان نمایی است. پس می توانیم $W$ را به این صورت تقریب بزنیم :</p>
+    
+    <div class="math">
+        \[
+        W(x) = e^{-k_W\cdot x}
+        \]
+    </div>
+    
+    <p class="persian">
+        در ارتباط با یادگیری آزمایش هایی با نتایج ضد و نقیض چاپ شده است. با این حال با مطالعه آنها، می توان دید که تقریبا آنها الگوی مشابهی دارند: 
+    </p>
+    
+    <div class="math">
+        \[
+        h(t) = \frac{1}{k_ht+b} + C_0, \quad b>0
+        \]
+    </div>
+    
+    <p class="persian">با جایگذاری این روابط داریم :</p>
+    
+    <div class="math">
+        \[
+        \begin{align*}
+        &\frac{dh}{dt}\bigg|_{t=t_i} \cdot W(n-i) = \lambda\\[10pt]
+        &\frac{e^{-k_w (n-i)}}{(k_ht_i+b)^2} = \lambda \\[10pt]
+        &t_i = \sqrt{ \frac{1}{\lambda k_h^2}\cdot e^{-k_w(n-i)}} - \frac{b}{k_h} \\[10pt]
+        &t_i = K e^{\frac{{-k_w}}{2}(n-i)} - \frac{b}{k_h} ,\quad K= \sqrt{\frac{1}{\lambda k_h^2}}
+        \end{align*}
+        \]
+    </div>
+
+    <p class="persian">با قرار دادن این رابطه در شرط اولیه داریم :</p>
+
+    <div class="math">
+        \[
+        \begin{align*}
+        &g(\vec t)  = \sum_{i=1}^n t_i = T \\[10pt]
+        &\sum_{i=1}^n {K e^{\frac{{-k_w}}{2}(n-i)} \frac{b}{k_h}} = T \\[10pt]
+        &-n\frac{b}{k_h} + K \sum_{i=1}^n {e^{\frac{{-k_w}}{2}(n-i)}} = T
+        \end {align*}
+        \]
+    </div>
+
+    <p class="persian">همچنین داریم :</p>
+
+    <div class="math">
+        \[
+        \begin{align*} 
+        e^{\frac{k_w}{2}}\sum_{i=1}^{n} {e^{\frac{{-k_w}}{2}(n-i)}} &= \sum_{i=2}^{n+1} {e^{\frac{{-k_w}}{2}(n-i)}} \\[10pt]
+        e^{\frac{k_w}{2}}\sum_{i=1}^{n} {e^{\frac{{-k_w}}{2}(n-i)}}&= \sum_{i=1}^{n} {e^{\frac{{-k_w}}{2}(n-i)}} +  e^{\frac{{-k_w}}{2}\cdot(-1)} - e^{\frac{{-k_w}}{2}\cdot(n-1)} \\[10pt]
+        \sum_{i=1}^{n} {e^{\frac{{-k_w}}{2}(n-i)}} &= \frac{e^{\frac{{k_w}}{2}} - e^{-(n-1)\frac{{k_w}}{2}}}{e^{\frac{k_w}{2}}-1} \\[10pt]
+
+        \end{align*}
+        \]
+    </div>
+
+    <p class="persian">با جایگذاری پاسخ در رابطه بالا داریم :</p>
+
+    <div class="math">
+        \[
+        \begin{align*}
+        &-n\frac{b}{k_h} + K \sum_{i=1}^n {e^{\frac{{-k_w}}{2}(n-i)}} = T \\[10pt]
+        &-n\frac{b}{k_h} + K \frac{e^{\frac{{k_w}}{2}} - e^{-(n-1)\frac{{k_w}}{2}}}{e^{\frac{k_w}{2}}-1} = T\\[10pt]
+        & K = \frac{({e^{\frac{k_w}{2}}-1})(T+n\frac{b}{k_h})}{e^{\frac{{k_w}}{2}} - e^{-(n-1)\frac{{k_w}}{2}}}
+        \end{align*}
+        \]
+    </div>
+
+    <p class="persian">در نهایت :</p>
+    
+    <div class="math">
+        \[
+        t_i = \frac{{e^{\frac{k_w}{2}}-1}}{e^{\frac{{k_w}}{2}} - e^{-(n-1)\frac{{k_w}}{2}}}(T+n\frac{b}{k_h})e^{\frac{{-k_w}}{2}(n-i)} - \frac{b}{k_h} 
+        \]
+    </div>
+
+    <p class="persian"><b>این است زمان بهینه مطالعه هر روز برای آزمون! زیباست!</b></p>
+
+    <p class="persian">حال بیایید با مقدار گذاری معقول کمی فرمول بالا را ساده تر کنیم. 
+        اولا $T_\frac{1}{2}$ را مقدار زمانی که در طی آن نصف اطلاعات را فراموش می کنیم تعریف می کنیم . 
+    </p>
+    
+    <div class="math">
+        \[
+        \begin{align*}
+        &W(n +T_\frac{1}{2}) = \frac{W(n)}{2} \\[10pt]
+        &2e^{-k_w(n +T_\frac{1}{2})} = e^{-nk_w} \\[10pt]
+        & ln(2)+-k_w(n +T_\frac{1}{2}) = -nk_w \\[10pt]
+        & k_w = \frac{ln(2)}{T_\frac{1}{2}}
+       \end{align*}       
+        \]
+    </div>
+
+    <p class="persian">در <a href="https://help.supermemo.org/wiki/Analysis#Forgetting">این مقاله</a> مقدار تقریبی $T_\frac{1}{2}$ حدود 25 روز عنوان شده. البته این مقدار بسته به سختی و آسونی مطالب، میزان نظم مطالب، مرور و تکنیک های به خاطر سپاری متفاوت هست.</p>
+    
+    <div class="math">
+        \[
+        k_w = 0.02634
+        \]
+    </div>
+
+    <p class="persian">همچنین $K_h$ رو بصورت $\frac{b}{k_h}$ تعریف می کنیم. 
+        برای افت یادگیری مقاله کامل یا مشخصی پیدا نکردم. اما با این شهود که بعد از حدود 3 ساعت مطالعه یادگیری من به حدود نصف میرسه این معادله تقریبی را به عنوان $h$ مشخص می کنیم:
+    </p>
+    
+    <div class="math">
+        \[
+        h(t) = \frac{1}{t+3}
+        \]
+    </div>
+
+    <p class="persian">در نتیجه:</p>
+
+    <div class="math">
+        \[
+        K_h = 3
+        \]
+    </div>
+
+    <p class="persian">حال معادله کلی را چنین باز نویسی می کنیم :</p>
+
+    <div class="math">
+        \[
+        t_i = \frac{{e^{0.01317}-1}}{e^{0.01317} - e^{-0.01317(n-1)}}(T+3n)e^{0.01317(n-i)} - 3
+        \]
+    </div>
+    
+    <p class="persian">این معادله نشان دهنده زمان بهینه مطالعه در هر روز برای آزمون است.</p>
+    <h1>مثال</h1>
+    <div class="math"></div>
+        \[
+        T = 10\\
+        n = 7
+        \]
+    </div>
+    <img src="Assets/example1.png" class="center" width="100%"\>
+    <div class="math"></div>
+        \[
+        T = 30\\
+        n = 30
+        \]
+    </div>
+    <img src="Assets/example2.png" class="center" width="100%"\>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "$", right: "$", display: false},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError : false
+            });
+        });
+    </script>
+        </article>
+</body>
+<footer>
+    <p class="author">
+        written by 
+        <a href="https://t.me/HojjatFiles">
+            @HojjatFiles
+            <svg class="telegram-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-17.15 6.498a2.268 2.268 0 0 0-.214 4.180l3.608 1.707a1.417 1.417 0 0 0 1.635-.409l5.725-6.950a.563.563 0 0 1 .321-.174.572.572 0 0 1 .554.896l-4.883 6.063a1.415 1.415 0 0 0-.153 1.334l1.741 4.283a2.265 2.265 0 0 0 4.016.584l8.21-15.31c.447-.836.169-1.705-.211-2.169a2.239 2.239 0 0 0-1.82-.784z"/>
+            </svg>
+        </a>
+    </p>
+</footer>
+</html>
