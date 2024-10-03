@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>ساعت گیج زمان</title>
+        <title>ساعت گیج زمان </title>
         <!-- Trick Telegram crawler into believing this is a Medium article -->
         <meta property="al:android:app_name" content="Medium" />
         <meta property="article:published_time" content="2024-10-03T00:00:00.000Z" />
