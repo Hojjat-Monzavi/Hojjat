@@ -49,14 +49,15 @@
                 vertical-align: text-bottom;
             }
             figure {
-  display: inline-block; /* Make the figure element shrink-wrap its content */
-  margin: 0 auto; /* Center the figure in its container horizontally */
-  width: auto; /* Allow the figure width to adjust based on its content */
+  display: block;
+  margin: 0 auto; /* Centers the figure horizontally within its container */
+  text-align: center; /* Centers the content inside the figure */
 }
 
 figure img {
-  max-width: 100%; /* Scale down image to fit figure width without upscaling */
-  height: auto; /* Maintain aspect ratio */
+  max-width: 100%; /* Allows the image to downscale if necessary */
+  height: auto; /* Maintains the aspect ratio */
+  width: auto; /* Ensures the image won't upscale beyond its natural width */
 }
         </style>
     </head>
