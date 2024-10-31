@@ -48,20 +48,16 @@
                 margin-right: 0.2em;
                 vertical-align: text-bottom;
             }
-            /* Ensure the container of the images can handle flexbox layout */
             figure {
-                display: flex; /* Apply flexbox layout */
-                justify-content: center; /* Horizontally center content */
-                align-items: center; /* Vertically center content */
-                /* Alternative: Depending on use-case, you may want to enable wrapping */
-                /* flex-wrap: wrap; */
-            }
+  display: inline-block; /* Make the figure element shrink-wrap its content */
+  margin: 0 auto; /* Center the figure in its container horizontally */
+  width: auto; /* Allow the figure width to adjust based on its content */
+}
 
-            /* Centering images horizontally on the page if their parent is body or similar containers */
-            img {
-                display: block; /* Removes the default inline nature allowing margin usage */
-                margin: auto; /* Centers image horizontally within block-level element */
-            }
+figure img {
+  max-width: 100%; /* Scale down image to fit figure width without upscaling */
+  height: auto; /* Maintain aspect ratio */
+}
         </style>
     </head>
     <body>
