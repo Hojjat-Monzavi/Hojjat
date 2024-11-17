@@ -1,321 +1,266 @@
-<!doctype html>
-<html lang="en"> 
- <head> 
-  <meta charset="UTF-8"> 
-  <title>JAT Stopwatch</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-  <style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Stopwatch</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
         body {
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background-color: #f4f6f8;
-            color: #333;
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
+            max-width: 800px;
+            margin: 1rem auto;
+            padding: 0 1rem;
+            background: white;
+            color: black;
         }
-        .card {
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin: 10px;
-            width: 90%;
-            max-width: 400px;
+        @media (max-width: 600px) {
+            body {
+                margin: 0.5rem auto;
+            }
+            .display {
+                font-size: 2.5rem !important;
+            }
+            .controls {
+                flex-direction: column;
+            }
+            button {
+                width: 100%;
+            }
+        }
+        .container {
+            display: grid;
+            gap: 1.5rem;
+        }
+        .display {
+            font-size: 3.5rem;
+            font-weight: 400;
             text-align: center;
+            font-variant-numeric: tabular-nums;
+            margin: 1rem 0;
         }
-        .stopwatch-display {
-            font-size: 3em;
-            color: #333;
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
         }
-        .buttons {
-            margin-top: 20px;
-        }
-        .button {
-            margin: 5px;
-            padding: 10px 15px;
-            font-size: 1em;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        button {
+            background: black;
             color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
         }
-        .start {
-            background-color: #4CAF50;
+        button:hover {
+            opacity: 0.8;
         }
-        .stop {
-            background-color: #f44336;
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
-        .reset {
-            background-color: #008CBA;
+        .laps {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
         }
-        .lap {
-            background-color: #9C27B0;
-        }
-        .lap-times {
-            margin-top: 20px;
-            text-align: left;
-        }
-        .lap-time {
+        .lap-item {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 10px;
-            margin: 10px 0;
-            width: 90%;
-            max-width: 400px;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #eee;
         }
-        .lap-time .trash-icon {
-            cursor: pointer;
-            color: #f44336;
-        }
-        #lapChart {
-            max-width: 100%;
-            max-height: 300px;
+        .chart-container {
+            height: 300px;
+            margin-top: 1.5rem;
+            border: 1px solid #ddd;
+            padding: 1rem;
         }
         .stats {
-            margin-top: 20px;
-            font-size: 1.2em;
+            text-align: center;
+            margin: 1rem 0;
+            font-size: 1.1rem;
             color: #333;
+            line-height: 1.6;
         }
-    </style> 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
-  <script>
-        // Perform linear regression and calculate R²
-        function linearRegression(x, y) {
-            const n = x.length;
-            const xSum = x.reduce((a, b) => a + b, 0);
-            const ySum = y.reduce((a, b) => a + b, 0);
-            const xSquaredSum = x.reduce((a, b) => a + b * b, 0);
-            const xySum = x.reduce((a, b, i) => a + b * y[i], 0);
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="display">00:00:00.000</div>
+        <div class="controls">
+            <button id="startStop">Start</button>
+            <button id="lap" disabled>Lap</button>
+            <button id="reset" disabled>Reset</button>
+        </div>
+        <div class="laps"></div>
+        <div class="stats"></div>
+        <div class="chart-container">
+            <canvas id="lapChart"></canvas>
+        </div>
+    </div>
+    <script>
+        class Stopwatch {
+            constructor() {
+                this.display = document.querySelector('.display');
+                this.lapsDiv = document.querySelector('.laps');
+                this.statsDiv = document.querySelector('.stats');
+                this.startStopBtn = document.getElementById('startStop');
+                this.lapBtn = document.getElementById('lap');
+                this.resetBtn = document.getElementById('reset');
 
-            const slope = (n * xySum - xSum * ySum) / (n * xSquaredSum - xSum * xSum);
-            const intercept = (ySum - slope * xSum) / n;
+                this.startTime = 0;
+                this.elapsedTime = 0;
+                this.lastLapTime = 0;
+                this.running = false;
+                this.intervalId = null;
+                this.laps = [];
+                this.chart = null;
 
-            const yPred = x.map(xi => slope * xi + intercept);
-            const ssTot = y.reduce((a, yi) => a + (yi - ySum / n) ** 2, 0);
-            const ssRes = y.reduce((a, yi, i) => a + (yi - yPred[i]) ** 2, 0);
-            const r2 = 1 - ssRes / ssTot;
+                this.initChart();
+                this.loadState();
 
-            return [slope, intercept, r2];
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Stopwatch State
-            let stopwatchState = {
-                isRunning: false,
-                startTime: 0,
-                elapsedTime: 0,
-                laps: [],
-                currentLapStart: 0,
-                lastUpdateTime: 0
-            };
-
-            // Load state from localStorage
-            const savedState = localStorage.getItem('stopwatchState');
-            if (savedState) {
-                stopwatchState = JSON.parse(savedState);
-                // Calculate the elapsed time if the stopwatch was running
-                const now = Date.now();
-                if (stopwatchState.isRunning) {
-                    stopwatchState.elapsedTime += now - stopwatchState.lastUpdateTime;
-                }
-                stopwatchState.startTime = now - stopwatchState.elapsedTime;
+                this.startStopBtn.addEventListener('click', () => this.toggleStartStop());
+                this.lapBtn.addEventListener('click', () => this.recordLap());
+                this.resetBtn.addEventListener('click', () => this.reset());
             }
 
-            let intervalId;
-            const display = document.querySelector('.stopwatch-display');
-            const lapTimesContainer = document.querySelector('.lap-times');
-            const startButton = document.querySelector('.start');
-            const stopButton = document.querySelector('.stop');
-            const resetButton = document.querySelector('.reset');
-            const lapButton = document.querySelector('.lap');
-            const ctx = document.getElementById('lapChart').getContext('2d');
-            const statsContainer = document.querySelector('.stats');
+            saveState() {
+                const state = {
+                    startTime: this.startTime,
+                    elapsedTime: this.elapsedTime,
+                    lastLapTime: this.lastLapTime,
+                    running: this.running,
+                    laps: this.laps,
+                };
+                localStorage.setItem('stopwatchState', JSON.stringify(state));
+            }
 
-            // Initialize Chart.js
-            const lapChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: stopwatchState.laps.map((_, index) => `Lap ${index + 1}`),
-                    datasets: [{
-                        label: 'Lap Time (s)',
-                        data: stopwatchState.laps.map(time => (time / 1000).toFixed(2)),
-                        borderColor: '#4CAF50',
-                        fill: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+            loadState() {
+                const savedState = JSON.parse(localStorage.getItem('stopwatchState'));
+                if (savedState) {
+                    this.startTime = savedState.startTime;
+                    this.elapsedTime = savedState.elapsedTime;
+                    this.lastLapTime = savedState.lastLapTime;
+                    this.running = savedState.running;
+                    this.laps = savedState.laps;
+
+                    if (this.running) {
+                        this.elapsedTime = Date.now()-this.startTime;
+                        this.startStopBtn.textContent = 'Stop';
+                        this.lapBtn.disabled = false;
+                        this.resetBtn.disabled = true;
+                        this.start();
+                    } else {
+                        this.updateDisplay();
                     }
+                    this.updateLapsDisplay();
+                    this.updateChart();
                 }
-            });
-
-            function updateDisplay() {
-                const elapsed = Date.now() - stopwatchState.startTime;
-                display.textContent = formatTime(elapsed);
             }
 
-            function formatTime(ms) {
-                const totalSeconds = Math.floor(ms / 1000);
-                const hours = Math.floor(totalSeconds / 3600);
-                const minutes = Math.floor((totalSeconds % 3600) / 60);
-                const seconds = totalSeconds % 60;
-                const milliseconds = ms % 1000;
-            
-                return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}`;
-            }
-
-            function saveState() {
-                stopwatchState.lastUpdateTime = Date.now();
-                localStorage.setItem('stopwatchState', JSON.stringify(stopwatchState));
-            }
-
-            function updateLapDisplay() {
-                lapTimesContainer.innerHTML = '';
-                stopwatchState.laps.forEach((lap, index) => {
-                    const lapElement = document.createElement('div');
-                    lapElement.className = 'lap-time';
-                    lapElement.innerHTML = `Lap ${index + 1}: ${formatTime(lap)} <span class="trash-icon" data-index="${index}">🗑️</span>`;
-                    lapTimesContainer.appendChild(lapElement);
-                });
-
-                lapChart.data.labels = stopwatchState.laps.map((_, index) => `Lap ${index + 1}`);
-                lapChart.data.datasets[0].data = stopwatchState.laps.map(time => (time / 1000).toFixed(2));
-
-                // Calculate linear regression line points
-                const lapIndices = stopwatchState.laps.map((_, index) => index + 1);
-                const lapTimes = stopwatchState.laps.map(time => time / 1000);
-                const [slope, intercept] = linearRegression(lapIndices, lapTimes);
-
-                const regressionPoints = lapIndices.map(index => (slope * index + intercept).toFixed(2));
-                if (lapChart.data.datasets.length === 1) {
-                    lapChart.data.datasets.push({
-                        label: 'Linear Regression',
-                        data: regressionPoints,
-                        borderColor: 'red',
-                        borderDash: [5, 5],
-                        fill: false,
-                        pointRadius: 0,
-                    });
+            toggleStartStop() {
+                if (!this.running) {
+                    this.start();
+                    this.startStopBtn.textContent = 'Stop';
+                    this.lapBtn.disabled = false;
+                    this.resetBtn.disabled = true;
                 } else {
-                    lapChart.data.datasets[1].data = regressionPoints;
+                    this.stop();
+                    this.startStopBtn.textContent = 'Start';
+                    this.lapBtn.disabled = true;
+                    this.resetBtn.disabled = false;
                 }
+                this.saveState();
+            }
 
-                lapChart.update();
-                updateStats();
+            start() {
+                this.startTime = Date.now() - this.elapsedTime;
+                this.intervalId = setInterval(() => this.updateDisplay(), 10);
+                this.running = true;
+                this.saveState();
+            }
 
-                // Add event listeners for trash icons
-                document.querySelectorAll('.trash-icon').forEach(icon => {
-                    icon.addEventListener('click', function () {
-                        deleteLap(parseInt(this.getAttribute('data-index')));
-                    });
+            stop() {
+                clearInterval(this.intervalId);
+                this.running = false;
+                this.saveState();
+            }
+
+            reset() {
+                this.stop();
+                this.startTime = 0;
+                this.elapsedTime = 0;
+                this.lastLapTime = 0;
+                this.laps = [];
+                this.updateDisplay();
+                this.updateLapsDisplay();
+                this.updateChart();
+                this.saveState();
+                this.startStopBtn.textContent = 'Start';
+                this.lapBtn.disabled = true;
+                this.resetBtn.disabled = true;
+            }
+
+            recordLap() {
+                const currentTime = this.elapsedTime;
+                const lapTime = currentTime - this.lastLapTime;
+                this.lastLapTime = currentTime;
+                this.laps.push(lapTime);
+                this.updateLapsDisplay();
+                this.updateChart();
+                this.saveState();
+            }
+
+            updateDisplay() {
+                if (this.running) {
+                    this.elapsedTime = Date.now() - this.startTime;
+                }
+                this.display.textContent = this.formatTime(this.elapsedTime);
+            }
+
+            formatTime(ms) {
+                const date = new Date(ms);
+                return date.toISOString().slice(11, 23);
+            }
+
+            updateLapsDisplay() {
+                this.lapsDiv.innerHTML = this.laps
+                    .map((lap, i) => `<div class="lap-item"><span>Lap ${i + 1}</span><span>${this.formatTime(lap)}</span></div>`)
+                    .join('');
+                if (this.laps.length) {
+                    const avg = this.laps.reduce((a, b) => a + b, 0) / this.laps.length;
+                    const best = Math.min(...this.laps);
+                    const worst = Math.max(...this.laps);
+                    this.statsDiv.innerHTML = `Average: ${this.formatTime(avg)}<br>Best: ${this.formatTime(best)}<br>Worst: ${this.formatTime(worst)}`;
+                } else {
+                    this.statsDiv.innerHTML = '';
+                }
+            }
+
+            initChart() {
+                const ctx = document.getElementById('lapChart');
+                this.chart = new Chart(ctx, {
+                    type: 'line',
+                    data: { labels: [], datasets: [{ label: 'Lap Times', data: [], borderColor: 'black' }] },
+                    options: { responsive: true, maintainAspectRatio: false }
                 });
             }
 
-            function updateStats() {
-                if (stopwatchState.laps.length > 1) {
-                    const lapTimes = stopwatchState.laps.map((time, index) => [index + 1, time / 1000]);
-                    const x = lapTimes.map(([index]) => index);
-                    const y = lapTimes.map(([, time]) => time);
-                    const [slope, intercept, r2] = linearRegression(x, y);
-
-                    statsContainer.innerHTML = `
-                        <div>Linear Equation: y = ${slope.toFixed(2)}x + ${intercept.toFixed(2)}</div>
-                        <div>R²: ${r2.toFixed(2)}</div>
-                    `;
-                } else {
-                    statsContainer.innerHTML = '<div>Not enough data for linear regression</div>';
-                }
+            updateChart() {
+                if (!this.chart) return;
+                this.chart.data.labels = this.laps.map((_, i) => `Lap ${i + 1}`);
+                this.chart.data.datasets[0].data = this.laps;
+                this.chart.update();
             }
+        }
 
-            function start() {
-                if (!stopwatchState.isRunning) {
-                    stopwatchState.isRunning = true;
-                    stopwatchState.startTime = Date.now() - stopwatchState.elapsedTime;
-                    intervalId = setInterval(updateDisplay, 10);
-                    updateDisplay();
-                    saveState();
-                }
-            }
+        document.addEventListener('DOMContentLoaded', () => new Stopwatch());
+    </script>
+</body>
+</html>
 
-            function stop() {
-                if (stopwatchState.isRunning) {
-                    clearInterval(intervalId);
-                    stopwatchState.elapsedTime = Date.now() - stopwatchState.startTime;
-                    stopwatchState.isRunning = false;
-                    updateDisplay();
-                    saveState();
-                }
-            }
-
-            function reset() {
-                stop();
-                stopwatchState.elapsedTime = 0;
-                stopwatchState.startTime = Date.now();
-                stopwatchState.laps = [];
-                stopwatchState.currentLapStart = 0;
-                stopwatchState.isRunning = false;
-                updateDisplay();
-                updateLapDisplay();
-                saveState();
-            }
-
-            function recordLap() {
-                if (!stopwatchState.isRunning) {
-                  return;
-                }
-                const currentTime = Date.now() - stopwatchState.startTime;
-                const lapTime = currentTime - stopwatchState.currentLapStart;
-                stopwatchState.currentLapStart = currentTime;
-                stopwatchState.laps.push(lapTime);
-                updateLapDisplay();
-                saveState();
-            }
-
-            function deleteLap(index) {
-                stopwatchState.laps.splice(index, 1);
-                updateLapDisplay();
-                saveState();
-            }
-
-            startButton.addEventListener('click', start);
-            stopButton.addEventListener('click', stop);
-            resetButton.addEventListener('click', reset);
-            lapButton.addEventListener('click', recordLap);
-
-            // Initial setup
-            updateDisplay();
-            updateLapDisplay();
-            //TODO: a better approach for this bug is required. it's resuming after reload
-            if (stopwatchState.isRunning){
-              stop()
-              start()
-            }
-        });
-    </script> 
- </head> 
- <body> 
-  <div class="card"> 
-   <div class="stopwatch-display">
-     00:00.000 
-   </div> 
-   <div class="buttons"> <button class="button start">Start</button> <button class="button stop">Stop</button> <button class="button reset">Reset</button> <button class="button lap">Lap</button> 
-   </div> 
-   <div class="lap-times"></div> 
-   <canvas id="lapChart" width="400" height="300"></canvas> 
-   <div class="stats"></div> 
-  </div> 
- 
-</body></html>
