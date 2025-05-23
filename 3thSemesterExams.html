@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>امتحانات ترم ۳</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap');
+
+        :root {
+            --bg-color: #fafafa;
+            --container-bg: #ffffff;
+            --text-color: #2c3e50;
+            --header-bg: #34495e;
+            --header-text: #ecf0f1;
+            --table-header-bg: #f8f9fa;
+            --border-color: #e9ecef;
+            --hover-bg: #f1f3f4;
+            --accent-color: #e74c3c;
+            --time-color: #3498db;
+            --shadow: rgba(0, 0, 0, 0.06);
+            --gap-bg: #eff3efe5;
+            --gap-text: #27ae60;
+            --success-color: #27ae60;
+            --muted-color: #7f8c8d;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --container-bg: #242424;
+            --text-color: #e0e0e0;
+            --header-bg: #34495e;
+            --header-text: #f0f0f0;
+            --table-header-bg: #2d2d2d;
+            --border-color: #404040;
+            --hover-bg: #2a2a2a;
+            --accent-color: #ff9898;
+            --time-color: #64b5f6;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --gap-bg: #2a2a2a;
+            --gap-text: #8df0b6;
+            --success-color: #81c784;
+            --muted-color: #757575;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 15px;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            padding: 15px 20px;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.3em;
+            flex: 1;
+            text-align: center;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--header-text);
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .icon {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+            transition: fill 0.3s ease;
+        }
+
+        .container {
+            background-color: var(--container-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 10px 6px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9em;
+        }
+
+        th {
+            background-color: var(--table-header-bg);
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        tr:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .days-left {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .exam-name {
+            text-align: right;
+            padding-right: 12px;
+            font-weight: 500;
+        }
+
+        .time {
+            font-weight: bold;
+            color: var(--time-color);
+        }
+
+        .gap-indicator {
+            background-color: var(--gap-bg);
+            color: var(--gap-text);
+            text-align: center;
+            padding: 5px;
+            font-size: 0.8em;
+            font-weight: bold;
+            border-bottom: 1px solid var(--border-color);
+            font-style: italic;
+        }
+
+        .today {
+            color: var(--success-color) !important;
+            font-weight: bold;
+        }
+
+        .passed {
+            color: var(--muted-color) !important;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 12px 15px;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.1em;
+                text-align: center;
+            }
+            
+            table {
+                min-width: 100%;
+                font-size: 0.85em;
+            }
+            
+            th, td {
+                padding: 8px 4px;
+            }
+            
+            .exam-name {
+                padding-right: 8px;
+                max-width: 120px;
+                word-wrap: break-word;
+            }
+            
+            .theme-toggle {
+                padding: 6px;
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            th, td {
+                padding: 6px 3px;
+                font-size: 0.8em;
+            }
+            
+            .header h1 {
+                font-size: 1em;
+            }
+            
+            .exam-name {
+                max-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M12,18C11.11,18 10.26,17.8 9.5,17.45C11.56,16.5 13,14.42 13,12C13,9.58 11.56,7.5 9.5,6.55C10.26,6.2 11.11,6 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z"/>
+                </svg>
+            </button>
+            <h1>برنامه امتحانی ترم ۳ پزشکی بهمن ۱۴۰۲</h1>
+            <div style="width: 100px;"></div>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>روزهای باقی‌مانده</th>
+                        <th>روز</th>
+                        <th>ساعت</th>
+                        <th>تاریخ</th>
+                        <th>نام امتحان</th>
+                    </tr>
+                </thead>
+                <tbody id="examTableBody">
+                    <!-- Exams will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function toPersianNumbers(str) {
+            const persianDigits = '۰۱۲۳۴۵۶۷۸۹';
+            const englishDigits = '0123456789';
+            
+            return str.toString().replace(/[0-9]/g, function(digit) {
+                return persianDigits[englishDigits.indexOf(digit)];
+            });
+        }
+
+        const exams = [
+            {name: 'میانترم انقلاب اسلامی پسران', persianDate: '۲۴ اردیبهشت', time: '-', day: 'چهارشنبه', gregorianDate: '2025-05-14'},
+            {name: 'میانترم آناتومی گوارش', persianDate: '۳۰ اردیبهشت', time: '-', day: 'سه‌شنبه', gregorianDate: '2025-05-20'},
+            {name: 'باکتری شناسی نظری', persianDate: '۱۷ خرداد', time: '۰۸:۰۰', day: 'شنبه', gregorianDate: '2025-06-07'},
+            {name: 'فیزیولوژی غدد و تولید مثل', persianDate: '۱۹ خرداد', time: '۰۸:۰۰', day: 'دوشنبه', gregorianDate: '2025-06-09'},
+            {name: 'بیوشیمی هورمون و کلیه', persianDate: '۲۱ خرداد', time: '۱۳:۰۰', day: 'چهارشنبه', gregorianDate: '2025-06-11'},
+            {name: 'انقلاب اسلامی', persianDate: '۲۵ خرداد', time: '۱۰:۰۰', day: 'یکشنبه', gregorianDate: '2025-06-15'},
+            {name: 'باکتری شناسی عملی', persianDate: '۲۶ خرداد', time: '۰۹:۰۰', day: 'دوشنبه', gregorianDate: '2025-06-16'},
+            {name: 'آداب پزشکی۳', persianDate: '۲۶ خرداد', time: '۱۳:۰۰', day: 'دوشنبه', gregorianDate: '2025-06-16'},
+            {name: 'فرهنگ و تمدن اسلامی', persianDate: '۲۸ خرداد', time: '۰۸:۰۰', day: 'چهارشنبه', gregorianDate: '2025-06-18'},
+            {name: 'پاتولوژی آماس', persianDate: '۳۱ خرداد', time: '۱۰:۰۰', day: 'شنبه', gregorianDate: '2025-06-21'},
+            {name: 'اصول تغذیه', persianDate: '۲ تیر', time: '۰۸:۰۰', day: 'دوشنبه', gregorianDate: '2025-06-23'},
+            {name: 'آناتومی گوارش نظری', persianDate: '۴ تیر', time: '۱۲:۰۰', day: 'چهارشنبه', gregorianDate: '2025-06-25'},
+            {name: 'فیزیولوژی گوارش', persianDate: '۷ تیر', time: '۱۲:۰۰', day: 'شنبه', gregorianDate: '2025-06-28'},
+            {name: 'آناتومی غدد', persianDate: '۹ تیر', time: '۱۰:۰۰', day: 'دوشنبه', gregorianDate: '2025-06-30'},
+            {name: 'آناتومی ادراری تناسلی', persianDate: '۱۱ تیر', time: '۰۹:۰۰', day: 'چهارشنبه', gregorianDate: '2025-07-02'},
+            {name: 'زبان تخصصی۲', persianDate: '۱۶ تیر', time: '۰۸:۰۰', day: 'دوشنبه', gregorianDate: '2025-07-07'},
+            {name: 'فیزیولوژی کلیه', persianDate: '۱۸ تیر', time: '۱۱:۰۰', day: 'چهارشنبه', gregorianDate: '2025-07-09'}
+        ];
+
+        function initTheme() {
+            const savedTheme = sessionStorage.getItem('examTheme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeButton(savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            sessionStorage.setItem('examTheme', newTheme);
+            updateThemeButton(newTheme);
+        }
+
+        function updateThemeButton(theme) {
+            const button = document.getElementById('themeToggle');
+            const icon = button.querySelector('.icon path');
+            
+            if (theme === 'dark') {
+                // Light mode icon
+                icon.setAttribute('d', 'M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8M12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z');
+            } else {
+                // Dark mode icon
+                icon.setAttribute('d', 'M12,18C11.11,18 10.26,17.8 9.5,17.45C11.56,16.5 13,14.42 13,12C13,9.58 11.56,7.5 9.5,6.55C10.26,6.2 11.11,6 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z');
+            }
+        }
+
+        function populateExamTable() {
+            const tableBody = document.getElementById('examTableBody');
+            const today = new Date();
+            
+            for (let i = 0; i < exams.length; i++) {
+                const exam = exams[i];
+                const examDate = new Date(exam.gregorianDate);
+                const timeDifference = examDate - today;
+                const daysLeft = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+                
+                // Add gap indicator between exams
+                if (i > 0) {
+                    const prevExamDate = new Date(exams[i-1].gregorianDate);
+                    const daysBetween = Math.ceil((examDate - prevExamDate) / (1000 * 60 * 60 * 24));
+                    
+                    if (daysBetween > 0) {
+                        const gapRow = document.createElement('tr');
+                        gapRow.innerHTML = `
+                            <td colspan="5" class="gap-indicator">
+                                <svg class="icon" style="width: 16px; height: 16px; vertical-align: middle; margin-left: 5px;" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M19,3H18V1H16V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19Z"/>
+                                </svg>
+                                فاصله تا امتحان بعدی: ${toPersianNumbers(daysBetween)} روز
+                            </td>
+                        `;
+                        tableBody.appendChild(gapRow);
+                    }
+                }
+                
+                const row = document.createElement('tr');
+                
+                let daysLeftText = '';
+                let daysLeftClass = 'days-left';
+                
+                if (daysLeft > 0) {
+                    daysLeftText = toPersianNumbers(daysLeft) + ' روز';
+                } else if (daysLeft === 0) {
+                    daysLeftText = 'امروز';
+                    daysLeftClass += ' today';
+                } else {
+                    daysLeftText = 'گذشته';
+                    daysLeftClass += ' passed';
+                }
+                
+                row.innerHTML = `
+                    <td class="${daysLeftClass}">${daysLeftText}</td>
+                    <td>${exam.day}</td>
+                    <td class="time">${exam.time}</td>
+                    <td>${exam.persianDate}</td>
+                    <td class="exam-name">${exam.name}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initTheme();
+            populateExamTable();
+        });
+    </script>
+</body>
+</html>
