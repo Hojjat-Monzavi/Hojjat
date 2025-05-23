@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fa">
+<html dir=rtl lang="fa">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -245,14 +245,14 @@
         <div class="table-container">
             <table>
                 <thead>
-                    <tr>
-                        <th>روزهای باقی‌مانده</th>
-                        <th>روز</th>
-                        <th>ساعت</th>
-                        <th>تاریخ</th>
-                        <th>نام امتحان</th>
-                    </tr>
-                </thead>
+    <tr>
+        <th>نام امتحان</th>
+        <th>تاریخ</th>
+        <th>ساعت</th>
+        <th>روز</th>
+        <th>روزهای باقی‌مانده</th>
+    </tr>
+</thead>
                 <tbody id="examTableBody">
                     <!-- Exams will be populated by JavaScript -->
                 </tbody>
@@ -361,13 +361,15 @@
                     daysLeftClass += ' passed';
                 }
                 
-                row.innerHTML = `
-                    <td class="${daysLeftClass}">${daysLeftText}</td>
-                    <td>${exam.day}</td>
-                    <td class="time">${exam.time}</td>
-                    <td>${exam.persianDate}</td>
-                    <td class="exam-name">${exam.name}</td>
-                `;
+row.innerHTML = `
+    <td class="exam-name">${exam.name}</td>
+    <td>${exam.persianDate}</td>
+    <td class="time">${exam.time}</td>
+    <td>${exam.day}</td>
+    <td class="${daysLeft === 0 ? 'today' : daysLeft < 0 ? 'passed' : 'days-left'}">
+        ${daysLeftText}
+    </td>
+`;
                 
                 tableBody.appendChild(row);
             }
