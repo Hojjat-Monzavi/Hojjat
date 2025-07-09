@@ -277,16 +277,15 @@
             {name: 'فیزیولوژی غدد و تولید مثل', persianDate: '۱۹ خرداد', time: '۰۸:۰۰', day: 'دوشنبه', gregorianDate: '2025-06-09'},
             {name: 'بیوشیمی هورمون و کلیه', persianDate: '۲۱ خرداد', time: '۱۳:۰۰', day: 'چهارشنبه', gregorianDate: '2025-06-11'},
             {name: 'انقلاب اسلامی', persianDate: '۲۵ خرداد', time: '۰۸:۰۰', day: 'یکشنبه', gregorianDate: '2025-06-15'},
-            {name: 'زبان تخصصی ۲', persianDate: '۲۲ تیر', time: '۱۲:۰۰', day: 'یکشنبه', gregorianDate: '2025-07-13'},
-            {name: 'فیزیولوژی گوارش', persianDate: '۲۴ تیر', time: '۱۰:۰۰', day: 'سه شنبه', gregorianDate: '2025-07-15'},
-            {name: 'آداب پزشکی ۳', persianDate: '۲۵ تیر', time: '-', day: 'چهارشنبه', gregorianDate: '2025-07-16'},
-            {name: 'باکتری عملی', persianDate: '۲۵ تیر', time: '-', day: 'چهارشنبه', gregorianDate: '2025-07-16'},
-            {name:'پاتولوژی آماس', persianDate: '۲۸ تیر', time: '۸:۰۰', day: 'شنبه', gregorianDate: '2025-07-19'},
-            {name:'آناتومی غدد', persianDate: '۳۰ تیر', time: '۱۰:۰۰', day: 'دوشنبه', gregorianDate: '2025-07-21'},
-            {name:'آناتومی گوارش', persianDate: '۱ مرداد', time: '۱۰:۰۰', day: 'چهارشنبه', gregorianDate: '2025-07-23'},
-            {name:'آناتومی ادراری-تناسلی', persianDate: '۴ مرداد', time: '۱۰:۰۰', day: 'شنبه', gregorianDate: '2025-07-26'},
-            {name:'اصول تغذیه', persianDate: '۶ مرداد', time: '۱۱:۰۰', day: 'دوشنبه', gregorianDate: '2025-07-28'},
-            {name:'فیزیولوژی کلیه', persianDate: '۸ مرداد', time: '۸:۰۰', day: 'چهارشنبه', gregorianDate: '2025-07-30'}
+            {name: 'زبان تخصصی ۲', persianDate: '۳ شهریور', time: '۱۲:۰۰', day: 'دوشنبه', gregorianDate: '2025-08-25'},
+            {name: 'فیزیولوژی گوارش', persianDate: '۵ شهریور', time: '۱۰:۰۰', day: 'چهارشنبه', gregorianDate: '2025-08-27'},
+            {name:'پاتولوژی آماس', persianDate: '۸ شهریور', time: '۸:۰۰', day: 'شنبه', gregorianDate: '2025-08-30'},
+            {name:'آناتومی غدد', persianDate: '۱۱ شهریور', time: '۸:۰۰', day: 'سه شنبه', gregorianDate: '2025-09-02'},
+            {name: 'آداب پزشکی ۳', persianDate: '۱۲ شهریور', time: '۱۲:۰۰', day: 'چهارشنبه', gregorianDate: '2025-09-03'},
+            {name:'آناتومی گوارش', persianDate: '۱۵ شهریور', time: '۱۰:۰۰', day: 'شنبه', gregorianDate: '2025-09-06'},
+            {name:'اصول تغذیه', persianDate: '۱۷ شهریور', time: '۱۱:۰۰', day: 'دوشنبه', gregorianDate: '2025-09-08'},
+            {name:'آناتومی ادراری-تناسلی', persianDate: '۲۲ شهریور', time: '۱۰:۰۰', day: 'شنبه', gregorianDate: '2025-07-13'},
+            {name:'فیزیولوژی کلیه', persianDate: '۲۴ شهریور', time: '۸:۰۰', day: 'چهارشنبه', gregorianDate: '2025-07-15'}
         ];
 
         function initTheme() {
@@ -372,8 +371,8 @@
                 
 row.innerHTML = `
     <td class="exam-name">${exam.name}</td>
-    <td>${exam.persianDate}</td>
-    <td class="time">${exam.time}</td>
+    <td>${toPersianNumbers(exam.persianDate)}</td>
+    <td class="time">${toPersianNumbers(exam.time)}</td>
     <td>${exam.day}</td>
     <td class="${daysLeft === 0 ? 'today' : daysLeft < 0 ? 'passed' : 'days-left'}">
         ${daysLeftText}
