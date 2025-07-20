@@ -262,8 +262,24 @@
     </div>
 
     <script>
-        Telegram.WebApp.ready();
-        Telegram.WebApp.expand();
+        window.addEventListener('DOMContentLoaded', () => {
+            const tg = window.Telegram.WebApp;
+            if (tg && tg.initDataUnsafe) {
+                const theme = tg.themeParams;
+        
+                const root = document.documentElement;
+                if (theme.bg_color) root.style.setProperty('--bg-color', theme.bg_color);
+                if (theme.secondary_bg_color) root.style.setProperty('--container-bg', theme.secondary_bg_color);
+                if (theme.text_color) root.style.setProperty('--text-color', theme.text_color);
+                if (theme.header_bg_color) root.style.setProperty('--header-bg', theme.header_bg_color);
+                if (theme.header_text_color) root.style.setProperty('--header-text', theme.header_text_color);
+                if (theme.button_color) root.style.setProperty('--accent-color', theme.button_color);
+                if (theme.button_text_color) root.style.setProperty('--muted-color', theme.button_text_color);
+                if (theme.link_color) root.style.setProperty('--time-color', theme.link_color);
+        
+                tg.ready();
+              }
+            });
         function toPersianNumbers(str) {
             const persianDigits = '۰۱۲۳۴۵۶۷۸۹';
             const englishDigits = '0123456789';
