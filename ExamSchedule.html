@@ -262,24 +262,49 @@
     </div>
 
     <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const tg = window.Telegram.WebApp;
-            if (tg && tg.initDataUnsafe) {
-                const theme = tg.themeParams;
-        
-                const root = document.documentElement;
-                if (theme.bg_color) root.style.setProperty('--bg-color', theme.bg_color);
-                if (theme.secondary_bg_color) root.style.setProperty('--container-bg', theme.secondary_bg_color);
-                if (theme.text_color) root.style.setProperty('--text-color', theme.text_color);
-                if (theme.header_bg_color) root.style.setProperty('--header-bg', theme.header_bg_color);
-                if (theme.header_text_color) root.style.setProperty('--header-text', theme.header_text_color);
-                if (theme.button_color) root.style.setProperty('--accent-color', theme.button_color);
-                if (theme.button_text_color) root.style.setProperty('--muted-color', theme.button_text_color);
-                if (theme.link_color) root.style.setProperty('--time-color', theme.link_color);
-        
-                tg.ready();
-              }
-            });
+    window.addEventListener('DOMContentLoaded', () => {
+      const tg = window.Telegram.WebApp;
+      if (tg?.initDataUnsafe) {
+        const p = tg.themeParams;
+        const root = document.documentElement;
+
+        // Apply Telegram theme colors if available
+        if (p.bg_color) root.style.setProperty('--bg-color', p.bg_color);
+        if (p.secondary_bg_color) {
+          root.style.setProperty('--container-bg', p.secondary_bg_color);
+          root.style.setProperty('--hover-bg', p.secondary_bg_color);
+          root.style.setProperty('--gap-bg', p.secondary_bg_color);
+        }
+        if (p.text_color) {
+          root.style.setProperty('--text-color', p.text_color);
+          root.style.setProperty('--gap-text', p.text_color);
+          root.style.setProperty('--success-color', p.text_color);
+        }
+        if (p.hint_color) {
+          root.style.setProperty('--muted-color', p.hint_color);
+          root.style.setProperty('--border-color', p.hint_color);
+        }
+        if (p.link_color) {
+          root.style.setProperty('--time-color', p.link_color);
+          root.style.setProperty('--accent-color', p.link_color);
+        }
+        if (p.header_bg_color) {
+          root.style.setProperty('--header-bg', p.header_bg_color);
+          root.style.setProperty('--table-header-bg', p.header_bg_color);
+        }
+        if (p.header_text_color) {
+          root.style.setProperty('--header-text', p.header_text_color);
+        }
+        if (p.button_color) {
+          root.style.setProperty('--accent-color', p.button_color);
+        }
+        if (p.button_text_color) {
+          root.style.setProperty('--muted-color', p.button_text_color);
+        }
+
+        tg.ready();
+      }
+    });
         function toPersianNumbers(str) {
             const persianDigits = '۰۱۲۳۴۵۶۷۸۹';
             const englishDigits = '0123456789';
