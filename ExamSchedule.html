@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="referrer" content="unsafe-url">
     <title>امتحانات ترم ۳</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap');
@@ -179,12 +178,6 @@
             color: var(--muted-color) !important;
         }
 
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: var(--muted-color);
-        }
-
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -253,84 +246,76 @@
         <div class="table-container">
             <table>
                 <thead>
-                    <tr>
-                        <th>نام امتحان</th>
-                        <th>تاریخ</th>
-                        <th>ساعت</th>
-                        <th>روز</th>
-                        <th>روزهای باقی‌مانده</th>
-                    </tr>
-                </thead>
+    <tr>
+        <th>نام امتحان</th>
+        <th>تاریخ</th>
+        <th>ساعت</th>
+        <th>روز</th>
+        <th>روزهای باقی‌مانده</th>
+    </tr>
+</thead>
                 <tbody id="examTableBody">
-                    <tr>
-                        <td colspan="5" class="loading">در حال بارگذاری...</td>
-                    </tr>
+                    <!-- Exams will be populated by JavaScript -->
                 </tbody>
             </table>
         </div>
     </div>
 
     <script>
-        // Replace with your actual Cloudflare Worker URL
-        const WORKER_API = 'https://smart-stopwatch.hojjatmonzavi1.workers.dev';
-        
-        window.addEventListener('DOMContentLoaded', () => {
-            const tg = window.Telegram.WebApp;
-            if (!tg || !tg.initDataUnsafe) return;
+      window.addEventListener('DOMContentLoaded', () => {
+    const tg = window.Telegram.WebApp;
+    if (!tg || !tg.initDataUnsafe) return;
 
-            const root = document.documentElement;
-            const theme = tg.themeParams;
-            const scheme = tg.colorScheme;
+    const root = document.documentElement;
+    const theme = tg.themeParams;
+    const scheme = tg.colorScheme;
 
-            if (scheme === 'dark') {
-                root.setAttribute('data-theme', 'dark');
-            } else {
-                root.removeAttribute('data-theme');
-            }
+    // Apply your default light/dark CSS variable set
+    if (scheme === 'dark') {
+      root.setAttribute('data-theme', 'dark');
+    } else {
+      root.removeAttribute('data-theme');
+    }
 
-            if (theme.bg_color) root.style.setProperty('--bg-color', theme.bg_color);
-            if (theme.secondary_bg_color) root.style.setProperty('--container-bg', theme.secondary_bg_color);
-            if (theme.text_color) root.style.setProperty('--text-color', theme.text_color);
-            if (theme.header_bg_color) root.style.setProperty('--header-bg', theme.header_bg_color);
-            if (theme.header_text_color) root.style.setProperty('--header-text', theme.header_text_color);
-            if (theme.button_color) root.style.setProperty('--accent-color', theme.button_color);
-            if (theme.button_text_color) root.style.setProperty('--muted-color', theme.button_text_color);
-            if (theme.link_color) root.style.setProperty('--time-color', theme.link_color);
+    // Override with Telegram theme colors when available
+    if (theme.bg_color) root.style.setProperty('--bg-color', theme.bg_color);
+    if (theme.secondary_bg_color) root.style.setProperty('--container-bg', theme.secondary_bg_color);
+    if (theme.text_color) root.style.setProperty('--text-color', theme.text_color);
+    if (theme.header_bg_color) root.style.setProperty('--header-bg', theme.header_bg_color);
+    if (theme.header_text_color) root.style.setProperty('--header-text', theme.header_text_color);
+    if (theme.button_color) root.style.setProperty('--accent-color', theme.button_color);
+    if (theme.button_text_color) root.style.setProperty('--muted-color', theme.button_text_color);
+    if (theme.link_color) root.style.setProperty('--time-color', theme.link_color);
 
-            tg.ready();
-        });
-
-        async function loadExamData() {
-            try {
-                const response = await fetch(`${WORKER_API}/api/exam-table`, {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                });
-                
-                if (!response.ok) throw new Error('Network response was not ok');
-                
-                const data = await response.json();
-                document.getElementById('examTableBody').innerHTML = data.html;
-                
-                // Track page load
-                fetch(`${WORKER_API}/api/track`, {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'table_loaded', timestamp: Date.now() })
-                }).catch(() => {}); // Silent fail
-                
-            } catch (error) {
-                console.error('Failed to load exam data:', error);
-                document.getElementById('examTableBody').innerHTML = `
-                    <tr><td colspan="5" style="color: var(--accent-color);">خطا در بارگذاری اطلاعات</td></tr>
-                `;
-            }
+    tg.ready();
+  });
+        function toPersianNumbers(str) {
+            const persianDigits = '۰۱۲۳۴۵۶۷۸۹';
+            const englishDigits = '0123456789';
+            
+            return str.toString().replace(/[0-9]/g, function(digit) {
+                return persianDigits[englishDigits.indexOf(digit)];
+            });
         }
+
+        const exams = [
+            {name: 'میانترم انقلاب اسلامی پسران', persianDate: '۲۴ اردیبهشت', time: '-', day: 'چهارشنبه', gregorianDate: '2025-05-14'},
+            {name: 'میانترم آناتومی گوارش', persianDate: '۳۰ اردیبهشت', time: '-', day: 'سه‌شنبه', gregorianDate: '2025-05-20'},
+            {name: 'باکتری شناسی نظری', persianDate: '۱۷ خرداد', time: '۰۸:۰۰', day: 'شنبه', gregorianDate: '2025-06-07'},
+            {name: 'فیزیولوژی غدد و تولید مثل', persianDate: '۱۹ خرداد', time: '۰۸:۰۰', day: 'دوشنبه', gregorianDate: '2025-06-09'},
+            {name: 'بیوشیمی هورمون و کلیه', persianDate: '۲۱ خرداد', time: '۱۳:۰۰', day: 'چهارشنبه', gregorianDate: '2025-06-11'},
+            {name: 'انقلاب اسلامی', persianDate: '۲۵ خرداد', time: '۰۸:۰۰', day: 'یکشنبه', gregorianDate: '2025-06-15'},
+            {name: 'زبان تخصصی ۲', persianDate: '۳ شهریور', time: '۱۲:۰۰', day: 'دوشنبه', gregorianDate: '2025-08-25'},
+            {name: 'فیزیولوژی گوارش', persianDate: '۵ شهریور', time: '۱۰:۰۰', day: 'چهارشنبه', gregorianDate: '2025-08-27'},
+            {name:'پاتولوژی آماس', persianDate: '۸ شهریور', time: '۸:۰۰', day: 'شنبه', gregorianDate: '2025-08-30'},
+            {name:'آناتومی غدد', persianDate: '۱۱ شهریور', time: '۸:۰۰', day: 'سه شنبه', gregorianDate: '2025-09-02'},
+            {name: 'آداب پزشکی ۳', persianDate: '۱۲ شهریور', time: '۱۲:۰۰', day: 'چهارشنبه', gregorianDate: '2025-09-03'},
+            {name:'آناتومی گوارش', persianDate: '۱۵ شهریور', time: '۱۰:۰۰', day: 'شنبه', gregorianDate: '2025-09-06'},
+            {name:'اصول تغذیه', persianDate: '۱۷ شهریور', time: '۱۱:۰۰', day: 'دوشنبه', gregorianDate: '2025-09-08'},
+            {name:'آناتومی ادراری-تناسلی', persianDate: '۲۲ شهریور', time: '۱۰:۰۰', day: 'شنبه', gregorianDate: '2025-09-13'},
+            {name:'فیزیولوژی کلیه', persianDate: '۲۴ شهریور', time: '۸:۰۰', day: 'دوشنبه', gregorianDate: '2025-09-15'},
+             {name:'تمدن اسلامی', persianDate: '۳۱ شهریور', time: '۸:۳۰', day: 'دوشنبه', gregorianDate: '2025-09-22'}
+        ];
 
         function initTheme() {
             const savedTheme = sessionStorage.getItem('examTheme') || 'light';
@@ -344,14 +329,6 @@
             document.documentElement.setAttribute('data-theme', newTheme);
             sessionStorage.setItem('examTheme', newTheme);
             updateThemeButton(newTheme);
-            
-            // Track theme change
-            fetch(`${WORKER_API}/api/track`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'theme_changed', theme: newTheme, timestamp: Date.now() })
-            }).catch(() => {}); // Silent fail
         }
 
         function updateThemeButton(theme) {
@@ -359,15 +336,85 @@
             const icon = button.querySelector('.icon path');
             
             if (theme === 'dark') {
+                // Light mode icon
                 icon.setAttribute('d', 'M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8M12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z');
             } else {
+                // Dark mode icon
                 icon.setAttribute('d', 'M12,18C11.11,18 10.26,17.8 9.5,17.45C11.56,16.5 13,14.42 13,12C13,9.58 11.56,7.5 9.5,6.55C10.26,6.2 11.11,6 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z');
+            }
+        }
+
+        function populateExamTable() {
+            const tableBody = document.getElementById('examTableBody');
+            const today = new Date();
+            
+            for (let i = 0; i < exams.length; i++) {
+                const exam = exams[i];
+                const examDate = new Date(exam.gregorianDate);
+                const timeDifference = examDate - today;
+                const daysLeft = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+                
+                // Add gap indicator between exams
+                if (i > 0) {
+                    const prevExamDate = new Date(exams[i-1].gregorianDate);
+                    const daysBetween = Math.ceil((examDate - prevExamDate) / (1000 * 60 * 60 * 24));
+                    
+                    if (daysBetween > 0) {
+                        const gapRow = document.createElement('tr');
+                        gapRow.innerHTML = `
+                            <td colspan="5" class="gap-indicator">
+                                <svg class="icon" style="width: 16px; height: 16px; vertical-align: middle; margin-left: 5px;" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M19,3H18V1H16V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19Z"/>
+                                </svg>
+                                فاصله تا امتحان بعدی: ${toPersianNumbers(daysBetween)} روز
+                            </td>
+                        `;
+                        if (i == 6){
+                            gapRow.innerHTML = `
+                                 <td colspan="5" class="gap-indicator">
+                                     <svg class="icon" style="width: 16px; height: 16px; vertical-align: middle; margin-left: 5px;" viewBox="0 0 24 24">
+                                         <path fill="currentColor" d="M19,3H18V1H16V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19Z"/>
+                                     </svg>
+                                فاصله تا امتحان بعدی: ${toPersianNumbers(daysBetween)} روز💀🚀
+                                 </td>
+                                 `;
+                        }
+                        tableBody.appendChild(gapRow);
+                    }
+                }
+                
+                const row = document.createElement('tr');
+                
+                let daysLeftText = '';
+                let daysLeftClass = 'days-left';
+                
+                if (daysLeft > 0) {
+                    daysLeftText = toPersianNumbers(daysLeft) + ' روز';
+                } else if (daysLeft === 0) {
+                    daysLeftText = 'امروز';
+                    daysLeftClass += ' today';
+                } else {
+                    daysLeftText = 'گذشته';
+                    daysLeftClass += ' passed';
+                }
+                
+row.innerHTML = `
+    <td class="exam-name">${exam.name}</td>
+    <td>${toPersianNumbers(exam.persianDate)}</td>
+    <td class="time">${toPersianNumbers(exam.time)}</td>
+    <td>${exam.day}</td>
+    <td class="${daysLeft === 0 ? 'today' : daysLeft < 0 ? 'passed' : 'days-left'}">
+        ${daysLeftText}
+    </td>
+`;
+                
+                tableBody.appendChild(row);
             }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
             initTheme();
-            loadExamData();
+            populateExamTable();
         });
     </script>
 </body>
