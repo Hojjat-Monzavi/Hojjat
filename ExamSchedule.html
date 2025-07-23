@@ -230,6 +230,29 @@
                 max-width: 100px;
             }
         }
+        
+        .footer {
+            background: var(--container-bg);
+            color: var(--muted-color);
+            text-align: center;
+            padding: 18px 10px 10px 10px;
+            font-size: 0.98em;
+            border-radius: 0 0 8px 8px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 0;
+            box-shadow: 0 2px 8px var(--shadow);
+            letter-spacing: 0.01em;
+        }
+        .footer-link {
+            color: var(--time-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .footer-link:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -259,6 +282,10 @@
                 </tbody>
             </table>
         </div>
+        <footer class="footer">
+            موفق باشید! برای مشاهده اطلاعات بیشتر به کانال مراجعه کنید.<br>
+            <a href="https://t.me/OlumPayeQuestion" target="_blank" class="footer-link">@OlumPayeQuestion</a>
+        </footer>
     </div>
 
     <script>
@@ -298,6 +325,27 @@
             });
         }
 
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days*24*60*60*1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i=0;i < ca.length;i++) {
+                let c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+
         const exams = [
             {name: 'میانترم انقلاب اسلامی پسران', persianDate: '۲۴ اردیبهشت', time: '-', day: 'چهارشنبه', gregorianDate: '2025-05-14'},
             {name: 'میانترم آناتومی گوارش', persianDate: '۳۰ اردیبهشت', time: '-', day: 'سه‌شنبه', gregorianDate: '2025-05-20'},
@@ -318,7 +366,13 @@
         ];
 
         function initTheme() {
-            const savedTheme = sessionStorage.getItem('examTheme') || 'light';
+            let savedTheme = getCookie('examTheme');
+            if (!savedTheme) {
+                savedTheme = sessionStorage.getItem('examTheme');
+            }
+            if (!savedTheme) {
+                savedTheme = 'light';
+            }
             document.documentElement.setAttribute('data-theme', savedTheme);
             updateThemeButton(savedTheme);
         }
@@ -328,6 +382,7 @@
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', newTheme);
             sessionStorage.setItem('examTheme', newTheme);
+            setCookie('examTheme', newTheme, 365);
             updateThemeButton(newTheme);
         }
 
