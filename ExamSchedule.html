@@ -1,6 +1,5 @@
 <!doctype html>
 <html dir=rtl lang="fa">
-<script src="https://telegram.org/js/telegram-web-app.js?58"></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -283,38 +282,23 @@
             </table>
         </div>
         <footer class="footer">
-            موفق باشید! برای مشاهده اطلاعات بیشتر به کانال مراجعه کنید.<br>
+            هر روز کلی سوال علوم پایه در 
             <a href="https://t.me/OlumPayeQuestion" target="_blank" class="footer-link">@OlumPayeQuestion</a>
         </footer>
     </div>
 
     <script>
       window.addEventListener('DOMContentLoaded', () => {
-    const tg = window.Telegram.WebApp;
-    if (!tg || !tg.initDataUnsafe) return;
 
     const root = document.documentElement;
-    const theme = tg.themeParams;
-    const scheme = tg.colorScheme;
 
     // Apply your default light/dark CSS variable set
-    if (scheme === 'dark') {
-      root.setAttribute('data-theme', 'dark');
-    } else {
-      root.removeAttribute('data-theme');
-    }
+    // No theme toggle logic needed as no Telegram theme parameters are available
 
     // Override with Telegram theme colors when available
-    if (theme.bg_color) root.style.setProperty('--bg-color', theme.bg_color);
-    if (theme.secondary_bg_color) root.style.setProperty('--container-bg', theme.secondary_bg_color);
-    if (theme.text_color) root.style.setProperty('--text-color', theme.text_color);
-    if (theme.header_bg_color) root.style.setProperty('--header-bg', theme.header_bg_color);
-    if (theme.header_text_color) root.style.setProperty('--header-text', theme.header_text_color);
-    if (theme.button_color) root.style.setProperty('--accent-color', theme.button_color);
-    if (theme.button_text_color) root.style.setProperty('--muted-color', theme.button_text_color);
-    if (theme.link_color) root.style.setProperty('--time-color', theme.link_color);
+    // No theme toggle logic needed as no Telegram theme parameters are available
 
-    tg.ready();
+    // No tg.ready() call as no Telegram Web App is available
   });
         function toPersianNumbers(str) {
             const persianDigits = '۰۱۲۳۴۵۶۷۸۹';
