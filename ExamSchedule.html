@@ -1,5 +1,6 @@
 <!doctype html>
 <html dir=rtl lang="fa">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -122,7 +123,8 @@
             min-width: 600px;
         }
 
-        th, td {
+        th,
+        td {
             padding: 10px 6px;
             text-align: center;
             border-bottom: 1px solid var(--border-color);
@@ -181,33 +183,34 @@
             body {
                 padding: 10px;
             }
-            
+
             .header {
                 padding: 12px 15px;
                 flex-direction: column;
                 gap: 10px;
             }
-            
+
             .header h1 {
                 font-size: 1.3em;
                 text-align: center;
             }
-            
+
             table {
                 min-width: 100%;
                 font-size: 0.95em;
             }
-            
-            th, td {
+
+            th,
+            td {
                 padding: 8px 4px;
             }
-            
+
             .exam-name {
                 padding-right: 8px;
                 max-width: 120px;
                 word-wrap: break-word;
             }
-            
+
             .theme-toggle {
                 padding: 6px;
                 width: 36px;
@@ -216,20 +219,22 @@
         }
 
         @media (max-width: 480px) {
-            th, td {
+
+            th,
+            td {
                 padding: 6px 3px;
                 font-size: 0.9em;
             }
-            
+
             .header h1 {
                 font-size: 1.2em;
             }
-            
+
             .exam-name {
                 max-width: 100px;
             }
         }
-        
+
         .footer {
             background: var(--container-bg);
             color: var(--muted-color);
@@ -242,24 +247,28 @@
             box-shadow: 0 2px 8px var(--shadow);
             letter-spacing: 0.01em;
         }
+
         .footer-link {
             color: var(--time-color);
             text-decoration: none;
             font-weight: 500;
             transition: color 0.2s;
         }
+
         .footer-link:hover {
             color: var(--accent-color);
             text-decoration: underline;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
             <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">
                 <svg class="icon" viewBox="0 0 24 24">
-                    <path d="M12,18C11.11,18 10.26,17.8 9.5,17.45C11.56,16.5 13,14.42 13,12C13,9.58 11.56,7.5 9.5,6.55C10.26,6.2 11.11,6 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z"/>
+                    <path
+                        d="M12,18C11.11,18 10.26,17.8 9.5,17.45C11.56,16.5 13,14.42 13,12C13,9.58 11.56,7.5 9.5,6.55C10.26,6.2 11.11,6 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z" />
                 </svg>
             </button>
             <h1>برنامه امتحانی ترم ۳ پزشکی بهمن ۱۴۰۲</h1>
@@ -268,43 +277,43 @@
         <div class="table-container">
             <table>
                 <thead>
-    <tr>
-        <th>نام امتحان</th>
-        <th>تاریخ</th>
-        <th>ساعت</th>
-        <th>روز</th>
-        <th>روزهای باقی‌مانده</th>
-    </tr>
-</thead>
+                    <tr>
+                        <th>نام امتحان</th>
+                        <th>تاریخ</th>
+                        <th>ساعت</th>
+                        <th>روز</th>
+                        <th>روزهای باقی‌مانده</th>
+                    </tr>
+                </thead>
                 <tbody id="examTableBody">
                     <!-- Exams will be populated by JavaScript -->
                 </tbody>
             </table>
         </div>
         <footer class="footer">
-            هر روز کلی سوال علوم پایه در 
+            هر روز کلی سوال علوم پایه در
             <a href="https://t.me/OlumPayeQuestion" target="_blank" class="footer-link">@OlumPayeQuestion</a>
         </footer>
     </div>
 
     <script>
-      window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', () => {
 
-    const root = document.documentElement;
+            const root = document.documentElement;
 
-    // Apply your default light/dark CSS variable set
-    // No theme toggle logic needed as no Telegram theme parameters are available
+            // Apply your default light/dark CSS variable set
+            // No theme toggle logic needed as no Telegram theme parameters are available
 
-    // Override with Telegram theme colors when available
-    // No theme toggle logic needed as no Telegram theme parameters are available
+            // Override with Telegram theme colors when available
+            // No theme toggle logic needed as no Telegram theme parameters are available
 
-    // No tg.ready() call as no Telegram Web App is available
-  });
+            // No tg.ready() call as no Telegram Web App is available
+        });
         function toPersianNumbers(str) {
             const persianDigits = '۰۱۲۳۴۵۶۷۸۹';
             const englishDigits = '0123456789';
-            
-            return str.toString().replace(/[0-9]/g, function(digit) {
+
+            return str.toString().replace(/[0-9]/g, function (digit) {
                 return persianDigits[englishDigits.indexOf(digit)];
             });
         }
@@ -313,40 +322,41 @@
             let expires = "";
             if (days) {
                 const date = new Date();
-                date.setTime(date.getTime() + (days*24*60*60*1000));
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
                 expires = "; expires=" + date.toUTCString();
             }
-            document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
         }
 
         function getCookie(name) {
             const nameEQ = name + "=";
             const ca = document.cookie.split(';');
-            for(let i=0;i < ca.length;i++) {
+            for (let i = 0; i < ca.length; i++) {
                 let c = ca[i];
-                while (c.charAt(0)==' ') c = c.substring(1,c.length);
-                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
             }
             return null;
         }
 
         const exams = [
-            {name: 'میانترم انقلاب اسلامی پسران', persianDate: '۲۴ اردیبهشت', time: '-', day: 'چهارشنبه', gregorianDate: '2025-05-14'},
-            {name: 'میانترم آناتومی گوارش', persianDate: '۳۰ اردیبهشت', time: '-', day: 'سه‌شنبه', gregorianDate: '2025-05-20'},
-            {name: 'باکتری شناسی نظری', persianDate: '۱۷ خرداد', time: '۰۸:۰۰', day: 'شنبه', gregorianDate: '2025-06-07'},
-            {name: 'فیزیولوژی غدد و تولید مثل', persianDate: '۱۹ خرداد', time: '۰۸:۰۰', day: 'دوشنبه', gregorianDate: '2025-06-09'},
-            {name: 'بیوشیمی هورمون و کلیه', persianDate: '۲۱ خرداد', time: '۱۳:۰۰', day: 'چهارشنبه', gregorianDate: '2025-06-11'},
-            {name: 'انقلاب اسلامی', persianDate: '۲۵ خرداد', time: '۰۸:۰۰', day: 'یکشنبه', gregorianDate: '2025-06-15'},
-            {name: 'زبان تخصصی ۲', persianDate: '۳ شهریور', time: '۱۲:۰۰', day: 'دوشنبه', gregorianDate: '2025-08-25'},
-            {name: 'فیزیولوژی گوارش', persianDate: '۵ شهریور', time: '۱۰:۰۰', day: 'چهارشنبه', gregorianDate: '2025-08-27'},
-            {name:'پاتولوژی آماس', persianDate: '۸ شهریور', time: '۸:۰۰', day: 'شنبه', gregorianDate: '2025-08-30'},
-            {name:'آناتومی غدد', persianDate: '۱۱ شهریور', time: '۸:۰۰', day: 'سه شنبه', gregorianDate: '2025-09-02'},
-            {name: 'آداب پزشکی ۳', persianDate: '۱۲ شهریور', time: '۱۲:۰۰', day: 'چهارشنبه', gregorianDate: '2025-09-03'},
-            {name:'آناتومی گوارش', persianDate: '۱۵ شهریور', time: '۱۰:۰۰', day: 'شنبه', gregorianDate: '2025-09-06'},
-            {name:'اصول تغذیه', persianDate: '۱۷ شهریور', time: '۱۱:۰۰', day: 'دوشنبه', gregorianDate: '2025-09-08'},
-            {name:'آناتومی ادراری-تناسلی', persianDate: '۲۲ شهریور', time: '۱۰:۰۰', day: 'شنبه', gregorianDate: '2025-09-13'},
-            {name:'فیزیولوژی کلیه', persianDate: '۲۴ شهریور', time: '۸:۰۰', day: 'دوشنبه', gregorianDate: '2025-09-15'},
-             {name:'تمدن اسلامی', persianDate: '۳۱ شهریور', time: '۸:۳۰', day: 'دوشنبه', gregorianDate: '2025-09-22'}
+            { name: 'میانترم انقلاب اسلامی پسران', persianDate: '۲۴ اردیبهشت', time: '-', day: 'چهارشنبه', gregorianDate: '2025-05-14' },
+            { name: 'میانترم آناتومی گوارش', persianDate: '۳۰ اردیبهشت', time: '-', day: 'سه‌شنبه', gregorianDate: '2025-05-20' },
+            { name: 'باکتری شناسی نظری', persianDate: '۱۷ خرداد', time: '۰۸:۰۰', day: 'شنبه', gregorianDate: '2025-06-07' },
+            { name: 'فیزیولوژی غدد و تولید مثل', persianDate: '۱۹ خرداد', time: '۰۸:۰۰', day: 'دوشنبه', gregorianDate: '2025-06-09' },
+            { name: 'بیوشیمی هورمون و کلیه', persianDate: '۲۱ خرداد', time: '۱۳:۰۰', day: 'چهارشنبه', gregorianDate: '2025-06-11' },
+            { name: 'انقلاب اسلامی', persianDate: '۲۵ خرداد', time: '۰۸:۰۰', day: 'یکشنبه', gregorianDate: '2025-06-15' },
+            { name: 'زبان تخصصی (۲)', persianDate: '۳ شهریور', time: '۱۲:۰۰', day: 'دوشنبه', gregorianDate: '2025-08-25' },
+            { name: 'فیزیولوژی گوارش', persianDate: '۵ شهریور', time: '۱۰:۰۰', day: 'چهارشنبه', gregorianDate: '2025-08-27' },
+            { name: 'پاتولوژی آماس', persianDate: '۸ شهریور', time: '۰۸:۰۰', day: 'شنبه', gregorianDate: '2025-08-30' },
+            { name: 'علوم تشریح غدد', persianDate: '۱۱ شهریور', time: '۰۸:۰۰', day: 'سه شنبه', gregorianDate: '2025-09-02' },
+            { name: 'آداب پزشکی (۳)', persianDate: '۱۲ شهریور', time: '۱۳:۰۰', day: 'چهارشنبه', gregorianDate: '2025-09-03' },
+            { name: 'تشریح گوارش نظری', persianDate: '۱۵ شهریور', time: '۱۰:۰۰', day: 'شنبه', gregorianDate: '2025-09-06' },
+            { name: 'اصول تغذیه', persianDate: '۱۷ شهریور', time: '۱۱:۰۰', day: 'دوشنبه', gregorianDate: '2025-09-08' },
+            { name: 'تشریح ادراری تناسلی نظری', persianDate: '۲۲ شهریور', time: '۱۰:۰۰', day: 'شنبه', gregorianDate: '2025-09-13' },
+            { name: 'فیزیولوژی کلیه', persianDate: '۲۴ شهریور', time: '۰۸:۰۰', day: 'دوشنبه', gregorianDate: '2025-09-15' },
+            { name: 'انقلاب اسلامی', persianDate: '۳۰ شهریور', time: '۱۲:۰۰', day: 'یکشنبه', gregorianDate: '2025-09-21' },
+            { name: 'تشریح ادراری تناسلی نظری', persianDate: '۳۱ شهریور', time: '۰۸:۳۰', day: 'دوشنبه', gregorianDate: '2025-09-22' },
         ];
 
         function initTheme() {
@@ -373,7 +383,7 @@
         function updateThemeButton(theme) {
             const button = document.getElementById('themeToggle');
             const icon = button.querySelector('.icon path');
-            
+
             if (theme === 'dark') {
                 // Light mode icon
                 icon.setAttribute('d', 'M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8M12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z');
@@ -386,18 +396,18 @@
         function populateExamTable() {
             const tableBody = document.getElementById('examTableBody');
             const today = new Date();
-            
+
             for (let i = 0; i < exams.length; i++) {
                 const exam = exams[i];
                 const examDate = new Date(exam.gregorianDate);
                 const timeDifference = examDate - today;
                 const daysLeft = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-                
+
                 // Add gap indicator between exams
                 if (i > 0) {
-                    const prevExamDate = new Date(exams[i-1].gregorianDate);
+                    const prevExamDate = new Date(exams[i - 1].gregorianDate);
                     const daysBetween = Math.ceil((examDate - prevExamDate) / (1000 * 60 * 60 * 24));
-                    
+
                     if (daysBetween > 0) {
                         const gapRow = document.createElement('tr');
                         gapRow.innerHTML = `
@@ -408,7 +418,7 @@
                                 فاصله تا امتحان بعدی: ${toPersianNumbers(daysBetween)} روز
                             </td>
                         `;
-                        if (i == 6){
+                        if (i == 6) {
                             gapRow.innerHTML = `
                                  <td colspan="5" class="gap-indicator">
                                      <svg class="icon" style="width: 16px; height: 16px; vertical-align: middle; margin-left: 5px;" viewBox="0 0 24 24">
@@ -421,12 +431,12 @@
                         tableBody.appendChild(gapRow);
                     }
                 }
-                
+
                 const row = document.createElement('tr');
-                
+
                 let daysLeftText = '';
                 let daysLeftClass = 'days-left';
-                
+
                 if (daysLeft > 0) {
                     daysLeftText = toPersianNumbers(daysLeft) + ' روز';
                 } else if (daysLeft === 0) {
@@ -436,8 +446,8 @@
                     daysLeftText = 'گذشته';
                     daysLeftClass += ' passed';
                 }
-                
-row.innerHTML = `
+
+                row.innerHTML = `
     <td class="exam-name">${exam.name}</td>
     <td>${toPersianNumbers(exam.persianDate)}</td>
     <td class="time">${toPersianNumbers(exam.time)}</td>
@@ -446,15 +456,16 @@ row.innerHTML = `
         ${daysLeftText}
     </td>
 `;
-                
+
                 tableBody.appendChild(row);
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             initTheme();
             populateExamTable();
         });
     </script>
 </body>
+
 </html>
