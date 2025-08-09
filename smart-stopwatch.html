@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Stopwatch</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --background: #fafafa;
+            --card-bg: #ffffff;
+            --card-secondary: #f8fafc;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --border: #e5e7eb;
+            --border-light: #f3f4f6;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+        }
+
+        .dark-theme {
+            --primary: #818cf8;
+            --primary-dark: #6366f1;
+            --secondary: #22d3ee;
+            --success: #34d399;
+            --danger: #f87171;
+            --warning: #fbbf24;
+            --background: #0f1419;
+            --card-bg: #1a1f36;
+            --card-secondary: #232946;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --text-muted: #9ca3af;
+            --border: #374151;
+            --border-light: #2d3748;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.5;
+            overflow-x: hidden;
+            min-height: 100vh;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Background decoration */
+        .bg-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .bg-decoration::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: var(--gradient);
+            border-radius: 50%;
+            opacity: 0.03;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .bg-decoration::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: 50%;
+            opacity: 0.02;
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .app-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .theme-toggle {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: none;
+            background: var(--card-secondary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1.1rem;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            padding: 1rem;
+            max-width: 480px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Timer tabs */
+        .timer-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding: 0.25rem;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .timer-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .timer-tab {
+            background: var(--card-secondary);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            white-space: nowrap;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: fit-content;
+        }
+
+        .timer-tab:hover {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            transform: translateY(-1px);
+        }
+
+        .timer-tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow);
+            transform: translateY(-2px);
+        }
+
+        .timer-delete {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        .timer-tab:hover .timer-delete {
+            opacity: 1;
+        }
+
+        .timer-delete:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .add-timer {
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .add-timer:hover {
+            transform: scale(1.05) rotate(90deg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Stopwatch display */
+        .stopwatch-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stopwatch-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient);
+        }
+
+        .time-display {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .timer-name {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-btn {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: scale(0);
+            transition: transform 0.3s ease;
+        }
+
+        .control-btn:active::before {
+            transform: scale(1);
+        }
+
+        .start-btn {
+            background: var(--success);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .reset-btn {
+            background: var(--danger);
+            color: white;
+        }
+
+        .lap-btn {
+            background: var(--warning);
+            color: white;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.15);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .start-btn:hover {
+            transform: scale(1.25);
+        }
+
+        /* Tabs */
+        .content-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            background: var(--card-secondary);
+            border-radius: 16px;
+            padding: 0.25rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Content sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Laps section */
+        .laps-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .lap-count {
+            background: var(--primary);
+            color: white;
+            border-radius: 12px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .laps-container {
+            max-height: 50vh;
+            overflow-y: auto;
+            border-radius: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+        }
+
+        .lap-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-light);
+            transition: all 0.2s ease;
+        }
+
+        .lap-item:last-child {
+            border-bottom: none;
+        }
+
+        .lap-item:hover {
+            background: var(--card-secondary);
+        }
+
+        .lap-number {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-right: 1rem;
+        }
+
+        .lap-info {
+            flex: 1;
+        }
+
+        .lap-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .lap-split {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .lap-delete {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            opacity: 0;
+        }
+
+        .lap-item:hover .lap-delete {
+            opacity: 1;
+        }
+
+        .lap-delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Analytics section */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .chart-container {
+            height: 240px;
+            margin-top: 1rem;
+        }
+
+        /* Predictions */
+        .prediction-input {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .workload-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--background);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.2s ease;
+        }
+
+        .workload-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .predictions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .prediction-card {
+            background: var(--card-secondary);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-light);
+        }
+
+        .prediction-card:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        .prediction-title {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .prediction-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .prediction-remaining {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Responsive design */
+        @media (max-width: 640px) {
+            .time-display {
+                font-size: 2.5rem;
+            }
+            
+            .control-btn {
+                width: 64px;
+                height: 64px;
+                font-size: 1.25rem;
+            }
+            
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .predictions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stopwatch-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 0.75rem;
+            }
+            
+            .time-display {
+                font-size: 2rem;
+            }
+            
+            .control-btn {
+                width: 56px;
+                height: 56px;
+                font-size: 1.125rem;
+            }
+        }
+
+        /* Smooth scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--card-secondary);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Loading states */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Success animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 0.6s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="bg-decoration"></div>
+        
+        <header class="header">
+            <div class="header-content">
+                <h1 class="app-title">Smart Stopwatch</h1>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Timer Tabs -->
+            <div class="timer-tabs" id="timerTabs">
+                <button class="add-timer" id="addTimerBtn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+
+            <!-- Stopwatch Display -->
+            <div class="stopwatch-card">
+                <div class="time-display" id="timeDisplay">00:00:00.000</div>
+                <div class="timer-name" id="timerName">Timer 1</div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <button class="control-btn reset-btn" id="resetBtn">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <button class="control-btn start-btn" id="startBtn">
+                    <i class="fas fa-play" id="startIcon"></i>
+                </button>
+                <button class="control-btn lap-btn" id="lapBtn">
+                    <i class="fas fa-flag"></i>
+                </button>
+            </div>
+
+            <!-- Content Tabs -->
+            <div class="content-tabs">
+                <button class="tab-btn active" data-tab="laps">
+                    <i class="fas fa-list"></i> Laps
+                </button>
+                <button class="tab-btn" data-tab="analytics">
+                    <i class="fas fa-chart-line"></i> Analytics
+                </button>
+                <button class="tab-btn" data-tab="predictions">
+                    <i class="fas fa-crystal-ball"></i> Predict
+                </button>
+            </div>
+
+            <!-- Laps Section -->
+            <div class="content-section active" id="laps-section">
+                <div class="laps-header">
+                    <h2 class="section-title">Lap Times</h2>
+                    <div class="lap-count" id="lapCount">0</div>
+                </div>
+                <div class="laps-container" id="lapTimes">
+                    <div class="empty-state">
+                        <i class="fas fa-flag"></i>
+                        <p>No laps recorded yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="content-section" id="analytics-section">
+                <h2 class="section-title" style="margin-bottom: 1.5rem;">Performance Analytics</h2>
+                
+                <div class="chart-card">
+                    <h3 class="section-title">Lap Progression</h3>
+                    <div class="chart-container">
+                        <canvas id="lapChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Average</div>
+                        <div class="stat-value" id="avgLap">0.000s</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Fastest</div>
+                        <div class="stat-value" id="fastestLap">0.000s</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Trend R²</div>
+                        <div class="stat-value" id="trendR2">0.000</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">P-Value</div>
+                        <div class="stat-value" id="pValue">0.000</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Predictions Section -->
+            <div class="content-section" id="predictions-section">
+                <h2 class="section-title" style="margin-bottom: 1.5rem;">Time Predictions</h2>
+                
+                <div class="prediction-input">
+                    <div class="input-group">
+                        <label class="input-label" for="workloadInput">
+                            <i class="fas fa-target"></i> Total Target (laps/pages/items)
+                        </label>
+                        <input type="number" class="workload-input" id="workloadInput" 
+                               placeholder="Enter your target number...">
+                    </div>
+                </div>
+
+                <div class="predictions-grid" id="predictions">
+                    <div class="empty-state">
+                        <i class="fas fa-crystal-ball"></i>
+                        <p>Enter a target above to see predictions</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // State management
+        let state = {
+            timers: [],
+            activeTimerId: null,
+            theme: 'light',
+            activeTab: 'laps'
+        };
+
+        // DOM Elements
+        const elements = {
+            themeToggle: document.getElementById('themeToggle'),
+            timerTabs: document.getElementById('timerTabs'),
+            addTimerBtn: document.getElementById('addTimerBtn'),
+            timeDisplay: document.getElementById('timeDisplay'),
+            timerName: document.getElementById('timerName'),
+            startBtn: document.getElementById('startBtn'),
+            startIcon: document.getElementById('startIcon'),
+            resetBtn: document.getElementById('resetBtn'),
+            lapBtn: document.getElementById('lapBtn'),
+            lapTimes: document.getElementById('lapTimes'),
+            lapCount: document.getElementById('lapCount'),
+            avgLap: document.getElementById('avgLap'),
+            fastestLap: document.getElementById('fastestLap'),
+            trendR2: document.getElementById('trendR2'),
+            pValue: document.getElementById('pValue'),
+            workloadInput: document.getElementById('workloadInput'),
+            predictions: document.getElementById('predictions')
+        };
+
+        // Chart instance
+        let lapChart = null;
+
+        // Timer class
+        class Timer {
+            constructor(id, name) {
+                this.id = id;
+                this.name = name || `Timer ${Date.now()}`;
+                this.startTime = 0;
+                this.elapsedTime = 0;
+                this.running = false;
+                this.laps = [];
+                this.workload = null;
+            }
+
+            start() {
+                if (!this.running) {
+                    this.startTime = Date.now() - this.elapsedTime;
+                    this.running = true;
+                }
+            }
+
+            pause() {
+                if (this.running) {
+                    this.elapsedTime = Date.now() - this.startTime;
+                    this.running = false;
+                }
+            }
+
+            reset() {
+                this.startTime = 0;
+                this.elapsedTime = 0;
+                this.running = false;
+                this.laps = [];
+            }
+
+            lap() {
+                if (this.running) {
+                    const lapTime = Date.now() - this.startTime;
+                    this.laps.push({
+                        time: lapTime,
+                        number: this.laps.length + 1,
+                        timestamp: Date.now()
+                    });
+                    return lapTime;
+                }
+                return null;
+            }
+
+            deleteLap(index) {
+                this.laps.splice(index, 1);
+                // Re-number laps
+                this.laps.forEach((lap, i) => {
+                    lap.number = i + 1;
+                });
+            }
+
+            setWorkload(workload) {
+                this.workload = workload;
+            }
+
+            get currentTime() {
+                if (this.running) {
+                    return Date.now() - this.startTime;
+                }
+                return this.elapsedTime;
+            }
+
+            formatTime(ms) {
+                const hours = Math.floor(ms / 3600000);
+                const minutes = Math.floor((ms % 3600000) / 60000);
+                const seconds = Math.floor((ms % 60000) / 1000);
+                const milliseconds = Math.floor(ms % 1000);
+                
+                return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+            }
+            
+            rename(newName) {
+                this.name = newName;
+            }
+        }
+
+        // Initialize the app
+        function init() {
+            loadState();
+            setupEventListeners();
+            renderTimers();
+            updateDisplay();
+            renderLaps();
+            updateAnalytics();
+            
+            // Set theme
+            if (state.theme === 'dark') {
+                document.body.classList.add('dark-theme');
+                elements.themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            // Set workload input value
+            const timer = getActiveTimer();
+            if (timer && timer.workload) {
+                elements.workloadInput.value = timer.workload;
+            }
+            
+            // Update button states
+            updateButtonStates();
+        }
+
+        // Load state from localStorage
+        function loadState() {
+            const savedState = localStorage.getItem('smartStopwatchState');
+            if (savedState) {
+                const parsedState = JSON.parse(savedState);
+                state = { ...state, ...parsedState };
+                
+                // Restore timer objects with proper methods
+                state.timers = state.timers.map(timerData => {
+                    const timer = new Timer(timerData.id, timerData.name);
+                    timer.startTime = timerData.startTime;
+                    timer.elapsedTime = timerData.elapsedTime;
+                    timer.running = timerData.running;
+                    timer.laps = timerData.laps || [];
+                    timer.workload = timerData.workload || null;
+                    return timer;
+                });
+            } else {
+                // Create initial timer
+                createNewTimer();
+            }
+        }
+
+        // Save state to localStorage
+        function saveState() {
+            // Convert timers to plain objects for serialization
+            const stateToSave = {
+                ...state,
+                timers: state.timers.map(timer => ({
+                    id: timer.id,
+                    name: timer.name,
+                    startTime: timer.startTime,
+                    elapsedTime: timer.elapsedTime,
+                    running: timer.running,
+                    laps: timer.laps,
+                    workload: timer.workload
+                }))
+            };
+            localStorage.setItem('smartStopwatchState', JSON.stringify(stateToSave));
+        }
+
+        // Create a new timer
+        function createNewTimer() {
+            const id = Date.now().toString();
+            const timer = new Timer(id, `Timer ${state.timers.length + 1}`);
+            state.timers.push(timer);
+            
+            if (state.timers.length === 1) {
+                state.activeTimerId = id;
+            }
+            
+            saveState();
+            return timer;
+        }
+
+        // Delete a timer
+        function deleteTimer(id) {
+            if (state.timers.length <= 1) {
+                showToast("You must have at least one timer!", 'warning');
+                return;
+            }
+            
+            // Remove the timer
+            state.timers = state.timers.filter(timer => timer.id !== id);
+            
+            // If we deleted the active timer, set a new active timer
+            if (state.activeTimerId === id) {
+                state.activeTimerId = state.timers[0].id;
+            }
+            
+            saveState();
+            renderTimers();
+            updateDisplay();
+            renderLaps();
+            updateAnalytics();
+            updateButtonStates();
+            
+            // Set workload input value
+            const timer = getActiveTimer();
+            if (timer && timer.workload) {
+                elements.workloadInput.value = timer.workload;
+            } else {
+                elements.workloadInput.value = '';
+            }
+        }
+
+        // Get active timer
+        function getActiveTimer() {
+            return state.timers.find(timer => timer.id === state.activeTimerId) || state.timers[0];
+        }
+
+        // Set active timer
+        function setActiveTimer(id) {
+            state.activeTimerId = id;
+            saveState();
+            renderTimers();
+            updateDisplay();
+            renderLaps();
+            updateAnalytics();
+            updateButtonStates();
+            
+            // Set workload input value
+            const timer = getActiveTimer();
+            if (timer && timer.workload) {
+                elements.workloadInput.value = timer.workload;
+            } else {
+                elements.workloadInput.value = '';
+            }
+        }
+
+        // Render timer tabs
+        function renderTimers() {
+            // Clear existing timer buttons except the add button
+            const existingTabs = elements.timerTabs.querySelectorAll('.timer-tab');
+            existingTabs.forEach(tab => tab.remove());
+            
+            // Add timer buttons before the add button
+            state.timers.forEach(timer => {
+                const tab = document.createElement('button');
+                tab.className = `timer-tab ${timer.id === state.activeTimerId ? 'active' : ''}`;
+                tab.innerHTML = `
+                    <span>${timer.name}</span>
+                    <button class="timer-delete" onclick="event.stopPropagation(); deleteTimer('${timer.id}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                tab.onclick = () => setActiveTimer(timer.id);
+                
+                // Add right-click context menu for renaming
+                tab.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    const newName = prompt("Enter new name for timer:", timer.name);
+                    if (newName !== null && newName.trim() !== "") {
+                        timer.rename(newName.trim());
+                        saveState();
+                        renderTimers();
+                        updateDisplay();
+                    }
+                });
+                
+                elements.timerTabs.insertBefore(tab, elements.addTimerBtn);
+            });
+        }
+
+        // Update button states
+        function updateButtonStates() {
+            const timer = getActiveTimer();
+            if (timer) {
+                if (timer.running) {
+                    elements.startIcon.className = 'fas fa-pause';
+                } else {
+                    elements.startIcon.className = 'fas fa-play';
+                }
+            }
+        }
+
+        // Update time display
+        function updateDisplay() {
+            const timer = getActiveTimer();
+            if (timer) {
+                elements.timeDisplay.textContent = timer.formatTime(timer.currentTime);
+                elements.timerName.textContent = timer.name;
+                // Update predictions in real-time
+                updatePredictions();
+            }
+        }
+
+        // Render lap times
+        function renderLaps() {
+            const timer = getActiveTimer();
+            
+            if (!timer || timer.laps.length === 0) {
+                elements.lapTimes.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-flag"></i>
+                        <p>No laps recorded yet</p>
+                        <p style="font-size: 0.875rem; margin-top: 0.5rem;">Start the timer and press the flag button to record laps</p>
+                    </div>
+                `;
+                elements.lapCount.textContent = '0';
+                return;
+            }
+            
+            elements.lapCount.textContent = timer.laps.length;
+            elements.lapTimes.innerHTML = '';
+            
+            timer.laps.slice().reverse().forEach((lap, index) => {
+                const lapElement = document.createElement('div');
+                lapElement.className = 'lap-item';
+                
+                // Calculate time since last lap
+                let lapDuration;
+                const actualIndex = timer.laps.length - 1 - index;
+                if (actualIndex === 0) {
+                    // First lap (chronologically)
+                    lapDuration = lap.time;
+                } else {
+                    // Time since previous lap
+                    const prevLap = timer.laps[actualIndex - 1];
+                    lapDuration = lap.time - prevLap.time;
+                }
+                
+                lapElement.innerHTML = `
+                    <div class="lap-number">${lap.number}</div>
+                    <div class="lap-info">
+                        <div class="lap-time">${timer.formatTime(lapDuration)}</div>
+                        <div class="lap-split">Total: ${timer.formatTime(lap.time)}</div>
+                    </div>
+                    <button class="lap-delete" onclick="deleteLap(${actualIndex})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                
+                elements.lapTimes.appendChild(lapElement);
+            });
+        }
+
+        // Delete lap function
+        function deleteLap(index) {
+            const timer = getActiveTimer();
+            if (timer) {
+                timer.deleteLap(index);
+                renderLaps();
+                updateAnalytics();
+                saveState();
+            }
+        }
+
+        // Calculate linear regression statistics
+        function calculateRegression(x, y) {
+            const n = x.length;
+            let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0, sumYY = 0;
+            
+            for (let i = 0; i < n; i++) {
+                sumX += x[i];
+                sumY += y[i];
+                sumXY += x[i] * y[i];
+                sumXX += x[i] * x[i];
+                sumYY += y[i] * y[i];
+            }
+            
+            const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+            const intercept = (sumY - slope * sumX) / n;
+            
+            // Calculate R²
+            let ssTot = 0, ssRes = 0;
+            const meanY = sumY / n;
+            
+            for (let i = 0; i < n; i++) {
+                const yPred = slope * x[i] + intercept;
+                ssTot += (y[i] - meanY) * (y[i] - meanY);
+                ssRes += (y[i] - yPred) * (y[i] - yPred);
+            }
+            
+            const rSquared = 1 - (ssRes / ssTot);
+            
+            // Calculate standard error of estimate
+            const sError = Math.sqrt(ssRes / (n - 2));
+            
+            // Calculate standard error of slope
+            const sSlope = sError / Math.sqrt(sumXX - (sumX * sumX) / n);
+            
+            // Calculate t-statistic
+            const tStat = slope / sSlope;
+            
+            // Calculate p-value (two-tailed t-test)
+            const pValue = 2 * (1 - cumulativeNormalDistribution(Math.abs(tStat)));
+            
+            return {
+                slope: slope,
+                intercept: intercept,
+                rSquared: rSquared,
+                pValue: pValue,
+                predict: (xVal) => slope * xVal + intercept
+            };
+        }
+
+        // Cumulative normal distribution function (approximation)
+        function cumulativeNormalDistribution(x) {
+            const a1 = 0.31938153;
+            const a2 = -0.356563782;
+            const a3 = 1.781477937;
+            const a4 = -1.821255978;
+            const a5 = 1.330274429;
+            const p = 0.2316419;
+            const phi = 0.3989422804014327;
+            
+            if (x >= 0.0) {
+                const t = 1.0 / (1.0 + p * x);
+                const cdf = 1.0 - phi * Math.exp(-x * x / 2.0) * 
+                    ((((a5 * t + a4) * t + a3) * t + a2) * t + a1) * t;
+                return cdf;
+            } else {
+                const t = 1.0 / (1.0 - p * x);
+                const cdf = phi * Math.exp(-x * x / 2.0) * 
+                    ((((a5 * t + a4) * t + a3) * t + a2) * t + a1) * t;
+                return cdf;
+            }
+        }
+
+        // Update analytics
+        function updateAnalytics() {
+            const timer = getActiveTimer();
+            if (!timer || timer.laps.length === 0) {
+                elements.avgLap.textContent = '0.000s';
+                elements.fastestLap.textContent = '0.000s';
+                elements.trendR2.textContent = '0.000';
+                elements.pValue.textContent = '0.000';
+                updateChart(null, [], null);
+                return;
+            }
+            
+            // Calculate lap durations (time since last lap)
+            const lapDurations = [];
+            for (let i = 0; i < timer.laps.length; i++) {
+                if (i === 0) {
+                    lapDurations.push(timer.laps[i].time);
+                } else {
+                    lapDurations.push(timer.laps[i].time - timer.laps[i-1].time);
+                }
+            }
+            
+            // Calculate statistics
+            const avg = lapDurations.reduce((a, b) => a + b, 0) / lapDurations.length;
+            const min = Math.min(...lapDurations);
+            
+            elements.avgLap.textContent = `${(avg / 1000).toFixed(3)}s`;
+            elements.fastestLap.textContent = `${(min / 1000).toFixed(3)}s`;
+            
+            // Calculate regression if we have enough data
+            if (lapDurations.length > 1) {
+                const lapNumbers = timer.laps.map(lap => lap.number);
+                const regression = calculateRegression(lapNumbers, lapDurations);
+                
+                elements.trendR2.textContent = regression.rSquared.toFixed(3);
+                elements.pValue.textContent = regression.pValue.toFixed(6);
+                
+                updateChart(timer, lapDurations, regression);
+            } else {
+                elements.trendR2.textContent = 'N/A';
+                elements.pValue.textContent = 'N/A';
+                updateChart(timer, lapDurations, null);
+            }
+        }
+
+        // Update chart
+        function updateChart(timer, lapDurations, regression) {
+            const ctx = document.getElementById('lapChart').getContext('2d');
+            
+            if (!timer || lapDurations.length === 0) {
+                if (lapChart) {
+                    lapChart.destroy();
+                    lapChart = null;
+                }
+                return;
+            }
+            
+            const lapNumbers = timer.laps.map(lap => lap.number);
+            const durations = lapDurations.map(d => d / 1000); // Convert to seconds
+            
+            // Generate regression line points if regression exists
+            let regressionData = [];
+            if (regression && lapNumbers.length > 1) {
+                const minX = Math.min(...lapNumbers);
+                const maxX = Math.max(...lapNumbers);
+                
+                for (let i = 0; i < lapNumbers.length; i++) {
+                    const x = lapNumbers[i];
+                    const y = regression.predict(x) / 1000; // Convert to seconds
+                    regressionData.push(y);
+                }
+            }
+            
+            if (lapChart) {
+                lapChart.destroy();
+            }
+            
+            lapChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: lapNumbers,
+                    datasets: [
+                        {
+                            label: 'Lap Times',
+                            data: durations,
+                            borderColor: '#6366f1',
+                            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#6366f1',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            borderColor: '#6366f1',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    const seconds = context.parsed.y;
+                                    const minutes = Math.floor(seconds / 60);
+                                    const remainingSeconds = (seconds % 60).toFixed(1);
+                                    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.padStart(4, '0')}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Time (MM:SS)',
+                                color: '#6b7280',
+                                font: {
+                                    family: 'Inter',
+                                    size: 12,
+                                    weight: 500
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(107, 114, 128, 0.1)'
+                            },
+                            ticks: {
+                                color: '#6b7280',
+                                font: {
+                                    family: 'JetBrains Mono',
+                                    size: 11
+                                },
+                                callback: function(value) {
+                                    const minutes = Math.floor(value / 60);
+                                    const seconds = (value % 60).toFixed(0);
+                                    return `${minutes.toString().padStart(2, '0')}:${seconds.padStart(2, '0')}`;
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Lap Number',
+                                color: '#6b7280',
+                                font: {
+                                    family: 'Inter',
+                                    size: 12,
+                                    weight: 500
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(107, 114, 128, 0.1)'
+                            },
+                            ticks: {
+                                color: '#6b7280',
+                                font: {
+                                    family: 'JetBrains Mono',
+                                    size: 11
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Add trend line if regression exists
+            if (regression && regressionData.length > 1) {
+                lapChart.data.datasets.push({
+                    label: 'Trend Line',
+                    data: regressionData,
+                    borderColor: '#ef4444',
+                    backgroundColor: 'transparent',
+                    borderDash: [5, 5],
+                    pointRadius: 0,
+                    fill: false,
+                    tension: 0
+                });
+                lapChart.update();
+            }
+        }
+
+        // Update predictions in real-time
+        function updatePredictions() {
+            const workload = parseInt(elements.workloadInput.value);
+            if (isNaN(workload) || workload <= 0) {
+                elements.predictions.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <i class="fas fa-crystal-ball"></i>
+                        <p>Enter a target above to see predictions</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const timer = getActiveTimer();
+            if (!timer) {
+                elements.predictions.innerHTML = '';
+                return;
+            }
+            
+            // Save workload to timer
+            timer.setWorkload(workload);
+            saveState();
+            
+            // Calculate lap durations
+            const lapDurations = [];
+            for (let i = 0; i < timer.laps.length; i++) {
+                if (i === 0) {
+                    lapDurations.push(timer.laps[i].time);
+                } else {
+                    lapDurations.push(timer.laps[i].time - timer.laps[i-1].time);
+                }
+            }
+            
+            // If no laps yet, use current time as first lap estimate
+            if (lapDurations.length === 0) {
+                if (timer.running) {
+                    const currentTime = timer.currentTime;
+                    lapDurations.push(currentTime);
+                } else {
+                    elements.predictions.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1 / -1;">
+                            <i class="fas fa-play-circle"></i>
+                            <p>Start timing to get predictions</p>
+                        </div>
+                    `;
+                    return;
+                }
+            }
+            
+            // Calculate average lap time
+            const avg = lapDurations.reduce((a, b) => a + b, 0) / lapDurations.length;
+            
+            // 1-parameter model: constant pace
+            let total1Param = avg * workload;
+            
+            // 2-parameter model: linear trend
+            let total2Param = total1Param;
+            if (lapDurations.length > 1) {
+                const lapNumbers = Array.from({length: lapDurations.length}, (_, i) => i + 1);
+                const regression = calculateRegression(lapNumbers, lapDurations);
+                
+                let regressionTime = 0;
+                
+                // Add time for existing laps
+                for (let i = 0; i < lapDurations.length; i++) {
+                    regressionTime += lapDurations[i];
+                }
+                
+                // Predict time for remaining laps
+                for (let i = lapDurations.length + 1; i <= workload; i++) {
+                    const predictedLapTime = Math.max(0, regression.predict(i));
+                    regressionTime += predictedLapTime;
+                }
+                
+                total2Param = regressionTime;
+            }
+            
+            // Calculate remaining time
+            const remaining1Param = Math.max(0, total1Param - timer.currentTime);
+            const remaining2Param = Math.max(0, total2Param - timer.currentTime);
+            
+            // Format times
+            const formatTime = (ms) => {
+                const seconds = ms / 1000;
+                if (seconds < 60) return `${seconds.toFixed(1)}s`;
+                if (seconds < 3600) return `${(seconds / 60).toFixed(1)}m`;
+                return `${(seconds / 3600).toFixed(1)}h`;
+            };
+            
+            elements.predictions.innerHTML = `
+                <div class="prediction-card">
+                    <div class="prediction-title">
+                        <i class="fas fa-equals"></i> Constant Pace
+                    </div>
+                    <div class="prediction-time">${formatTime(total1Param)}</div>
+                    <div class="prediction-remaining">${formatTime(remaining1Param)} remaining</div>
+                </div>
+                <div class="prediction-card">
+                    <div class="prediction-title">
+                        <i class="fas fa-chart-line"></i> Linear Trend
+                    </div>
+                    <div class="prediction-time">${formatTime(total2Param)}</div>
+                    <div class="prediction-remaining">${formatTime(remaining2Param)} remaining</div>
+                </div>
+            `;
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            state.activeTab = tabName;
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.tab === tabName) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Update content sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.getElementById(`${tabName}-section`).classList.add('active');
+            
+            // Update analytics/chart when switching to analytics tab
+            if (tabName === 'analytics') {
+                setTimeout(() => updateAnalytics(), 100);
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 2rem;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${type === 'warning' ? '#f59e0b' : '#6366f1'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                font-weight: 500;
+                z-index: 1000;
+                box-shadow: var(--shadow-lg);
+                animation: slideUp 0.3s ease;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideDown 0.3s ease';
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Theme toggle
+            elements.themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-theme');
+                state.theme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+                elements.themeToggle.innerHTML = state.theme === 'dark' ? 
+                    '<i class="fas fa-sun"></i>' : 
+                    '<i class="fas fa-moon"></i>';
+                saveState();
+            });
+            
+            // Add timer
+            elements.addTimerBtn.addEventListener('click', () => {
+                createNewTimer();
+                renderTimers();
+                updateDisplay();
+                saveState();
+            });
+            
+            // Start/Pause button
+            elements.startBtn.addEventListener('click', () => {
+                const timer = getActiveTimer();
+                if (timer) {
+                    if (timer.running) {
+                        timer.pause();
+                        elements.startIcon.className = 'fas fa-play';
+                    } else {
+                        timer.start();
+                        elements.startIcon.className = 'fas fa-pause';
+                    }
+                    
+                    // Add pulse effect
+                    elements.startBtn.classList.add('pulse');
+                    setTimeout(() => elements.startBtn.classList.remove('pulse'), 600);
+                    
+                    saveState();
+                }
+            });
+            
+            // Reset button
+            elements.resetBtn.addEventListener('click', () => {
+                const timer = getActiveTimer();
+                if (timer && (timer.currentTime > 0 || timer.laps.length > 0)) {
+                    if (confirm("Reset this timer? All data will be lost.")) {
+                        timer.reset();
+                        elements.startIcon.className = 'fas fa-play';
+                        updateDisplay();
+                        renderLaps();
+                        updateAnalytics();
+                        saveState();
+                        showToast('Timer reset successfully');
+                    }
+                } else {
+                    showToast('Nothing to reset', 'warning');
+                }
+            });
+            
+            // Lap button
+            elements.lapBtn.addEventListener('click', () => {
+                const timer = getActiveTimer();
+                if (timer && timer.running) {
+                    timer.lap();
+                    renderLaps();
+                    updateAnalytics();
+                    saveState();
+                    
+                    // Add pulse effect
+                    elements.lapBtn.classList.add('pulse');
+                    setTimeout(() => elements.lapBtn.classList.remove('pulse'), 600);
+                    
+                    showToast(`Lap ${timer.laps.length} recorded!`);
+                }
+            });
+            
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    switchTab(btn.dataset.tab);
+                });
+            });
+            
+            // Workload input
+            elements.workloadInput.addEventListener('input', () => {
+                updatePredictions();
+            });
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.target.tagName === 'INPUT') return;
+                
+                switch(e.code) {
+                    case 'Space':
+                        e.preventDefault();
+                        elements.startBtn.click();
+                        break;
+                    case 'KeyL':
+                        e.preventDefault();
+                        elements.lapBtn.click();
+                        break;
+                    case 'KeyR':
+                        e.preventDefault();
+                        elements.resetBtn.click();
+                        break;
+                    case 'KeyT':
+                        e.preventDefault();
+                        elements.themeToggle.click();
+                        break;
+                }
+            });
+            
+            // Update display every 10ms when any timer is running
+            setInterval(() => {
+                const activeTimer = getActiveTimer();
+                if (activeTimer && activeTimer.running) {
+                    updateDisplay();
+                }
+            }, 10);
+        }
+
+        // Add missing CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(100%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+            }
+            
+            @keyframes slideDown {
+                from {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(100%);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize the app
+        window.onload = init;
+    </script>
+</body>
+</html>
